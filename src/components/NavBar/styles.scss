@@ -1,0 +1,21 @@
+@import "../../styles/app.scss";
+
+.aside {
+  @include flex-column;
+}
+
+.navbar {
+  // padding: 0;
+  // margin: 0;
+
+  &__nav {
+    @include flex-column;
+    gap: 2.5rem;
+
+    &-item {
+      display: flex;
+      gap: 1.25rem;
+      text-decoration: none;
+    }
+  }
+}

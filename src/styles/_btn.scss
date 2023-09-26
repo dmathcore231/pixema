@@ -1,0 +1,41 @@
+$component: 'btn';
+
+.#{$component} {
+  --btn-color: var(--white-color);
+  --btn-bg-color: transparent;
+  --btn-border-color: transparent;
+  --btn-color-hover: var(--dark-color);
+  --btn-border-color-hover: transparent;
+  --btn-color-active: var(--dark-color);
+  --btn-bg-color-active: transparent;
+  --btn-border-color-active: transparent;
+  --btn-font-size: 1.125rem;
+  --btn-font-weight: 400;
+  --btn-line-height: 1.313rem;
+  --btn-padding: 1.25rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  color: var(--btn-color);
+  background-color: var(--btn-border-color);
+  border: 1px solid var(--btn-border-color);
+  font-size: var(--btn-font-size);
+  font-weight: var(--btn-font-weight);
+  line-height: var(--btn-line-height);
+  padding: var(--btn-padding);
+
+  &:hover {
+    transition-duration: 280ms;
+    color: var(--btn-color-hover);
+    background-color: var(--btn-bg-color-hover);
+    border-color: var(--btn-border-color-hover);
+  }
+
+  &:active {
+    color: var(--btn-color-active);
+    background-color: var(--btn-bg-color-active);
+    border-color: var(--btn-border-color-active);
+  }
+}
