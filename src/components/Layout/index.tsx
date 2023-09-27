@@ -4,13 +4,14 @@ import { Header } from "../Header"
 import { Main } from "../Main"
 import { Footer } from "../Footer"
 import { SearchInput } from "../SearchInput"
+import { UserProfiles } from "../UserProfiles"
 
 export function Layout() {
   return (
     <div className="layout">
       <Header>
         <SearchInput />
-        <div>account</div>
+        <UserProfiles />
       </Header>
       <Main>
         <Outlet />

@@ -5,17 +5,28 @@
 }
 
 .navbar {
-  // padding: 0;
-  // margin: 0;
 
   &__nav {
     @include flex-column;
     gap: 2.5rem;
+  }
+}
 
-    &-item {
-      display: flex;
-      gap: 1.25rem;
-      text-decoration: none;
-    }
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 1.25rem;
+  color: var(--secondary-color);
+  fill: var(--secondary-color);
+
+  &:hover {
+    color: var(--primary-color-light);
+    fill: var(--primary-color-light);
+  }
+
+  &:active {
+    color: var(--primary-color);
+    fill: var(--primary-color);
   }
 }

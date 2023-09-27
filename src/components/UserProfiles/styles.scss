@@ -1,0 +1,22 @@
+.user-profiles {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+  width: calc(14%);
+  justify-content: start;
+
+  &__avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--primary-color);
+    border-radius: 0.625rem;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 3.125rem;
+  }
+}

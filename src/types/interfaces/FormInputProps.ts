@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 
 export interface FormInputProps {
+  label?: boolean
   htmlFor?: string
   children?: ReactNode
   type: string

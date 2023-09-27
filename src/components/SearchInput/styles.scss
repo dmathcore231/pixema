@@ -1,8 +1,19 @@
 .search-form {
-  width: 100%;
-  padding-left: 9.125rem;
-  padding-right: 2.563rem;
+  width: calc(100% - 35.1rem);
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &__wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+}
+
+.btn_search {
+  position: absolute;
+  right: 0;
 }

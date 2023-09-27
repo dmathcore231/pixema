@@ -1,33 +1,40 @@
 import "./styles.scss"
-import homeIcon from "../../images/interface/home-icon.png"
-import trendsIcon from "../../images/interface/trends-icon.png"
-import favoritesIcon from "../../images/interface/favorites-icon.png"
-import settingsIcon from "../../images/interface/settings-icon.png"
+import { HomeIcon } from "../../images/Icons/HomeIcon"
+import { TrendsIcon } from "../../images/Icons/TrendsIcon"
+import { FavoritesIcon } from "../../images/Icons/FavoritesIcon"
+import { SettingsIcon } from "../../images/Icons/SettingsIcon"
 
 export function NavBar(): JSX.Element {
   return (
     <aside className="aside">
       <nav className="navbar">
         <ul className="navbar__nav">
-          <a className="navbar__nav-item" href="#">
-            <img src={homeIcon} alt="home" />
-            <div className="subtitle">Home</div>
-          </a>
-          <a className="navbar__nav-item subtitle" href="#">
-            <img src={trendsIcon} alt="trends" />
-            <div className="subtitle">Trends</div>
-          </a>
-          <a className="navbar__nav-item subtitle" href="#">
-            <img src={favoritesIcon} alt="favorites" />
-            <div className="subtitle">Favorites</div>
-          </a>
-          <a className="navbar__nav-item subtitle" href="#">
-            <img src={settingsIcon} alt="settings" />
-            <div className="subtitle">Settings</div>
-          </a>
+          <div className="nav-item">
+            <a className="nav-link" href="#">
+              <HomeIcon className="nav-link__icon" width="24" height="24" />
+              <div className="subtitle subtitle_color-inherit">Home</div>
+            </a>
+          </div>
+          <div className="nav-item">
+            <a className="nav-link" href="#">
+              <TrendsIcon className="nav-link__icon" width="24" height="24" />
+              <div className="subtitle subtitle_color-inherit">Trends</div>
+            </a>
+          </div>
+          <div className="nav-item">
+            <a className="nav-link" href="#">
+              <FavoritesIcon className="nav-link__icon" width="24" height="24" />
+              <div className="subtitle subtitle_color-inherit">Favorites</div>
+            </a>
+          </div>
+          <div className="nav-item">
+            <a className="nav-link" href="#">
+              <SettingsIcon className="nav-link__icon" width="24" height="24" />
+              <div className="subtitle subtitle_color-inherit">Settings</div>
+            </a>
+          </div>
         </ul>
       </nav>
     </aside>
-
   )
 }
