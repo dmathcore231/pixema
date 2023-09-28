@@ -3,20 +3,17 @@ import { Outlet } from "react-router-dom"
 import { Header } from "../Header"
 import { Main } from "../Main"
 import { Footer } from "../Footer"
-import { SearchInput } from "../SearchInput"
-import { UserProfiles } from "../UserProfiles"
+import { NavBar } from "../NavBar"
 
 export function Layout() {
   return (
     <div className="layout">
-      <Header>
-        <SearchInput />
-        <UserProfiles />
-      </Header>
+      <Header />
       <Main>
+        <NavBar />
         <Outlet />
       </Main>
       <Footer />
-    </div>
+    </div >
   )
 }

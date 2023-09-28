@@ -20,11 +20,33 @@ h3 {
   font-size: 1.12rem;
   font-weight: 600;
   line-height: 1.5rem;
-  color: var(--secondary-color);
 
+  &_size {
 
-  &_color-inherit {
-    color: inherit;
+    &_s {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    &_xs {
+      font-size: 1rem;
+    }
+
+    &_xxs {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+  }
+
+  &_color {
+
+    &_secondary {
+      color: var(--secondary-color);
+    }
+
+    &_inherit {
+      color: inherit;
+    }
   }
 }
 

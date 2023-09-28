@@ -2,6 +2,7 @@
 
 .aside {
   @include flex-column;
+  min-width: 158px;
 }
 
 .navbar {

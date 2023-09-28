@@ -1,19 +1,14 @@
 .search-form {
-  width: calc(100% - 35.1rem);
   display: flex;
   justify-content: center;
   align-items: center;
-
-  &__wrapper {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  }
+  position: relative;
+  width: 100%;
+  padding-left: 146px;
+  padding-right: 41px;
 }
 
 .btn_search {
   position: absolute;
-  right: 0;
+  right: 41px;
 }
