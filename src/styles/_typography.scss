@@ -34,7 +34,6 @@ h3 {
 
     &_xxs {
       font-size: 1rem;
-      font-weight: 500;
     }
   }
 
@@ -46,6 +45,13 @@ h3 {
 
     &_inherit {
       color: inherit;
+    }
+  }
+
+  &_align {
+
+    &_left {
+      text-align: left;
     }
   }
 }

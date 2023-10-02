@@ -1,0 +1,6 @@
+@import "../../styles/app.scss";
+
+.filter-panel {
+  @include flex-column;
+  width: 100%;
+}

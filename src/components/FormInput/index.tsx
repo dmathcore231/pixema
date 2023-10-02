@@ -6,10 +6,12 @@ export function FormInput({ label, htmlFor, children, type, id, placeholder, val
     if (label) {
       return (
         <>
-          <label htmlFor={htmlFor}><h5>{children}</h5></label>
+          <label htmlFor={htmlFor} className="subtitle subtitle_size_xxs label-input">
+            {children}
+          </label>
           <input
             type={type}
-            className={`primary-input ${className}`}
+            className={`primary-input ${className ? className : ""}`}
             id={id}
             placeholder={placeholder}
             value={value}
@@ -24,7 +26,7 @@ export function FormInput({ label, htmlFor, children, type, id, placeholder, val
         <>
           <input
             type={type}
-            className={`primary-input ${className}`}
+            className={`primary-input ${className ? className : ""}`}
             id={id}
             placeholder={placeholder}
             value={value}

@@ -8,11 +8,11 @@
 
   &__link {
     &:hover {
-      color: var(--primary-color);
+      color: var(--primary-color-light);
     }
 
     &:active {
-      color: var(--primary-color-light);
+      color: var(--primary-color);
     }
   }
 
@@ -31,11 +31,11 @@
     object-fit: cover;
 
     &:hover {
-      border-color: var(--primary-color);
+      border-color: var(--primary-color-light);
     }
 
     &:active {
-      border-color: var(--primary-color-light);
+      border-color: var(--primary-color);
     }
   }
 
