@@ -16,6 +16,13 @@
     background: var(--dark-color);
     padding: 3rem 2.5rem;
     width: 518px;
+
+    &_height {
+
+      &_100 {
+        height: 100vh;
+      }
+    }
   }
 
   &_filter {

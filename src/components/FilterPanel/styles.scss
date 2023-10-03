@@ -3,4 +3,109 @@
 .filter-panel {
   @include flex-column;
   width: 100%;
+  gap: 1.5rem;
+
+  &__item {
+    @include flex-column;
+
+    &_flex-row {
+      flex-direction: row;
+      align-items: flex-end;
+      gap: 2.5rem;
+    }
+  }
+
+  &__wrapper {
+    @include flex-column;
+  }
+}
+
+.react-select {
+
+  &__control {
+    background-color: var(--graphite-color) !important;
+    border: 2px solid transparent !important;
+    border-radius: 10px !important;
+    padding: 7px 0px;
+
+    &:active {
+      box-shadow: 0 0 0 1px var(--graphite-color) !important;
+    }
+  }
+
+  &__indicator-separator {
+    display: none !important;
+  }
+
+  &__placeholder {
+    text-align: left !important;
+  }
+
+  &__menu {
+    background-color: var(--graphite-color) !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    line-height: 1.5rem !important;
+
+  }
+
+  &__option {
+    text-align: left !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    line-height: 1.5rem !important;
+
+    &:hover {
+      color: var(--primary-color) !important;
+      background-color: var(--graphite-color) !important;
+    }
+
+    &--is-focused {
+      color: var(--primary-color) !important;
+      background-color: var(--graphite-color) !important;
+    }
+  }
+
+  &__multi-value {
+    background-color: var(--dark-color) !important;
+
+    &__label {
+      color: var(--white-color) !important;
+    }
+
+    &__input-container {
+      color: var(--white-color) !important;
+    }
+  }
+}
+
+.select-title {
+  text-align: left;
+  padding-bottom: 0.5rem;
+}
+
+.css-t3ipsp-control {
+  box-shadow: none !important;
+  border: 2px solid var(--primary-color) !important;
+
+  &:hover {
+    box-shadow: none;
+    border: 2px solid var(--primary-color);
+  }
+}
+
+.css-12a83d4-MultiValueRemove:hover {
+  background-color: var(--primary-color-light) !important;
+}
+
+.css-12a83d4-MultiValueRemove:active {
+  background-color: var(--primary-color) !important;
+}
+
+.css-w9q2zk-Input2 {
+  color: var(--white-color) !important;
+}
+
+.css-feonkk-Input2 {
+  color: var(--white-color) !important;
 }
