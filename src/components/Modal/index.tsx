@@ -2,7 +2,7 @@ import "./styles.scss"
 import { ModalProps } from "../../types/interfaces/ModalProps"
 import { CloseIcon } from "../../images/Icons/CloseIcon"
 
-export function Modal({ isActive, modalClass, title, onClose, onSubmit, children }: ModalProps): JSX.Element | null {
+export function Modal({ isActive, modalClass, title, onClose, onSubmit, children, titleBtnSubmit, titleBtnClose }: ModalProps): JSX.Element | null {
   if (!isActive) {
     return null
   } else {
@@ -19,8 +19,8 @@ export function Modal({ isActive, modalClass, title, onClose, onSubmit, children
             {children}
           </div>
           <div className="modal__footer">
-            <button className="btn btn_secondary modal__btn-clear" onClick={onClose}>Clear filter</button>
-            <button className="btn btn_primary modal__btn-submit" onClick={onSubmit}>Show results</button>
+            <button className="btn btn_secondary modal__btn-clear" onClick={onClose}>{titleBtnClose}</button>
+            <button className="btn btn_primary modal__btn-submit" onClick={onSubmit}>{titleBtnSubmit}</button>
           </div>
         </div>
       </div>

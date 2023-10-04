@@ -1,9 +1,56 @@
 @import "../../styles/app.scss";
 
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #00000080;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+
+  &__content {
+    background: var(--dark-color);
+    padding: 3rem 2.5rem;
+    width: 518px;
+
+    &_height {
+
+      &_100 {
+        height: 100vh;
+        overflow: auto;
+      }
+    }
+  }
+
+  &_filter {
+    justify-content: end;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__body {
+    @include flex-center;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 6rem;
+  }
+}
+
 .filter-panel {
   @include flex-column;
   width: 100%;
   gap: 1.5rem;
+  padding-top: 1.5rem;
 
   &__item {
     @include flex-column;
@@ -17,6 +64,12 @@
 
   &__wrapper {
     @include flex-column;
+  }
+
+  &__footer {
+    padding-top: 6rem;
+    display: flex;
+    justify-content: space-between;
   }
 }
 
@@ -77,6 +130,11 @@
       color: var(--white-color) !important;
     }
   }
+
+  &__single-value {
+    color: var(--white-color) !important;
+    text-align: left !important;
+  }
 }
 
 .select-title {
@@ -108,4 +166,8 @@
 
 .css-feonkk-Input2 {
   color: var(--white-color) !important;
+}
+
+.css-1nmdiq5-menu {
+  background-color: var(--graphite-color) !important;
 }

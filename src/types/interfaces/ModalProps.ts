@@ -7,4 +7,6 @@ export interface ModalProps {
   onClose: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   onSubmit?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   children: ReactNode
+  titleBtnSubmit?: string
+  titleBtnClose?: string
 }

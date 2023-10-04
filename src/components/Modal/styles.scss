@@ -21,6 +21,7 @@
 
       &_100 {
         height: 100vh;
+        overflow: auto;
       }
     }
   }
@@ -41,5 +42,6 @@
   &__footer {
     display: flex;
     justify-content: space-between;
+    padding-top: 6rem;
   }
 }

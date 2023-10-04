@@ -2,9 +2,8 @@ import "../FormInput/styles.scss"
 import "./styles.scss"
 import filterIcon from "../../images/interface/filter-icon.png"
 import { FormInput } from "../FormInput"
-import { Modal } from "../Modal"
 import { useState } from "react"
-import { FilterPanel } from "../FilterPanel"
+import { FilterModal } from "../FilterModal"
 
 export function SearchInput(): JSX.Element {
   const [isActive, setIsActive] = useState(false)
@@ -23,15 +22,12 @@ export function SearchInput(): JSX.Element {
           <img src={filterIcon} alt="filter" />
         </button>
       </form>
-      <Modal
+      <FilterModal
         isActive={isActive}
-        title="Filters"
         onClose={() => setIsActive(false)}
         onSubmit={() => setIsActive(false)}
-        modalClass="modal_filter"
-      >
-        <FilterPanel />
-      </Modal>
+        title="Filter"
+      />
     </>
   )
 }

@@ -18,4 +18,14 @@
   --primary-color-light: #917CFF;
   --success-color: #00A340;
   color: var(--white-color);
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
 }
