@@ -11,5 +11,7 @@ export interface FormInputProps {
   required?: boolean
   className?: string
   disabled?: boolean
+  min?: number
+  max?: number
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }

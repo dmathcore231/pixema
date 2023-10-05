@@ -170,6 +170,8 @@ export function FilterModal(
                     children="Years"
                     onChange={handleYearFromChange}
                     value={yearsFrom}
+                    min={1890}
+
                   />
                 </div>
                 <div className="filter-panel__wrapper">
@@ -181,6 +183,8 @@ export function FilterModal(
                     placeholder="To"
                     onChange={handleYearToChange}
                     value={yearsTo}
+                    min={1890}
+                    max={2050}
                   />
                 </div>
               </div>
@@ -195,6 +199,8 @@ export function FilterModal(
                     children="Rating"
                     onChange={handleRatingFromChange}
                     value={ratingFrom}
+                    min={0}
+                    max={10}
                   />
                 </div>
                 <div className="filter-panel__wrapper">
@@ -206,6 +212,8 @@ export function FilterModal(
                     placeholder="To"
                     onChange={handleRatingToChange}
                     value={ratingTo}
+                    min={0}
+                    max={10}
                   />
                 </div>
               </div>

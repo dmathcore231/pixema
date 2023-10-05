@@ -1,0 +1,13 @@
+@import "../../styles/app.scss";
+
+.footer {
+  display: flex;
+  justify-content: start;
+  text-align: center;
+  padding: 3rem 0;
+
+
+  &__copyright {
+    color: var(--light-color);
+  }
+}

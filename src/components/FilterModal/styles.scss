@@ -20,7 +20,7 @@
     &_height {
 
       &_100 {
-        height: 100vh;
+        height: 100%;
         overflow: auto;
       }
     }
@@ -44,6 +44,22 @@
     justify-content: space-between;
     padding-top: 6rem;
   }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 0.625rem;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(--secondary-color);
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--graphite-color);
+    border-radius: 0.313rem;
+  }
 }
 
 .filter-panel {
@@ -64,6 +80,7 @@
 
   &__wrapper {
     @include flex-column;
+    width: 100%;
   }
 
   &__footer {
