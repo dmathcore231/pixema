@@ -1,0 +1,83 @@
+$component: 'btn';
+@import "../../styles/app";
+
+.#{$component} {
+  --btn-color: var(--white-color);
+  --btn-bg-color: transparent;
+  --btn-border-color: transparent;
+  --btn-color-hover: var(--black-color);
+  --btn-bg-color-hover: transparent;
+  --btn-border-color-hover: transparent;
+  --btn-color-active: var(--black-color);
+  --btn-bg-color-active: transparent;
+  --btn-border-color-active: transparent;
+  --btn-font-size: 1.125rem;
+  --btn-font-weight: 400;
+  --btn-line-height: 1.313rem;
+  --btn-padding: 0.938rem 1.25rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  color: var(--btn-color);
+  background-color: var(--btn-bg-color);
+  border: 1px solid var(--btn-border-color);
+  font-size: var(--btn-font-size);
+  font-weight: var(--btn-font-weight);
+  line-height: var(--btn-line-height);
+  padding: var(--btn-padding);
+  width: 100%;
+
+  &:hover {
+    transition-duration: 280ms;
+    color: var(--btn-color-hover);
+    background-color: var(--btn-bg-color-hover);
+    border-color: var(--btn-border-color-hover);
+  }
+
+  &:active {
+    color: var(--btn-color-active);
+    background-color: var(--btn-bg-color-active);
+    border-color: var(--btn-border-color-active);
+  }
+
+  &_close {
+    fill: var(--white-color);
+    --btn-padding: 0;
+
+    &:hover {
+      fill: var(--primary-color-light);
+    }
+
+    &:active {
+      fill: var(--primary-color);
+    }
+  }
+
+  &_primary {
+    --btn-bg-color: var(--primary-color);
+    --btn-color-hover: var(--white-color);
+    --btn-bg-color-hover: var(--primary-color-light);
+    --btn-color-active: var(--white-color);
+    --btn-bg-color-active: var(--primary-color-light);
+    --btn-font-size: 1rem;
+    --btn-font-weight: 600;
+    --btn-line-height: 1.5rem;
+    text-transform: none;
+    border-radius: 0.625rem;
+  }
+
+  &_secondary {
+    --btn-bg-color: var(--graphite-color);
+    --btn-color-hover: var(--light-color);
+    --btn-bg-color-hover: var(--graphite-color);
+    --btn-color-active: var(--light-color);
+    --btn-bg-color-active: var(--graphite-color);
+    --btn-font-size: 1rem;
+    --btn-font-weight: 600;
+    --btn-line-height: 1.5rem;
+    text-transform: none;
+    border-radius: 0.625rem;
+  }
+}

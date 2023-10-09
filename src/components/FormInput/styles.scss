@@ -24,9 +24,23 @@
     font-weight: 400;
     line-height: 1.5rem;
   }
+
+  &_padding-right {
+
+
+    &_small {
+      padding-right: 3.25rem;
+    }
+  }
 }
 
 .label-input {
   text-align: left;
-  padding-bottom: 0.5rem;
+}
+
+.form-input {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  width: 100%;
 }

@@ -3,6 +3,8 @@ import { Layout } from "./components/Layout"
 import { Main } from "./pages/Main"
 import { Movie } from "./pages/Movie"
 import { Settings } from "./pages/Settings"
+import { Authorization } from "./pages/Authorization"
+import { SignIn } from "./components/SignIn"
 
 export const router = createBrowserRouter([
   {
@@ -21,6 +23,15 @@ export const router = createBrowserRouter([
         element: <Settings />
       }
 
+    ]
+  },
+  {
+    element: <Authorization />,
+    children: [
+      {
+        path: "/sign-in",
+        element: <SignIn />
+      }
     ]
   }
 ])

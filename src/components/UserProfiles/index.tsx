@@ -4,7 +4,7 @@ import arrowRightIcon from "../../images/interface/arrow-right.png"
 
 export function UserProfiles(): JSX.Element {
   return (
-    <a href="#" className="user-profiles">
+    <a href="/sign-in" className="user-profiles">
       <div className="user-profiles__wrapper">
         <div className="user-profiles__avatar">
           <img src={userIcon} alt="User Avatar" />

@@ -5,13 +5,13 @@ export function FormInput({ label, htmlFor, children, type, id, placeholder, val
   function RenderInput(): JSX.Element {
     if (label) {
       return (
-        <>
+        <div className="form-input">
           <label htmlFor={htmlFor} className="subtitle subtitle_size_xxs label-input">
             {children}
           </label>
           <input
             type={type}
-            className={`primary-input ${className ? className : ""}`}
+            className={"primary-input" + (className ? " " + className : "")}
             id={id}
             placeholder={placeholder}
             value={value}
@@ -21,14 +21,14 @@ export function FormInput({ label, htmlFor, children, type, id, placeholder, val
             min={min}
             max={max}
           />
-        </>
+        </div>
       )
     } else {
       return (
         <>
           <input
             type={type}
-            className={`primary-input ${className ? className : ""}`}
+            className={"primary-input" + (className ? " " + className : "")}
             id={id}
             placeholder={placeholder}
             value={value}

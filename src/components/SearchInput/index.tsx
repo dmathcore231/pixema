@@ -4,6 +4,7 @@ import filterIcon from "../../images/interface/filter-icon.png"
 import { FormInput } from "../FormInput"
 import { useState } from "react"
 import { FilterModal } from "../FilterModal"
+import { Btn } from "../Btn"
 
 export function SearchInput(): JSX.Element {
   const [isActive, setIsActive] = useState(false)
@@ -17,10 +18,16 @@ export function SearchInput(): JSX.Element {
           id="search"
           placeholder="Search"
           required={true}
+          className="primary-input_padding-right_small"
         />
-        <button className="btn btn_search" onClick={() => setIsActive(true)} type="button">
+        <Btn
+          type="button"
+          className="btn_search"
+          onClick={() => setIsActive(true)}
+          form="search-form"
+        >
           <img src={filterIcon} alt="filter" />
-        </button>
+        </Btn>
       </form>
       <FilterModal
         isActive={isActive}

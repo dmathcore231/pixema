@@ -5,6 +5,7 @@ import { Tabs } from "../Tabs"
 import { FormInput } from "../FormInput"
 import { useState } from "react"
 import Select from "react-select"
+import { Btn } from "../Btn"
 
 export function FilterModal(
   { isActive, title, onClose, onSubmit }: FilterModalProps): JSX.Element | null {
@@ -111,9 +112,15 @@ export function FilterModal(
         <div className="modal__content modal__content_height_100">
           <div className="modal__header">
             <h2 className="modal__title">{title}</h2>
-            <button className="btn btn_close modal__btn-close" onClick={onClose}>
-              <CloseIcon width="24" height="24" />
-            </button>
+            <div className="modal__close-btn">
+              <Btn
+                type="button"
+                className="btn btn_close modal__btn-close"
+                onClick={onClose}
+              >
+                <CloseIcon width="24" height="24" />
+              </Btn>
+            </div>
           </div>
           <div className="modal__body">
             <form className="filter-panel" onSubmit={handleSubmit} id="filter-form">
@@ -238,21 +245,21 @@ export function FilterModal(
             </form>
           </div>
           <div className="modal__footer">
-            <button
-              className="btn btn_secondary modal__btn-clear"
+            <Btn
+              className="btn_secondary modal__btn-clear"
               onClick={handleClickBtnClear}
               type="button"
               form="filter-form"
             >
               Clear filter
-            </button>
-            <button
-              className="btn btn_primary modal__btn-submit"
+            </Btn>
+            <Btn
+              className="btn_primary modal__btn-submit"
               type="submit"
               form="filter-form"
             >
               Show results
-            </button>
+            </Btn>
           </div>
         </div>
       </div>
