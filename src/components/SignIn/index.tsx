@@ -58,7 +58,9 @@ export function SignIn(): JSX.Element {
         </Btn>
       </div>
       <div className='sign-in__no-account'>
-        <a href='#' className='subtitle subtitle_size_xs subtitle_color_secondary subtitle_weight_500'>Don’t have an account? <span>Sign Up</span></a>
+        <a href='#'
+        className='subtitle subtitle_size_xs subtitle_color_secondary subtitle_weight_500'>
+          Don’t have an account? <span>Sign Up</span></a>
       </div>
     </form>
   )

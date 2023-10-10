@@ -1,6 +1,19 @@
 .container {
   margin: 0 auto;
-  max-width: 117.75rem;
+  max-width: 120rem;
   padding-left: 3.5rem;
   padding-right: 3.5rem;
+
+  &_bg {
+
+    &_image {
+      background-image: url('../../images/bg.png');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-attachment: inherit;
+      height: 100vh;
+      overflow:auto;
+    }
+  }
 }

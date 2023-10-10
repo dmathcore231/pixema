@@ -5,6 +5,7 @@ import { Movie } from "./pages/Movie"
 import { Settings } from "./pages/Settings"
 import { Authorization } from "./pages/Authorization"
 import { SignIn } from "./components/SignIn"
+import { SignUp } from "./components/SignUp"
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
       {
         path: "/sign-in",
         element: <SignIn />
+      },
+      {
+        path: "/sign-up",
+        element: <SignUp />
       }
     ]
   }

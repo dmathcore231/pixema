@@ -1,0 +1,43 @@
+@import "../../styles/app";
+
+.sign-up {
+  background-color: var(--dark-color);
+  padding: 2.5rem;
+  @include flex-column;
+  gap: 1.5rem;
+  border-radius: 0.625rem;
+  min-width: 35.875rem;
+
+  &__item {
+    @include flex-column;
+    gap: 0.5rem;
+  }
+
+  &__already-account {
+    color: var(--primary-color);
+
+    span {
+      color: var(--primary-color);
+    }
+
+    &:hover {
+      color: var(--primary-color-light);
+    }
+
+    &:active {
+      color: var(--primary-color);
+    }
+
+    &:hover>a>span {
+      color: var(--primary-color-light);
+    }
+
+    &:active>a>span {
+      color: var(--primary-color);
+    }
+  }
+
+  &__title {
+    display: flex;
+  }
+}
