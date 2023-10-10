@@ -89,7 +89,7 @@ export function SignUp(): JSX.Element {
         </Btn>
       </div>
       <div className="sign-up__already-account">
-        <a href="#"
+        <a href="/sign-in"
           className="subtitle subtitle_size_xs subtitle_color_secondary subtitle_weight_500">
           Already have an account? <span>Sign In</span></a>
       </div>

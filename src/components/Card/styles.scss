@@ -60,25 +60,3 @@
     flex-direction: column;
   }
 }
-
-
-.genres {
-
-  &__list {
-    display: flex;
-    gap: 27px;
-  }
-
-  &__item {
-    list-style-type: disc;
-
-
-    &_list-style {
-
-      &_none {
-        list-style-type: none;
-      }
-    }
-  }
-
-}

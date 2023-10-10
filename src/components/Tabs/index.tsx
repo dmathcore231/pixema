@@ -8,6 +8,7 @@ interface TabsProps {
   amount: number
   isChecked: string
 }
+
 export function Tabs({ name, value, titleTabs, onClick, amount, isChecked }: TabsProps): JSX.Element {
 
   function renderTabs(): JSX.Element[] {

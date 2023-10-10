@@ -7,9 +7,9 @@ export function Authorization(): JSX.Element {
     <div className="container container_bg_image">
       <div className="authorization">
         <div className="authorization-header">
-          <div className="authorization-header__logo">
+          <a href="/" className="authorization-header__logo">
             <img src={Logo} alt="logo" />
-          </div>
+          </a>
         </div>
         <div className="authorization-body">
           <Outlet />

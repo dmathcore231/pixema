@@ -1,5 +1,6 @@
 import "./styles.scss"
 import imgPoster from "../../images/poster.png"
+import { GenresList } from "../GenresList"
 
 export function Card(): JSX.Element {
   return (
@@ -15,22 +16,7 @@ export function Card(): JSX.Element {
           Wonder Woman 1984
         </div>
       </a>
-      <div className="genres">
-        <ul className="genres__list">
-          <li className="genres__item genres__item_list-style_none
-          subtitle subtitle_size_xxs subtitle_color_secondary">
-            Adventure
-          </li>
-          <li className="genres__item
-          subtitle subtitle_size_xxs subtitle_color_secondary">
-            Action
-          </li>
-          <li className="genres__item
-          subtitle subtitle_size_xxs subtitle_color_secondary">
-            Fantasy
-          </li>
-        </ul>
-      </div>
+      <GenresList itemList={["Adventure", "Action", "Fantasy"]} />
     </div>
   )
 }
