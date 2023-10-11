@@ -3,4 +3,14 @@
 .movie {
   display: flex;
   gap: 2.625rem;
+
+  &__title {
+    padding-bottom: 2rem;
+  }
+
+  &__poster {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
 }

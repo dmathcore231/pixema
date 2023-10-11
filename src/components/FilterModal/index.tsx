@@ -133,7 +133,6 @@ export function FilterModal(
                   value={["rating", "year"]}
                   titleTabs={["Rating", "Years"]}
                   onClick={handleClickTab}
-                  amount={2}
                   isChecked={"year"} />
               </div>
               <div className="filter-panel__item">

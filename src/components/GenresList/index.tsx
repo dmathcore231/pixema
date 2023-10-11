@@ -11,7 +11,7 @@ export function GenresList({ itemList }: GenresListProps): JSX.Element {
 
     for (let i = 0; i < itemList.length; i++) {
       genreItems.push(
-        <li
+        <li key={i}
           className={`genres__item ${i > 0 ? "" : "genres__item_list-style_none"
             } subtitle subtitle_size_xxs
             subtitle_color_secondary
