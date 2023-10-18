@@ -46,6 +46,10 @@ h3 {
     &_inherit {
       color: inherit;
     }
+
+    &_light {
+      color: var(--light-color);
+    }
   }
 
   &_weight {

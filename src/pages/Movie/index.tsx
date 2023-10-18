@@ -5,6 +5,7 @@ import { Presentation } from "../../components/Presentation"
 import { BtnGroup } from "../../components/BtnGroup"
 import { ShareIcon } from "../../images/Icons/ShareIcon"
 import { FavoritesIcon } from "../../images/Icons/FavoritesIcon"
+import { MovieInfo } from "../../components/MovieInfo"
 
 export function Movie(): JSX.Element {
   return (
@@ -25,6 +26,17 @@ export function Movie(): JSX.Element {
           <h1>Wonder Woman 1984</h1>
         </div>
         <Presentation itemList={[7.6, 7.6, 130]} />
+        <MovieInfo
+          description="In 1984, after saving the world in Wonder Woman (2017), the immortal Amazon warrior, Princess Diana of Themyscira, finds herself trying to stay under the radar, working as an archaeologist at the Smithsonian Museum. With the memory of the brave U.S. pilot, Captain Steve Trevor, etched on her mind, Diana Prince becomes embroiled in a sinister conspiracy of global proportions when a transparent, golden-yellow citrine gemstone catches the eye of the power-hungry entrepreneur, Maxwell Lord. "
+          year={2020}
+          releaseDate="15 Jul 2020"
+          boxOffice="$381,409,310"
+          country="United Kingdom, United States"
+          production={["DC", "Warner Bros"]}
+          actors={["Gal Gadot, Chris Pine, Kristen Wiig, Pedro Pascal"]}
+          directors="Patty Jenkins"
+          writers="Patty Jenkins, Geoff Johns"
+        />
       </div>
     </div>
   )

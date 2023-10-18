@@ -1,0 +1,20 @@
+@import "../../styles/app.scss";
+
+.movie-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  padding-top: 2.5rem;
+
+  &__details {
+    display: flex;
+    gap: 3.375rem;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+}

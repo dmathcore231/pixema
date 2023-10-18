@@ -4,7 +4,14 @@
   display: flex;
   gap: 2.625rem;
 
+  &__content {
+    display: flex;
+    flex-direction: column;
+    max-width: 878px;
+  }
+
   &__title {
+    display: flex;
     padding-bottom: 2rem;
   }
 
