@@ -4,9 +4,11 @@ import { ArrowRight } from "../../images/Icons/ArrowRight"
 
 export interface RecommendationsProps {
   value: JSX.Element[]
+  clickRight: (e: React.MouseEvent) => void
+  clickLeft: (e: React.MouseEvent) => void
 }
 
-export function Recommendations({ value }: RecommendationsProps): JSX.Element {
+export function Recommendations({ value, clickRight, clickLeft }: RecommendationsProps): JSX.Element {
 
   return (
     <div className="recommendations">
@@ -15,12 +17,16 @@ export function Recommendations({ value }: RecommendationsProps): JSX.Element {
           <h2>Recommendations</h2>
         </div>
         <div className="recommendations-toggle">
-          <div className="recommendations-toggle__item">
+          <button className="recommendations-toggle__item
+          btn btn_padding_none"
+            onClick={clickLeft}>
             <ArrowLeft width="24" height="24" />
-          </div>
-          <div className="recommendations-toggle__item">
+          </button>
+          <button className="recommendations-toggle__item
+          btn btn_padding_none"
+            onClick={clickRight}>
             <ArrowRight width="24" height="24" />
-          </div>
+          </button>
         </div>
       </div>
       <ul className="recommendations__list">

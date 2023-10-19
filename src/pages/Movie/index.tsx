@@ -10,6 +10,14 @@ import { Recommendations } from "../../components/Recommendations"
 import { Card } from "../../components/Card"
 
 export function Movie(): JSX.Element {
+
+  function handleClickLeft() {
+    console.log("left")
+  }
+
+  function handleClickRight() {
+    console.log("right")
+  }
   return (
     <div className="movie">
       <div className="movie__poster">
@@ -41,7 +49,7 @@ export function Movie(): JSX.Element {
             writers="Patty Jenkins, Geoff Johns"
           />
         </div>
-        <Recommendations value={[<Card />, <Card />, <Card />, <Card />]} />
+        <Recommendations value={[<Card />, <Card />, <Card />, <Card />]} clickLeft={handleClickLeft} clickRight={handleClickRight} />
       </div>
     </div>
   )

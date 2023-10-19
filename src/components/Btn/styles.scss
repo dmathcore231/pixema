@@ -55,6 +55,13 @@ $component: 'btn';
     }
   }
 
+  &_padding {
+
+    &_none {
+      padding: 0;
+    }
+  }
+
   &_primary {
     --btn-bg-color: var(--primary-color);
     --btn-color-hover: var(--white-color);
