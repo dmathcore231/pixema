@@ -1,0 +1,39 @@
+@import "../../styles/app.scss";
+
+.recommendations {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__item {
+    width: calc(25% - 1.25rem)
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &-toggle {
+    display: flex;
+    gap: 1rem;
+    justify-content: end;
+    padding-right: 0.625rem;
+
+    &__item {
+      fill: var(--light-color);
+
+      &:hover {
+        fill: var(--white-color);
+      }
+    }
+  }
+}
