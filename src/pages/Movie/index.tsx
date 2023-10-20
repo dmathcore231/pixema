@@ -8,6 +8,7 @@ import { FavoritesIcon } from "../../images/Icons/FavoritesIcon"
 import { MovieInfo } from "../../components/MovieInfo"
 import { Recommendations } from "../../components/Recommendations"
 import { Card } from "../../components/Card"
+import { Carousel } from "../../components/Carousel"
 
 export function Movie(): JSX.Element {
 
@@ -36,6 +37,7 @@ export function Movie(): JSX.Element {
           <div className="movie__title">
             <h1>Wonder Woman 1984</h1>
           </div>
+          <Carousel data={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]} />
           <Presentation itemList={[7.6, 7.6, 130]} />
           <MovieInfo
             description="In 1984, after saving the world in Wonder Woman (2017), the immortal Amazon warrior, Princess Diana of Themyscira, finds herself trying to stay under the radar, working as an archaeologist at the Smithsonian Museum. With the memory of the brave U.S. pilot, Captain Steve Trevor, etched on her mind, Diana Prince becomes embroiled in a sinister conspiracy of global proportions when a transparent, golden-yellow citrine gemstone catches the eye of the power-hungry entrepreneur, Maxwell Lord. "
