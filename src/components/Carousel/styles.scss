@@ -1,9 +1,45 @@
+@import "../../styles/app.scss";
+
 .carousel {
   display: flex;
   flex-direction: column;
+  width: 100%;
 
-  &__btn-group {
+  &-header {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+
+    &__arrow {
+      display: flex;
+      gap: 1rem;
+
+      &-prev {
+        fill: var(--light-color);
+
+        &:hover {
+          fill: var(--white-color);
+        }
+      }
+
+      &-next {
+        fill: var(--light-color);
+
+        &:hover {
+          fill: var(--white-color);
+        }
+      }
+    }
+  }
+
+  &-body {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: scroll;
+    gap: 1.25rem;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }

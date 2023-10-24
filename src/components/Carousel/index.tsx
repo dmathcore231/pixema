@@ -1,43 +1,96 @@
 import "./styles.scss"
+import { ArrowLeft } from "../../images/Icons/ArrowLeft"
+import { ArrowRight } from "../../images/Icons/ArrowRight"
 import { useState } from "react"
 
-export interface SliderProps {
-  data: string[]
+export interface CarouselProps {
+  data: JSX.Element[]
+  title: string
 }
-
-export function Carousel({ data }: SliderProps): JSX.Element {
-  const [prev, setPrev] = useState(0)
-  const [next, setNext] = useState(4)
-  const [activeSlide, setActiveSlide] = useState(data.slice(prev, next))
-
-  function handleClickPrev() {
-    if (prev > 0) {
-      setPrev(prev - 1)
-      setNext(next - 1)
-      setActiveSlide(data.slice(prev - 1, next - 1))
+export function Carousel({ data, title }: CarouselProps): JSX.Element {
+  const [offset, setOffset] = useState(0)
+  const [counterClick, setCounterClick] = useState(0)
+  function handleClickRight(): void {
+    const carouselBodyElement = document.querySelector(".carousel-body")
+    const bodyItemElement = document.querySelector(".carousel-body__item")
+    const widthBodyElement = carouselBodyElement?.getBoundingClientRect().width
+    const widthBodyItemElement = bodyItemElement?.getBoundingClientRect().width
+    const lastSwap = (data.length - 5)
+    setCounterClick(counterClick + 1)
+    if (counterClick < lastSwap) {
+      const newOffset = offset + widthBodyItemElement!
+      carouselBodyElement?.scrollTo({
+        top: 0,
+        left: newOffset,
+        behavior: "smooth",
+      })
+      setOffset(newOffset)
+    } else if (counterClick === lastSwap) {
+      setCounterClick(counterClick)
+      const newOffset = widthBodyElement!
+      carouselBodyElement?.scrollTo({
+        top: 0,
+        left: newOffset,
+        behavior: "smooth",
+      })
+      setOffset(newOffset)
     }
   }
-
-  function handleClickNext() {
-    if (next < data.length) {
-      setPrev(prev + 1)
-      setNext(next + 1)
-      setActiveSlide(data.slice(prev + 1, next + 1))
+  function handleClickLeft(): void {
+    const carouselBodyElement = document.querySelector(".carousel-body")
+    const bodyItemElement = document.querySelector(".carousel-body__item")
+    const widthBodyItemElement = bodyItemElement?.getBoundingClientRect().width
+    setCounterClick(counterClick - 1)
+    if (counterClick > 0) {
+      const newOffset = offset - widthBodyItemElement!
+      carouselBodyElement?.scrollTo({
+        top: 0,
+        left: newOffset,
+        behavior: "smooth",
+      })
+      setOffset(newOffset)
+    } else if (counterClick === 0) {
+      setCounterClick(0)
+      const newOffset = 0
+      carouselBodyElement?.scrollTo({
+        top: 0,
+        left: newOffset,
+        behavior: "smooth",
+      })
+      setOffset(newOffset)
     }
   }
+  console.log(counterClick)
 
   return (
     <div className="carousel">
-      <div className="carousel__btn-group">
-        <button className="btn"
-          type="button"
-          onClick={handleClickPrev}>Prev</button>
-        <button className="btn"
-          type="button"
-          onClick={handleClickNext}>Next</button>
+      <div className="carousel-header">
+        <div className="carousel-header__title">
+          <h2>{title}</h2>
+        </div>
+        <div className="carousel-header__arrow">
+          <button
+            className=" carousel-header__arrow-prev
+          btn btn_padding_none"
+            onClick={handleClickLeft}
+          >
+            <ArrowLeft width="24" height="24" />
+          </button>
+          <button
+            className="carousel-header__arrow-next
+          btn btn_padding_none"
+            onClick={handleClickRight}
+          >
+            <ArrowRight width="24" height="24" />
+          </button>
+        </div>
       </div>
-      <div className="carousel__content">
-        {activeSlide}
+      <div className="carousel-body">
+        {data.map((item, index) => (
+          <div className="carousel-body__item" key={index}>
+            {item}
+          </div>
+        ))}
       </div>
     </div>
   )

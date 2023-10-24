@@ -1,13 +1,16 @@
 import "./styles.scss"
-import imgPoster from "../../images/poster.png"
 import { GenresList } from "../GenresList"
 
-export function Card(): JSX.Element {
+export interface CardProps {
+  img: string
+}
+
+export function Card({ img }: CardProps): JSX.Element {
   return (
     <div className="card">
       <a href="#" className="card__link">
         <div className="card__image">
-          <img src={imgPoster} alt="movie poster" className="card__poster" />
+          <img src={img} alt="movie poster" className="card__poster" />
           <div className="card__rating subtitle subtitle_size_xs">
             7.6
           </div>
