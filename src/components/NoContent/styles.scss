@@ -1,0 +1,12 @@
+@import "../../styles/app.scss";
+
+.no-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.875rem;
+
+  &__title {
+    color: var(--secondary-color);
+  }
+}

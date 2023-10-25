@@ -30,4 +30,12 @@
     color: var(--primary-color);
     fill: var(--primary-color);
   }
+
+  &.active {
+    color: var(--primary-color-light);
+
+    &:active {
+      color: var(--primary-color);
+    }
+  }
 }

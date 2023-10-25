@@ -6,6 +6,9 @@ import { Settings } from "./pages/Settings"
 import { Authorization } from "./pages/Authorization"
 import { SignIn } from "./components/SignIn"
 import { SignUp } from "./components/SignUp"
+import { Favorites } from "./pages/Favorites"
+import { Trends } from "./pages/Trends"
+import { ResetPassword } from "./components/ResetPassword"
 
 export const router = createBrowserRouter([
   {
@@ -22,8 +25,15 @@ export const router = createBrowserRouter([
       {
         path: "/settings",
         element: <Settings />
+      },
+      {
+        path: "/favorites",
+        element: <Favorites />
+      },
+      {
+        path: "/trends",
+        element: <Trends />
       }
-
     ]
   },
   {
@@ -36,6 +46,10 @@ export const router = createBrowserRouter([
       {
         path: "/sign-up",
         element: <SignUp />
+      },
+      {
+        path: "/reset-password",
+        element: <ResetPassword />
       }
     ]
   }

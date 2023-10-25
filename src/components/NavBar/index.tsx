@@ -3,7 +3,7 @@ import { HomeIcon } from "../../images/Icons/HomeIcon"
 import { TrendsIcon } from "../../images/Icons/TrendsIcon"
 import { FavoritesIcon } from "../../images/Icons/FavoritesIcon"
 import { SettingsIcon } from "../../images/Icons/SettingsIcon"
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 
 export function NavBar(): JSX.Element {
   return (
@@ -11,28 +11,28 @@ export function NavBar(): JSX.Element {
       <nav className="navbar">
         <ul className="navbar__nav">
           <div className="nav-item">
-            <Link className="nav-link" to="/">
+            <NavLink className="nav-link" to="/">
               <HomeIcon className="nav-link__icon" width="24" height="24" />
               <div className="subtitle subtitle_color_inherit">Home</div>
-            </Link>
+            </NavLink>
           </div>
           <div className="nav-item">
-            <Link className="nav-link" to="#">
+            <NavLink className="nav-link" to="/trends">
               <TrendsIcon className="nav-link__icon" width="24" height="24" />
               <div className="subtitle subtitle_color_inherit">Trends</div>
-            </Link>
+            </NavLink>
           </div>
           <div className="nav-item">
-            <Link className="nav-link" to="#">
+            <NavLink className="nav-link" to="/favorites">
               <FavoritesIcon className="nav-link__icon" width="24" height="24" />
               <div className="subtitle subtitle_color_inherit">Favorites</div>
-            </Link>
+            </NavLink>
           </div>
           <div className="nav-item">
-            <Link className="nav-link" to="/settings">
+            <NavLink className="nav-link" to="/settings">
               <SettingsIcon className="nav-link__icon" width="24" height="24" />
               <div className="subtitle subtitle_color_inherit">Settings</div>
-            </Link>
+            </NavLink>
           </div>
         </ul>
       </nav>

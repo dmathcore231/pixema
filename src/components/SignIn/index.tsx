@@ -2,6 +2,7 @@ import './styles.scss'
 import { FormInput } from '../FormInput'
 import { Btn } from '../Btn'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 export function SignIn(): JSX.Element {
   const [email, setEmail] = useState('')
@@ -47,7 +48,12 @@ export function SignIn(): JSX.Element {
           onChange={(e) => setPassword(e.target.value)}
           required={true}
         />
-        <a href='#' className='sign-in__forgot subtitle subtitle_size_xxs subtitle_color_secondary subtitle_align_left subtitle_weight_500'>Forgot your password?</a>
+        <Link
+          to='/reset-password'
+          className='sign-in__forgot
+         subtitle subtitle_size_xxs subtitle_color_secondary subtitle_align_left subtitle_weight_500'>
+          Forgot your password?
+        </Link>
       </div>
       <div className='sign-in__item'>
         <Btn
