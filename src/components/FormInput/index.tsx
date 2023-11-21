@@ -20,6 +20,7 @@ export function FormInput({ label, htmlFor, children, type, id, placeholder, val
             disabled={disabled}
             min={min}
             max={max}
+            autoComplete="off"
           />
         </div>
       )

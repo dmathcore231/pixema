@@ -2,12 +2,16 @@ import "./styles.scss"
 import { FormInput } from '../FormInput'
 import { Btn } from '../Btn'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 export function SignUp(): JSX.Element {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const navigate = useNavigate()
+  const passwordElement = document.querySelector('#password')
+  const confirmPasswordElement = document.querySelector('#confirm-password')
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -18,10 +22,20 @@ export function SignUp(): JSX.Element {
       confirmPassword,
     }
     console.log(data)
-    setName('')
-    setEmail('')
-    setPassword('')
-    setConfirmPassword('')
+    if (password === confirmPassword) {
+      setName('')
+      setEmail('')
+      setPassword('')
+      setConfirmPassword('')
+      navigate('/sign-in')
+      passwordElement?.classList.remove('primary-input_error')
+      confirmPasswordElement?.classList.remove('primary-input_error')
+    } else {
+      setPassword('')
+      setConfirmPassword('')
+      passwordElement?.classList.add('primary-input_error')
+      confirmPasswordElement?.classList.add('primary-input_error')
+    }
   }
   return (
     <form className="sign-up" onSubmit={handleSubmit}>

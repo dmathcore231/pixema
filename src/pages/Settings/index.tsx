@@ -1,6 +1,7 @@
 import "./styles.scss"
 import { FormInput } from "../../components/FormInput"
 import { Switch } from "../../components/Switch"
+import { Btn } from "../../components/Btn"
 
 export function Settings() {
   return (
@@ -92,8 +93,16 @@ export function Settings() {
         </div>
         <div className="settings__item">
           <div className="settings__btn">
-            <button className="btn btn_secondary">Cancel</button>
-            <button className="btn btn_primary">Save</button>
+            <Btn
+              type='button'
+              className='btn_secondary'>
+              Cancel
+            </Btn>
+            <Btn
+              type='submit'
+              className='btn_primary'>
+              Save
+            </Btn>
           </div>
         </div>
       </form>

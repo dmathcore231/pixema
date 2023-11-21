@@ -32,6 +32,15 @@
       padding-right: 3.25rem;
     }
   }
+
+
+  &_error {
+    border: 2px solid var(--danger-color);
+
+    &:focus {
+      border: 2px solid var(--danger-color);
+    }
+  }
 }
 
 .label-input {
