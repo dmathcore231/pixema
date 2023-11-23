@@ -1,0 +1,10 @@
+@import "../../styles/app.scss";
+
+.show-more {
+  display: flex;
+  gap: 0.625rem;
+  background-color: var(--graphite-color);
+  fill: var(--graphite-color);
+  padding: 0.625rem 1.563rem 0.625rem 1.563rem;
+  border-radius: 2.5rem;
+}
