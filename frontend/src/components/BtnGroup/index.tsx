@@ -1,10 +1,6 @@
 import "./styles.scss"
+import { BtnGroupProps } from "../../types/interfaces/BtnGroupProps"
 
-export interface BtnGroupProps {
-  itemsName: string[]
-  itemsValue: JSX.Element[]
-  onClick: (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => void
-}
 
 export function BtnGroup({ itemsName, itemsValue, onClick }: BtnGroupProps): JSX.Element {
 
