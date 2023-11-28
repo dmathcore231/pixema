@@ -1,8 +1,6 @@
-import "./styles.scss";
+import "./styles.scss"
+import { GenresListProps } from "../../types/interfaces/GenresListProps"
 
-export interface GenresListProps {
-  itemList: string[]
-}
 
 export function GenresList({ itemList }: GenresListProps): JSX.Element {
   return (

@@ -1,9 +1,7 @@
 import "./styles.scss"
 import image from "../../images/interface/noMovies.png"
+import { NoContentProps } from "../../types/interfaces/NoContentProps"
 
-export interface NoContentProps {
-  text: string
-}
 export function NoContent({ text }: NoContentProps): JSX.Element {
   return (
     <div className="no-content">

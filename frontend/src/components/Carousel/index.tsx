@@ -2,11 +2,8 @@ import "./styles.scss"
 import { ArrowLeft } from "../../images/Icons/ArrowLeft"
 import { ArrowRight } from "../../images/Icons/ArrowRight"
 import { useState } from "react"
+import { CarouselProps } from "../../types/interfaces/CarouselProps"
 
-export interface CarouselProps {
-  data: JSX.Element[]
-  title: string
-}
 export function Carousel({ data, title }: CarouselProps): JSX.Element {
   const [offset, setOffset] = useState(0)
   const [counterClick, setCounterClick] = useState(0)

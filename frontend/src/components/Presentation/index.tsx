@@ -1,8 +1,6 @@
 import "./styles.scss"
+import { PresentationProps } from "../../types/interfaces/PresentationProps"
 
-export interface PresentationProps {
-  itemList: number[]
-}
 
 export function Presentation({ itemList }: PresentationProps): JSX.Element {
   return (
