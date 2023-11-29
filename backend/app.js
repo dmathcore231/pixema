@@ -5,15 +5,16 @@ const moviesRouter = require('./src/movies')
 
 const app = express()
 
-app.use(express.json())
-app.use('/auth', authRouter)
-app.use('/movies', moviesRouter)
-app.use((req, res, next) => {
+app.use((_, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173')
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
   next()
 })
+
+app.use(express.json())
+app.use('/auth', authRouter)
+app.use('/movies', moviesRouter)
 
 async function main() {
   try {
