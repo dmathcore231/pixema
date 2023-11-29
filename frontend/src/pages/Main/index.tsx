@@ -13,7 +13,7 @@ export function Main(): JSX.Element {
   useEffect(() => {
     dispatch(fetchMovies())
   }, [dispatch])
-  console.log(movies)
+
   function renderCardsMovies(): JSX.Element {
     if (loading) {
       return (
