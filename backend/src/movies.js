@@ -1,28 +1,47 @@
 const express = require('express')
-
 const Movie = require('./models/moviesSchema')
+const checkInvalidFields = require('./helpers/index')
+
 const router = express.Router()
 
-router.get('/', async (req, res) => {
-  const movies = await Movie.find({})
-  res.send(movies)
-})
-
-router.get('/:id', async (req, res) => {
-  const id = req.params.id
-  const movie = await Movie.findById(id)
-  if (movie) {
-    res.send(movie)
-  } else {
-    res.sendStatus(404) // not found
+async function getAllMovies(req, res) {
+  try {
+    const movies = await Movie.find({})
+    res.send(movies)
+  } catch (error) {
+    res.status(500).send('Internal Server Error')
   }
-})
+}
 
-router.post('/', async (req, res) => {
+async function getMovieById(req, res) {
+  const id = req.params.id
+
+  try {
+    const movie = await Movie.findById(id)
+    if (movie) {
+      res.send(movie)
+    } else {
+      res.status(404).send('Movie not found')
+    }
+  } catch (error) {
+    res.status(500).send('Internal Server Error')
+  }
+}
+
+async function createNewMovie(req, res) {
   const { title, year, rating, genre, poster, description } = req.body
+  const invalidFields = checkInvalidFields([
+    { name: 'title', value: title },
+    { name: 'year', value: year },
+    { name: 'rating', value: rating },
+    { name: 'genre', value: genre },
+    { name: 'poster', value: poster },
+    { name: 'description', value: description },
+  ])
 
-  if (!title || !year || !rating || !genre || !poster || !description) {
-    return res.status(400).send('Bad request');
+  if (invalidFields.length > 0) {
+    const error = `Invalid fields: ${invalidFields.join(', ')}`
+    return res.status(400).send(error)
   }
 
   try {
@@ -45,19 +64,65 @@ router.post('/', async (req, res) => {
     await movie.save()
     res.send(movie)
   } catch (error) {
-    console.error(error)
     res.status(500).send('Internal Server Error')
   }
-})
+}
 
-router.delete('/:id', async (req, res) => {
+async function deleteMovieById(req, res) {
   const id = req.params.id
-  const movie = await Movie.findByIdAndDelete(id)
-  if (movie) {
-    res.send(movie)
-  } else {
-    res.sendStatus(404) // not found
+
+  try {
+    const movie = await Movie.findByIdAndDelete(id)
+    if (movie) {
+      res.send(movie)
+    } else {
+      res.status(404).send('Movie not found')
+    }
+  } catch (error) {
+    res.status(500).send('Internal Server Error')
   }
-})
+}
+
+async function updateMovieById(req, res) {
+  const id = req.params.id
+  const { title, year, rating, genre, poster, description } = req.body
+  const invalidFields = checkInvalidFields([
+    { name: 'title', value: title },
+    { name: 'year', value: year },
+    { name: 'rating', value: rating },
+    { name: 'genre', value: genre },
+    { name: 'poster', value: poster },
+    { name: 'description', value: description },
+  ])
+
+  if (invalidFields.length > 0) {
+    const errorMessage = `Invalid fields: ${invalidFields.join(', ')}`
+    return res.status(400).send(errorMessage)
+  }
+
+  try {
+    const movie = await Movie.findByIdAndUpdate(id, {
+      title,
+      year,
+      rating,
+      genre,
+      poster,
+      description
+    }, { new: true })
+    if (movie) {
+      res.send(movie)
+    } else {
+      res.status(404).send('Movie not found')
+    }
+  } catch (error) {
+    res.status(500).send('Internal Server Error')
+  }
+}
+
+router.get('/', getAllMovies)
+router.get('/:id', getMovieById)
+router.post('/', createNewMovie)
+router.delete('/:id', deleteMovieById)
+router.put('/:id', updateMovieById)
 
 module.exports = router
