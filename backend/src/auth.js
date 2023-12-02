@@ -33,7 +33,7 @@ async function getUserById(req, res) {
   }
 }
 
-async function getUserByNameWithJWT(req, res) {
+async function authenticateUser(req, res) {
   const { email, password } = req.body
 
   try {
@@ -135,7 +135,7 @@ async function updateUserById(req, res) {
 
 router.get('/users', getAllUser)
 router.get('/user/:id', getUserById)
-router.post('/user', getUserByNameWithJWT)
+router.post('/user', authenticateUser)
 router.post('/user', createUser)
 router.delete('/user/:id', deleteUserById)
 router.put('/user/:id', updateUserById)
