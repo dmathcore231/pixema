@@ -20,8 +20,9 @@ export function SignIn(): JSX.Element {
       const response = await requestSignIn({ email, password })
 
       if (response.status === 200) {
-        setDataLocalStorage('accessToken', response.data.token)
-        clientRest.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`
+        setDataLocalStorage('accessToken', response.data.accessToken)
+        setDataLocalStorage('refreshToken', response.data.refreshToken)
+        clientRest.defaults.headers.common['Authorization'] = `Bearer ${response.data.accessToken}`
         navigate('/')
       }
     } catch (error) {

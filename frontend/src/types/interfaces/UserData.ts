@@ -12,7 +12,8 @@ export interface UserData extends ResponseDataUser {
 }
 
 export interface RequestUsersData {
-  token: string
+  accessToken: string
+  refreshToken: string
   users: UserData
   status: number
 }

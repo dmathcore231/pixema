@@ -1,9 +1,9 @@
 import ReactDOM from 'react-dom/client'
 import { App } from './components/App'
-import { tokenJWT } from './utils/token'
+import { refreshToken } from './utils/refreshToken'
 
 async function initApp() {
-  await tokenJWT()
+  await refreshToken()
   ReactDOM.createRoot(document.getElementById('root')!).render(
     <App />
   )
