@@ -2,10 +2,11 @@ import "./styles.scss"
 import { FormInput } from '../FormInput'
 import { Btn } from '../Btn'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
+import { requestSignUp } from "../../services/auth"
 
 export function SignUp(): JSX.Element {
-  const [name, setName] = useState('')
+  const [userName, setUserName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -15,21 +16,15 @@ export function SignUp(): JSX.Element {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    const data = {
-      name,
-      email,
-      password,
-      confirmPassword,
-    }
-    console.log(data)
     if (password === confirmPassword) {
-      setName('')
+      setUserName('')
       setEmail('')
       setPassword('')
       setConfirmPassword('')
       navigate('/sign-in')
       passwordElement?.classList.remove('primary-input_error')
       confirmPasswordElement?.classList.remove('primary-input_error')
+      requestSignUp({ userName, email, password })
     } else {
       setPassword('')
       setConfirmPassword('')
@@ -50,8 +45,8 @@ export function SignUp(): JSX.Element {
           type="text"
           id="name"
           placeholder="Your name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
           required={true}
         />
       </div>

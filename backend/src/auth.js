@@ -33,6 +33,33 @@ async function getUserById(req, res) {
   }
 }
 
+async function getUserByNameWithJWT(req, res) {
+  const { email, password } = req.body
+
+  try {
+    if (!email) {
+      return res.status(400).send({ status: 400, message: 'Email is required' })
+    }
+
+    const users = await User.findOne({ email })
+
+    if (!users) {
+      return res.status(401).send({ status: 401, message: 'Invalid email' })
+    }
+
+    const isMatch = await bcrypt.compare(password, users.password)
+
+    if (!isMatch) {
+      return res.status(401).send({ status: 401, message: 'Invalid password' })
+    }
+
+    const token = jwt.sign({ id: users._id }, secretKey)
+    res.send({ status: 200, users, token })
+  } catch (error) {
+    res.status(500).send({ status: 500, message: 'Internal Server Error' })
+  }
+}
+
 async function createUser(req, res) {
   const { userName, email, password } = req.body
   const invalidFields = checkInvalidFields([
@@ -106,11 +133,13 @@ async function updateUserById(req, res) {
   }
 }
 
-router.get('/user', getAllUser)
+router.get('/users', getAllUser)
 router.get('/user/:id', getUserById)
+router.post('/user', getUserByNameWithJWT)
 router.post('/user', createUser)
 router.delete('/user/:id', deleteUserById)
 router.put('/user/:id', updateUserById)
+
 
 
 module.exports = router

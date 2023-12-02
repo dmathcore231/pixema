@@ -2,21 +2,31 @@ import './styles.scss'
 import { FormInput } from '../FormInput'
 import { Btn } from '../Btn'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { requestSignIn } from '../../services/auth'
+import { setDataLocalStorage } from '../../helpers'
+import { clientRest } from '../../utils/client'
 
 export function SignIn(): JSX.Element {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const navigate = useNavigate()
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    const data = {
-      email,
-      password,
-    }
-    console.log(data)
     setEmail('')
     setPassword('')
+    try {
+      const response = await requestSignIn({ email, password })
+
+      if (response.status === 200) {
+        setDataLocalStorage('accessToken', response.data.token)
+        clientRest.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`
+        navigate('/')
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
   return (
     <form className='sign-in' onSubmit={handleSubmit}>
