@@ -1,9 +1,9 @@
 import { clientRest } from "../utils/client"
-import { authEndPoint, refreshTokenJtwEndPoint } from "../api"
-import { AxiosResponse } from "axios";
-import { ResponseDataUser, RequestUsersData, UserData } from "../types/interfaces/UserData"
+import { authEndPoint, refreshTokenJtwEndPoint, authenticateUserEndPoint } from "../api"
+import { AxiosError, AxiosResponse } from "axios"
+import { RequestSignIn, RequestSignUp, RequestUserData } from "../types/interfaces/UserData"
 
-export const requestSignUp = async (body: ResponseDataUser): Promise<AxiosResponse<UserData>> => {
+export const requestSignUp = async (body: RequestSignUp): Promise<RequestUserData> => {
   try {
     const { data } = await clientRest.post(authEndPoint, body, {
       headers: {
@@ -12,14 +12,14 @@ export const requestSignUp = async (body: ResponseDataUser): Promise<AxiosRespon
     })
     return data
   } catch (error) {
-    console.log(error)
-    throw error
+    const err = error as AxiosError
+    throw err
   }
 }
 
-export const requestSignIn = async (body: ResponseDataUser): Promise<AxiosResponse<RequestUsersData>> => {
+export const requestSignIn = async (body: RequestSignIn): Promise<AxiosResponse<RequestUserData>> => {
   try {
-    const data = await clientRest.post(authEndPoint, body, {
+    const data = await clientRest.post(authenticateUserEndPoint, body, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -31,7 +31,7 @@ export const requestSignIn = async (body: ResponseDataUser): Promise<AxiosRespon
   }
 }
 
-export const requestRefreshTokenJWT = async (body: { refreshToken: string }): Promise<AxiosResponse<RequestUsersData>> => {
+export const requestRefreshTokenJWT = async (body: { refreshToken: string }): Promise<AxiosResponse<RequestUserData>> => {
   try {
     const data = await clientRest.post(refreshTokenJtwEndPoint, body, {
       headers: {

@@ -1,3 +1,5 @@
 export const moviesEndPoint = '/movies'
 export const authEndPoint = '/auth/user'
+export const authenticateUserEndPoint = '/auth/user/authenticate'
+export const authorizationUserEndPoint = '/auth/user/authorization'
 export const refreshTokenJtwEndPoint = '/auth/refreshTokenJwt'

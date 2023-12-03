@@ -1,35 +1,66 @@
 import "./styles.scss"
 import { FormInput } from '../FormInput'
 import { Btn } from '../Btn'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { requestSignUp } from "../../services/auth"
+import { fetchUserRegistration } from "../../redux/userSlice"
+import { useAppDispatch, useAppSelector } from "../../hooks"
 
 export function SignUp(): JSX.Element {
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
   const [userName, setUserName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const navigate = useNavigate()
-  const passwordElement = document.querySelector('#password')
-  const confirmPasswordElement = document.querySelector('#confirm-password')
+  const [isSubmit, setIsSubmit] = useState(false)
+  const [errorField, setErrorField] = useState('')
+
+  const nameElement = document.querySelector('#name') as HTMLElement
+  const emailElement = document.querySelector('#email') as HTMLElement
+
+  const { status, errorMessage } = useAppSelector(state => state.user)
+
+  useEffect(() => {
+    if (isSubmit) {
+      dispatch(fetchUserRegistration({ userName: userName, email, password }))
+    }
+  }, [isSubmit])
+
+  useEffect(() => {
+    if (errorMessage === "User already exists") {
+      setErrorField('name')
+      setIsSubmit(false)
+      setPassword('')
+      setConfirmPassword('')
+      nameElement?.focus()
+    } else if (errorMessage === "Email already exists") {
+      setErrorField('email')
+      setIsSubmit(false)
+      setPassword('')
+      setConfirmPassword('')
+      emailElement?.focus()
+    }
+  }, [errorMessage, isSubmit])
+
+  useEffect(() => {
+    if (status === 200) {
+      navigate('/sign-in')
+    }
+  }, [status])
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     if (password === confirmPassword) {
-      setUserName('')
-      setEmail('')
-      setPassword('')
-      setConfirmPassword('')
-      navigate('/sign-in')
-      passwordElement?.classList.remove('primary-input_error')
-      confirmPasswordElement?.classList.remove('primary-input_error')
-      requestSignUp({ userName, email, password })
+      setIsSubmit(true)
+      setErrorField('')
+
     } else {
+      setIsSubmit(false)
+      setErrorField('password')
       setPassword('')
       setConfirmPassword('')
-      passwordElement?.classList.add('primary-input_error')
-      confirmPasswordElement?.classList.add('primary-input_error')
     }
   }
   return (
@@ -48,6 +79,7 @@ export function SignUp(): JSX.Element {
           value={userName}
           onChange={(e) => setUserName(e.target.value)}
           required={true}
+          className={errorField === 'name' ? 'primary-input_error' : ''}
         />
       </div>
       <div className="sign-up__item">
@@ -61,6 +93,7 @@ export function SignUp(): JSX.Element {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required={true}
+          className={errorField === 'email' ? 'primary-input_error' : ''}
         />
       </div>
       <div className="sign-up__item">
@@ -74,6 +107,7 @@ export function SignUp(): JSX.Element {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required={true}
+          className={errorField === 'password' ? 'primary-input_error' : ''}
         />
       </div>
       <div className="sign-up__item">
@@ -87,6 +121,7 @@ export function SignUp(): JSX.Element {
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           required={true}
+          className={errorField === 'password' ? 'primary-input_error' : ''}
         />
       </div>
       <div className="sign-up__item">

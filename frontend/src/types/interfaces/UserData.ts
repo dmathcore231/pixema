@@ -1,19 +1,33 @@
 
-export interface ResponseDataUser {
-  userName?: string
+export interface RequestSignIn {
   email: string
   password: string
 }
 
-export interface UserData extends ResponseDataUser {
+export interface RequestSignUp {
+  userName: string
+  email: string
+  password: string
+}
+
+export interface UserData {
+  userName: string
+  email: string
+  password: string
   _role: string
   _id: string
   __v: number
 }
 
-export interface RequestUsersData {
-  accessToken: string
-  refreshToken: string
-  users: UserData
+export interface RequestUserData {
+  accessToken?: string
+  refreshToken?: string
+  user?: UserData
   status: number
+  message: string
+}
+
+export interface UserState extends RequestUserData {
+  error: boolean
+  errorMessage: string
 }

@@ -35,28 +35,37 @@ async function getUserById(req, res) {
 
 async function createUser(req, res) {
   const { userName, email, password } = req.body
-  const invalidFields = checkInvalidFields([
-    { name: 'userName', value: userName },
-    { name: 'email', value: email },
-    { name: 'password', value: password },
-  ])
 
-  if (invalidFields.length > 0) {
-    const error = `Invalid fields: ${invalidFields.join(', ')}`
-    return res.status(400).send(error)
+  if (!userName) {
+    return res.status(400).send({ status: 400, message: 'Username is required' })
+  } else if (!email) {
+    return res.status(400).send({ status: 400, message: 'Email is required' })
+  } else if (!password) {
+    return res.status(400).send({ status: 400, message: 'Password is required' })
   }
 
   try {
-    const existingUser = await User.findOne({ email })
-    if (existingUser) {
-      return res.status(400).send('User already exists')
+    const existingEmail = await User.findOne({ email })
+    if (existingEmail) {
+      return res.status(400).send({ status: 400, message: 'Email already exists' })
     }
+
+    const existingUserName = await User.findOne({ userName })
+    if (existingUserName) {
+      return res.status(400).send({ status: 400, message: 'User already exists' })
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10)
-    const user = new User({ userName, email, password: hashedPassword })
+    const user = new User({
+      userName,
+      email,
+      password: hashedPassword,
+    })
     await user.save()
-    res.send(user)
+    res.send({ status: 200, message: 'User created successfully', user })
   } catch (error) {
-    res.status(500).send('Internal Server Error')
+    res.status(500).send({ status: 500, message: 'Internal Server Error' })
+
   }
 }
 
@@ -90,6 +99,26 @@ async function authenticateUser(req, res) {
     res.send({ status: 200, users, accessToken, refreshToken })
   } catch (error) {
     res.status(500).send({ status: 500, message: 'Internal Server Error' })
+  }
+}
+
+async function authorizationUser(req, res) {
+  const refreshToken = req.body.refreshToken
+
+  if (!refreshToken) {
+    return res.status(401).send({ status: 401, message: 'Refresh token is missing' })
+  }
+
+  try {
+    const decoded = jwt.verify(refreshToken, secretKey)
+    const users = await User.findById(decoded.id)
+
+    if (!users) {
+      throw new Error('Invalid refresh token')
+    }
+    return res.status(200).send({ status: 200, users })
+  } catch (error) {
+    return res.status(401).send({ status: 401, message: error.toString() })
   }
 }
 
@@ -164,12 +193,16 @@ async function updateUserById(req, res) {
   }
 }
 
-router.get('/users', getAllUser)
-router.get('/user/:id', getUserById)
-router.post('/user', authenticateUser)
-router.post('/refreshTokenJwt', refreshToken)
+//user
 router.post('/user', createUser)
+router.post('/user/authenticate', authenticateUser)
+router.post('/user/authorization', authorizationUser)
+router.get('/user/:id', getUserById)
 router.delete('/user/:id', deleteUserById)
 router.put('/user/:id', updateUserById)
+//all user
+router.get('/users', getAllUser)
+//token
+router.post('/refreshTokenJwt', refreshToken)
 
 module.exports = router
