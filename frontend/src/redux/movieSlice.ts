@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { requestMovies } from "../services/movie"
 import { Movie, MovieState } from "../types/interfaces/Movie"
 
-
 export const fetchMovies = createAsyncThunk('movies/fetchMovies',
   async () => {
     return await requestMovies()

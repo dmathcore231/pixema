@@ -1,8 +1,8 @@
 import "./styles.scss"
-import { FormInput } from '../FormInput'
-import { Btn } from '../Btn'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { FormInput } from '../FormInput'
+import { Btn } from '../Btn'
 import { fetchUserRegistration } from "../../redux/userSlice"
 import { useAppDispatch, useAppSelector } from "../../hooks"
 
@@ -45,7 +45,7 @@ export function SignUp(): JSX.Element {
   }, [errorMessage, isSubmit])
 
   useEffect(() => {
-    if (status === 200) {
+    if (status === 201) {
       navigate('/sign-in')
     }
   }, [status])

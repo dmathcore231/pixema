@@ -29,5 +29,6 @@ export interface RequestUserData {
 
 export interface UserState extends RequestUserData {
   error: boolean
+  loading: boolean
   errorMessage: string
 }

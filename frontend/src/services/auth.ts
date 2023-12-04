@@ -1,6 +1,6 @@
+import { AxiosError, AxiosResponse } from "axios"
 import { clientRest } from "../utils/client"
 import { authEndPoint, refreshTokenJtwEndPoint, authenticateUserEndPoint } from "../api"
-import { AxiosError, AxiosResponse } from "axios"
 import { RequestSignIn, RequestSignUp, RequestUserData } from "../types/interfaces/UserData"
 
 export const requestSignUp = async (body: RequestSignUp): Promise<RequestUserData> => {

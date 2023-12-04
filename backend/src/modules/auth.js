@@ -2,8 +2,8 @@ const express = require('express')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
-const User = require('./models/userSchema')
-const checkInvalidFields = require('./helpers/index')
+const User = require('../models/userSchema')
+const missingFields = require('../helpers/missingFields')
 
 const secretKey = crypto.randomBytes(32).toString('hex')
 
@@ -12,36 +12,42 @@ const router = express.Router()
 async function getAllUser(_, res) {
   try {
     const users = await User.find({})
-    res.send(users)
+    res.status(200).send({ status: 200, message: 'Success', users })
   } catch (error) {
-    res.status(500).send('Internal Server Error')
+    res.status(500).send({ status: 500, message: 'Internal Server Error' })
   }
 }
 
 async function getUserById(req, res) {
   const id = req.params.id
 
+  if (!id) {
+    return res.status(400).send({ status: 400, message: 'User ID is required' })
+  }
+
   try {
     const user = await User.findById(id)
     if (user) {
-      res.send(user)
+      res.status(200).send({ status: 200, message: 'Success', user })
     } else {
-      res.status(404).send('User not found')
+      res.status(404).send({ status: 404, message: 'User not found' })
     }
   } catch (error) {
-    res.status(500).send('Internal Server Error')
+    res.status(500).send({ status: 500, message: 'Internal Server Error' })
   }
 }
 
 async function createUser(req, res) {
   const { userName, email, password } = req.body
-
-  if (!userName) {
-    return res.status(400).send({ status: 400, message: 'Username is required' })
-  } else if (!email) {
-    return res.status(400).send({ status: 400, message: 'Email is required' })
-  } else if (!password) {
-    return res.status(400).send({ status: 400, message: 'Password is required' })
+  const errMessages = []
+  missingFields(userName, 'Username', errMessages)
+  missingFields(email, 'Email', errMessages)
+  missingFields(password, 'Password', errMessages)
+  if (errMessages.length > 0) {
+    return res.status(400).send({
+      status: 400, message:
+        `Missing fields: ${errMessages.join(', ')}`
+    })
   }
 
   try {
@@ -62,7 +68,7 @@ async function createUser(req, res) {
       password: hashedPassword,
     })
     await user.save()
-    res.send({ status: 200, message: 'User created successfully', user })
+    res.send({ status: 201, message: 'User created successfully', user })
   } catch (error) {
     res.status(500).send({ status: 500, message: 'Internal Server Error' })
 
@@ -138,7 +144,7 @@ async function refreshToken(req, res) {
     }
 
     const accessToken = jwt.sign({ id: users._id }, secretKey, {
-      expiresIn: '7d',
+      expiresIn: '10m',
     })
 
     return res.send({ status: 200, users, accessToken })
@@ -150,46 +156,42 @@ async function refreshToken(req, res) {
 async function deleteUserById(req, res) {
   const id = req.params.id
 
+  if (!id) {
+    return res.status(400).send({ status: 400, message: 'User ID is required' })
+  }
+
   try {
     const user = await User.findByIdAndDelete(id)
     if (user) {
-      res.send(user)
+      res.status(200).send({ status: 200, message: 'User deleted successfully' })
     } else {
-      res.status(404).send('User not found')
+      res.status(404).send({ status: 404, message: 'User not found' })
     }
   } catch (error) {
-    res.status(500).send('Internal Server Error')
+    res.status(500).send({ status: 500, message: 'Internal Server Error' })
   }
 }
 
 async function updateUserById(req, res) {
   const id = req.params.id
   const { userName, email, password } = req.body
-
-  const invalidFields = checkInvalidFields([
-    { name: 'userName', value: userName },
-    { name: 'email', value: email },
-    { name: 'password', value: password },
-  ])
-
-  if (invalidFields.length > 0) {
-    const error = `Invalid fields: ${invalidFields.join(', ')}`
-    return res.status(400).send(error)
+  if (!userName) {
+    return res.status(400).send({ status: 400, message: 'User name is required' })
+  } else if (!email) {
+    return res.status(400).send({ status: 400, message: 'Email is required' })
+  } else if (!password) {
+    return res.status(400).send({ status: 400, message: 'Password is required' })
   }
 
   try {
-    const user = await User.findByIdAndUpdate(
-      id,
-      { userName, email, password },
-      { new: true }
-    )
+    const user = await User.findByIdAndUpdate(id, { userName, email, password }, { new: true })
     if (user) {
-      res.send(user)
+      res.status(200).send({ status: 200, message: 'User updated successfully', user })
     } else {
-      res.status(404).send('User not found')
+      res.status(404).send({ status: 404, message: 'User not found' })
     }
   } catch (error) {
-    res.status(500).send('Internal Server Error')
+    res.status(500).send({ status: 500, message: 'Internal Server Error' })
   }
 }
 

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { AxiosError } from "axios"
 import { RequestSignUp, UserData, UserState, RequestUserData } from "../types/interfaces/UserData"
 import { requestSignUp } from "../services/auth"
-import { AxiosError } from "axios";
 
 export const fetchUserRegistration = createAsyncThunk<RequestUserData, RequestSignUp, { rejectValue: { status: number, message: string } }>('user/fetchUserRegistration',
   async (body: RequestSignUp, { rejectWithValue }) => {
@@ -23,6 +23,7 @@ export const userSlice = createSlice({
     user: {} as UserData,
     status: 0,
     error: false,
+    loading: false,
     errorMessage: '',
   } as Partial<UserState>,
 
@@ -31,8 +32,14 @@ export const userSlice = createSlice({
 
 
   extraReducers: (builder) => {
+    builder.addCase(fetchUserRegistration.pending, (state) => {
+      state.loading = true
+      state.error = false
+    })
+
     builder.addCase(fetchUserRegistration.fulfilled, (state, action: PayloadAction<RequestUserData>) => {
-      state.status = 200
+      state.status = 201
+      state.loading = false
       state.error = false
       state.accessToken = action.payload.accessToken
       state.refreshToken = action.payload.refreshToken
@@ -41,6 +48,7 @@ export const userSlice = createSlice({
 
     builder.addCase(fetchUserRegistration.rejected, (state, action) => {
       state.status = action.payload?.status
+      state.loading = false
       state.error = true
       state.errorMessage = action.payload?.message
     })
