@@ -3,6 +3,7 @@ const express = require('express')
 const authRouter = require('./src/modules/auth')
 const moviesRouter = require('./src/modules/movies')
 const movieRouter = require('./src/modules/movie')
+const { deleteExpiredTokens } = require('./src/modules/deleteExpiredTokens')
 
 const app = express()
 
@@ -21,6 +22,7 @@ app.use('/movie', movieRouter)
 async function main() {
   try {
     await mongoose.connect('mongodb://localhost:27017/pixema')
+    await deleteExpiredTokens()
     app.listen(3000, () => {
       console.log('Server started on http://localhost:3000')
     })

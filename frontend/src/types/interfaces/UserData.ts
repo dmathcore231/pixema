@@ -21,8 +21,7 @@ export interface UserData {
 
 export interface RequestUserData {
   accessToken: string
-  refreshToken: string
-  user?: UserData
+  user: UserData
   status: number
   message: string
 }

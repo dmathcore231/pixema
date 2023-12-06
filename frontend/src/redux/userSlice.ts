@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AxiosError } from "axios"
 import { RequestSignUp, RequestSignIn, UserData, UserState, RequestUserData, ErrorResponse } from "../types/interfaces/UserData"
-import { requestSignUp, requestSignIn } from "../services/auth"
+import { requestSignUp, requestSignIn, requestRefreshTokenJWT } from "../services/auth"
 import { setDataLocalStorage } from "../helpers"
 
 export const fetchUserRegistration = createAsyncThunk<RequestUserData, RequestSignUp, { rejectValue: ErrorResponse }>('user/fetchUserRegistration',
@@ -26,12 +26,22 @@ export const fetchUserAuthorization = createAsyncThunk<RequestUserData, RequestS
     }
   })
 
+export const fetchRefreshTokenJWT = createAsyncThunk<RequestUserData, { accessToken: string }, { rejectValue: ErrorResponse }>('user/fetchRefreshTokenJWT',
+  async (body: { accessToken: string }, { rejectWithValue }) => {
+    try {
+      return await requestRefreshTokenJWT(body)
+    } catch (error) {
+      const err = error as AxiosError
+      const errResponse = err.response?.data as ErrorResponse
+      return rejectWithValue(errResponse)
+    }
+  })
+
 export const userSlice = createSlice({
   name: 'user',
 
   initialState: {
     accessToken: '',
-    refreshToken: '',
     user: {} as UserData,
     status: 0,
     error: false,
@@ -74,11 +84,9 @@ export const userSlice = createSlice({
       state.loading = false
       state.error = false
       state.accessToken = action.payload.accessToken
-      state.refreshToken = action.payload.refreshToken
       state.user = action.payload.user
       state.errorMessage = ''
       setDataLocalStorage('accessToken', action.payload.accessToken)
-      setDataLocalStorage('refreshToken', action.payload.refreshToken)
     })
 
     builder.addCase(fetchUserAuthorization.rejected, (state, action) => {
@@ -86,6 +94,31 @@ export const userSlice = createSlice({
       state.loading = false
       state.error = true
       state.errorMessage = action.payload?.message
+    })
+
+    builder.addCase(fetchRefreshTokenJWT.pending, (state) => {
+      state.loading = true
+      state.error = false
+    })
+
+    builder.addCase(fetchRefreshTokenJWT.fulfilled, (state, action: PayloadAction<RequestUserData>) => {
+      console.log(action.payload.accessToken)
+      state.status = action.payload.status
+      state.loading = false
+      state.error = false
+      state.accessToken = action.payload.accessToken
+      state.user = action.payload.user
+      state.errorMessage = ''
+      setDataLocalStorage('accessToken', action.payload.accessToken)
+    })
+
+    builder.addCase(fetchRefreshTokenJWT.rejected, (state, action) => {
+      state.status = action.payload?.status
+      state.loading = false
+      state.error = true
+      state.errorMessage = action.payload?.message
+      state.accessToken = ''
+      setDataLocalStorage('accessToken', '')
     })
   },
 

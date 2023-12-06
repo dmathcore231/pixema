@@ -3,7 +3,10 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 const User = require('../models/userSchema')
+const Token = require('../models/tokenSchema')
 const missingFields = require('../helpers/missingFields')
+const expiresInAccessToken = '30s'
+const expiresInRefreshToken = '7d'
 
 const secretKey = crypto.randomBytes(32).toString('hex')
 
@@ -71,7 +74,6 @@ async function createUser(req, res) {
     res.send({ status: 201, message: 'User created successfully', user })
   } catch (error) {
     res.status(500).send({ status: 500, message: 'Internal Server Error' })
-
   }
 }
 
@@ -108,60 +110,56 @@ async function authenticateUser(req, res) {
     }
 
     const accessToken = jwt.sign({ id: user._id }, secretKey, {
-      expiresIn: '5m',
+      expiresIn: expiresInAccessToken,
     })
 
     const refreshToken = jwt.sign({ id: user._id }, secretKey, {
-      expiresIn: '7d',
+      expiresIn: expiresInRefreshToken,
     })
-    res.send({ status: 200, user, accessToken, refreshToken })
+
+    const refreshTokenData = new Token({
+      tokenData: refreshToken,
+      userID: user._id,
+      expiresAt: jwt.decode(refreshToken).exp
+    })
+
+    await refreshTokenData.save()
+    res.send({ status: 200, user, accessToken })
   } catch (error) {
     res.status(500).send({ status: 500, message: 'Internal Server Error' })
   }
 }
-
-async function authorizationUser(req, res) {
-  const refreshToken = req.body.refreshToken
-
-  if (!refreshToken) {
-    return res.status(401).send({ status: 401, message: 'Refresh token is missing' })
-  }
-
-  try {
-    const decoded = jwt.verify(refreshToken, secretKey)
-    const users = await User.findById(decoded.id)
-
-    if (!users) {
-      throw new Error('Invalid refresh token')
-    }
-    return res.status(200).send({ status: 200, users })
-  } catch (error) {
-    return res.status(401).send({ status: 401, message: error.toString() })
-  }
-}
-
 async function refreshToken(req, res) {
-  const refreshToken = req.body.refreshToken
+  const accessTokenReq = req.body.accessToken
 
-  if (!refreshToken) {
-    return res.status(401).send({ status: 401, message: 'Refresh token is missing' })
+  if (!accessTokenReq) {
+    return res.status(400).send({ status: 400, message: 'Access token is required' })
+  }
+
+  const decodeAccessToken = jwt.decode(accessTokenReq)
+
+  if (!decodeAccessToken) {
+    return res.status(400).send({ status: 400, message: 'Invalid access token', accessToken: null })
+  }
+  const findRefreshToken = await Token.findOne({ userID: decodeAccessToken.id })
+
+  if (!findRefreshToken) {
+    res.status(401).send({ status: 401, message: 'Invalid access token', accessToken: null })
   }
 
   try {
-    const decoded = jwt.verify(refreshToken, secretKey)
-    const users = await User.findById(decoded.id)
+    const checkAccessTokenReq = jwt.verify(accessTokenReq, secretKey)
 
-    if (!users) {
-      throw new Error('Invalid refresh token')
-    }
-
-    const accessToken = jwt.sign({ id: users._id }, secretKey, {
-      expiresIn: '5m',
-    })
-
-    return res.send({ status: 200, users, accessToken })
+    res.status(200).send({ status: 200, message: 'Access token verified', accessToken: accessTokenReq })
   } catch (error) {
-    return res.status(401).send({ status: 401, message: error.toString() })
+    if (error instanceof jwt.JsonWebTokenError) {
+      const newAccessToken = jwt.sign({ id: decodeAccessToken.id }, secretKey, {
+        expiresIn: expiresInAccessToken
+      })
+      res.status(200).send({ status: 200, message: 'New access token', accessToken: newAccessToken })
+    } else {
+      res.status(500).send({ status: 500, message: 'Internal Server Error' })
+    }
   }
 }
 
@@ -210,7 +208,6 @@ async function updateUserById(req, res) {
 //user
 router.post('/user', createUser)
 router.post('/user/authenticate', authenticateUser)
-router.post('/user/authorization', authorizationUser)
 router.get('/user/:id', getUserById)
 router.delete('/user/:id', deleteUserById)
 router.put('/user/:id', updateUserById)
