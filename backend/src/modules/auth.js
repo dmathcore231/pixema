@@ -77,32 +77,44 @@ async function createUser(req, res) {
 
 async function authenticateUser(req, res) {
   const { email, password } = req.body
+  const errMessages = []
+  missingFields(email, 'Email', errMessages)
+  missingFields(password, 'Password', errMessages)
+  if (errMessages.length > 0) {
+    return res.status(400).send({
+      status: 400, message:
+        `Missing fields: ${errMessages.join(', ')}`
+    })
+  }
+
+  if (errMessages.length > 0) {
+    return res.status(400).send({
+      status: 400, message:
+        `Missing fields: ${errMessages.join(', ')}`
+    })
+  }
 
   try {
-    if (!email) {
-      return res.status(400).send({ status: 400, message: 'Email is required' })
+    const user = await User.findOne({ email })
+
+    if (!user) {
+      return res.status(401).send({ status: 401, message: 'User not found' })
     }
 
-    const users = await User.findOne({ email })
-
-    if (!users) {
-      return res.status(401).send({ status: 401, message: 'Invalid email' })
-    }
-
-    const isMatch = await bcrypt.compare(password, users.password)
+    const isMatch = await bcrypt.compare(password, user.password)
 
     if (!isMatch) {
       return res.status(401).send({ status: 401, message: 'Invalid password' })
     }
 
-    const accessToken = jwt.sign({ id: users._id }, secretKey, {
-      expiresIn: '10m',
+    const accessToken = jwt.sign({ id: user._id }, secretKey, {
+      expiresIn: '5m',
     })
 
-    const refreshToken = jwt.sign({ id: users._id }, secretKey, {
+    const refreshToken = jwt.sign({ id: user._id }, secretKey, {
       expiresIn: '7d',
     })
-    res.send({ status: 200, users, accessToken, refreshToken })
+    res.send({ status: 200, user, accessToken, refreshToken })
   } catch (error) {
     res.status(500).send({ status: 500, message: 'Internal Server Error' })
   }
@@ -144,7 +156,7 @@ async function refreshToken(req, res) {
     }
 
     const accessToken = jwt.sign({ id: users._id }, secretKey, {
-      expiresIn: '10m',
+      expiresIn: '5m',
     })
 
     return res.send({ status: 200, users, accessToken })

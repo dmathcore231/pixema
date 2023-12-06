@@ -17,9 +17,9 @@ export const requestSignUp = async (body: RequestSignUp): Promise<RequestUserDat
   }
 }
 
-export const requestSignIn = async (body: RequestSignIn): Promise<AxiosResponse<RequestUserData>> => {
+export const requestSignIn = async (body: RequestSignIn): Promise<RequestUserData> => {
   try {
-    const data = await clientRest.post(authenticateUserEndPoint, body, {
+    const { data } = await clientRest.post(authenticateUserEndPoint, body, {
       headers: {
         'Content-Type': 'application/json'
       }

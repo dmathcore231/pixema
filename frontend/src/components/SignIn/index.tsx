@@ -1,33 +1,52 @@
 import './styles.scss'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { FormInput } from '../FormInput'
 import { Btn } from '../Btn'
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { requestSignIn } from '../../services/auth'
-import { setDataLocalStorage } from '../../helpers'
-import { clientRest } from '../../utils/client'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { fetchUserAuthorization } from '../../redux/userSlice'
 
 export function SignIn(): JSX.Element {
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const navigate = useNavigate()
+  const [isSubmit, setIsSubmit] = useState(false)
+  const [errorField, setErrorField] = useState('')
+
+  const emailElement = document.querySelector('#email') as HTMLElement
+  const passwordElement = document.querySelector('#password') as HTMLElement
+
+  const { status, errorMessage } = useAppSelector(state => state.user)
+
+  useEffect(() => {
+    if (isSubmit) {
+      dispatch(fetchUserAuthorization({ email, password }))
+      setIsSubmit(false)
+    }
+
+    if (errorMessage === "User not found") {
+      setErrorField('email')
+      setIsSubmit(false)
+      setEmail('')
+      setPassword('')
+      emailElement?.focus()
+    } else if (errorMessage === "Invalid password") {
+      setErrorField('password')
+      setIsSubmit(false)
+      setEmail('')
+      setPassword('')
+      passwordElement?.focus()
+    }
+    if (status === 200) {
+      navigate('/')
+    }
+  }, [isSubmit, errorMessage, status])
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setEmail('')
-    setPassword('')
-    try {
-      const response = await requestSignIn({ email, password })
-
-      if (response.status === 200) {
-        setDataLocalStorage('accessToken', response.data.accessToken)
-        setDataLocalStorage('refreshToken', response.data.refreshToken)
-        clientRest.defaults.headers.common['Authorization'] = `Bearer ${response.data.accessToken}`
-        navigate('/')
-      }
-    } catch (error) {
-      console.log(error)
-    }
+    setIsSubmit(true)
   }
   return (
     <form className='sign-in' onSubmit={handleSubmit}>
@@ -45,6 +64,7 @@ export function SignIn(): JSX.Element {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required={true}
+          className={errorField === 'email' ? 'primary-input_error' : ''}
         />
       </div>
       <div className='sign-in__item'>
@@ -58,6 +78,7 @@ export function SignIn(): JSX.Element {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required={true}
+          className={errorField === 'password' ? 'primary-input_error' : ''}
         />
         <Link
           to='/reset-password'
