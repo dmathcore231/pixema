@@ -44,3 +44,18 @@ export const requestRefreshTokenJWT = async (body: { accessToken: string }): Pro
     throw err
   }
 }
+
+export const requestUserData = async (body: { accessToken: string }): Promise<RequestUserData> => {
+  try {
+    const { data } = await clientRest.get(authEndPoint, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${body.accessToken}`
+      }
+    })
+    return data
+  } catch (error) {
+    const err = error as AxiosError
+    throw err
+  }
+}

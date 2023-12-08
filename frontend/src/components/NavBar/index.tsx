@@ -23,13 +23,13 @@ export function NavBar(): JSX.Element {
             </NavLink>
           </div>
           <div className="nav-item">
-            <NavLink className="nav-link" to="/favorites">
+            <NavLink className="nav-link" to="/user/favorites">
               <FavoritesIcon className="nav-link__icon" width="24" height="24" />
               <div className="subtitle subtitle_color_inherit">Favorites</div>
             </NavLink>
           </div>
           <div className="nav-item">
-            <NavLink className="nav-link" to="/settings">
+            <NavLink className="nav-link" to="/user/settings">
               <SettingsIcon className="nav-link__icon" width="24" height="24" />
               <div className="subtitle subtitle_color_inherit">Settings</div>
             </NavLink>

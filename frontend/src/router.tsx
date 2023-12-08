@@ -23,11 +23,11 @@ export const router = createBrowserRouter([
         element: <Movie />
       },
       {
-        path: "/settings",
+        path: "/user/settings",
         element: <Settings />
       },
       {
-        path: "/favorites",
+        path: "/user/favorites",
         element: <Favorites />
       },
       {

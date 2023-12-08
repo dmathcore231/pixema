@@ -5,7 +5,7 @@ const crypto = require('crypto')
 const User = require('../models/userSchema')
 const Token = require('../models/tokenSchema')
 const missingFields = require('../helpers/missingFields')
-const expiresInAccessToken = '30s'
+const expiresInAccessToken = '10m'
 const expiresInRefreshToken = '7d'
 
 const secretKey = crypto.randomBytes(32).toString('hex')
@@ -163,6 +163,33 @@ async function refreshToken(req, res) {
   }
 }
 
+async function getUserByJwt(req, res) {
+  const token = req.headers['authorization'].split(' ')[1]
+
+  if (!token) {
+    return res.status(401).send({ status: 401, message: 'Access token is required' })
+  }
+
+
+  try {
+    const decoded = jwt.verify(token, secretKey)
+
+    const user = await User.findById(decoded.id)
+    if (user) {
+      res.status(200).send({ status: 200, message: 'Success', user, accessToken: token })
+    } else {
+      res.status(404).send({ status: 404, message: 'User not found' })
+    }
+
+  } catch (error) {
+    if (error instanceof jwt.JsonWebTokenError) {
+      res.status(401).send({ status: 401, message: 'Invalid access token' })
+    } else {
+      res.status(500).send({ status: 500, message: 'Internal Server Error' })
+    }
+  }
+}
+
 async function deleteUserById(req, res) {
   const id = req.params.id
 
@@ -209,6 +236,7 @@ async function updateUserById(req, res) {
 router.post('/user', createUser)
 router.post('/user/authenticate', authenticateUser)
 router.get('/user/:id', getUserById)
+router.get('/user', getUserByJwt)
 router.delete('/user/:id', deleteUserById)
 router.put('/user/:id', updateUserById)
 //all user
