@@ -167,7 +167,7 @@ async function getUserByJwt(req, res) {
   const token = req.headers['authorization'].split(' ')[1]
 
   if (!token) {
-    return res.status(401).send({ status: 401, message: 'Access token is required' })
+    return res.status(401).send({ status: 401, message: 'Access token is required', accessToken: null })
   }
 
 
@@ -210,24 +210,40 @@ async function deleteUserById(req, res) {
 }
 
 async function updateUserById(req, res) {
-  const id = req.params.id
-  const { userName, email, password } = req.body
-  if (!userName) {
-    return res.status(400).send({ status: 400, message: 'User name is required' })
-  } else if (!email) {
-    return res.status(400).send({ status: 400, message: 'Email is required' })
-  } else if (!password) {
-    return res.status(400).send({ status: 400, message: 'Password is required' })
+  const { userName, email, password, newPassword } = req.body
+  const token = req.headers['authorization'].split(' ')[1]
+
+  if (!token) {
+    return res.status(401).send({ status: 401, message: 'Access token is required', accessToken: null })
   }
 
   try {
-    const user = await User.findByIdAndUpdate(id, { userName, email, password }, { new: true })
-    if (user) {
-      res.status(200).send({ status: 200, message: 'User updated successfully', user })
+    const decoded = jwt.verify(token, secretKey)
+    const user = await User.findById(decoded.id)
+    const isMatchPassword = await bcrypt.compare(password, user.password)
+    if (!user) {
+      return res.status(404).send({ status: 404, message: 'User not found', accessToken: null })
+    }
+
+    if (!isMatchPassword) {
+      return res.status(401).send({ status: 401, message: 'Invalid password' })
     } else {
-      res.status(404).send({ status: 404, message: 'User not found' })
+      if (newPassword) {
+        const hashedPassword = await bcrypt.hash(newPassword, 10)
+        user.password = hashedPassword
+        user.userName = userName
+        user.email = email
+        await user.save()
+        return res.status(200).send({ status: 200, message: 'User updated successfully', user })
+      } else {
+        user.userName = userName
+        user.email = email
+        await user.save()
+        return res.status(200).send({ status: 200, message: 'User updated successfully', user })
+      }
     }
   } catch (error) {
+    console.log(error)
     res.status(500).send({ status: 500, message: 'Internal Server Error' })
   }
 }
@@ -238,7 +254,7 @@ router.post('/user/authenticate', authenticateUser)
 router.get('/user/:id', getUserById)
 router.get('/user', getUserByJwt)
 router.delete('/user/:id', deleteUserById)
-router.put('/user/:id', updateUserById)
+router.put('/user', updateUserById)
 //all user
 router.get('/users', getAllUser)
 //token

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AxiosError } from "axios"
-import { RequestSignUp, RequestSignIn, UserData, UserState, RequestUserData, ErrorResponse } from "../types/interfaces/UserData"
-import { requestSignUp, requestSignIn, requestRefreshTokenJWT, requestUserData } from "../services/auth"
+import { RequestSignUp, RequestSignIn, UserState, RequestUserData, ErrorResponse, RequestUpdateUserData } from "../types/interfaces/UserData"
+import { requestSignUp, requestSignIn, requestRefreshTokenJWT, requestUserData, requestUpdateUserData } from "../services/auth"
 import { setDataLocalStorage } from "../helpers"
 
 export const fetchUserRegistration = createAsyncThunk<RequestUserData, RequestSignUp, { rejectValue: ErrorResponse }>('user/fetchUserRegistration',
@@ -48,12 +48,23 @@ export const fetchUserData = createAsyncThunk<RequestUserData, { accessToken: st
     }
   })
 
+export const fetchUpdateUserData = createAsyncThunk<RequestUserData, RequestUpdateUserData, { rejectValue: ErrorResponse }>('user/fetchUpdateUserData',
+  async (body: RequestUpdateUserData, { rejectWithValue }) => {
+    try {
+      return await requestUpdateUserData(body)
+    } catch (error) {
+      const err = error as AxiosError
+      const errResponse = err.response?.data as ErrorResponse
+      return rejectWithValue(errResponse)
+    }
+  })
+
 export const userSlice = createSlice({
   name: 'user',
 
   initialState: {
     accessToken: '',
-    user: {} as UserData,
+    user: null,
     status: 0,
     error: false,
     loading: false,
@@ -75,7 +86,6 @@ export const userSlice = createSlice({
       state.loading = false
       state.error = false
       state.errorMessage = ''
-      console.log(action.payload)
     })
 
     builder.addCase(fetchUserRegistration.rejected, (state, action) => {
@@ -145,6 +155,26 @@ export const userSlice = createSlice({
     })
 
     builder.addCase(fetchUserData.rejected, (state, action) => {
+      state.status = action.payload?.status
+      state.loading = false
+      state.error = true
+      state.errorMessage = action.payload?.message
+    })
+
+    builder.addCase(fetchUpdateUserData.pending, (state) => {
+      state.loading = true
+      state.error = false
+    })
+
+    builder.addCase(fetchUpdateUserData.fulfilled, (state, action: PayloadAction<RequestUserData>) => {
+      state.status = action.payload.status
+      state.loading = false
+      state.error = false
+      state.user = action.payload.user
+      state.errorMessage = ''
+    })
+
+    builder.addCase(fetchUpdateUserData.rejected, (state, action) => {
       state.status = action.payload?.status
       state.loading = false
       state.error = true

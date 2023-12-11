@@ -10,7 +10,7 @@ import { truncateTitle } from "../../helpers"
 export function UserProfiles(): JSX.Element {
   const dispatch = useAppDispatch()
   const { user, accessToken, loading } = useAppSelector(state => state.user)
-
+  console.log(user)
   useEffect(() => {
     if (accessToken) {
       dispatch(fetchUserData({ accessToken }))
@@ -36,7 +36,7 @@ export function UserProfiles(): JSX.Element {
   }
 
   return (
-    <a href={user ? "/user/settings" : "/sign-in"} className="user-profiles">
+    <a href={user ? `/user/settings` : "/sign-in"} className="user-profiles">
       <div className="user-profiles__wrapper">
         <div className="user-profiles__avatar">
           <img src={userIcon} alt="User Avatar" />

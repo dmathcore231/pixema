@@ -10,6 +10,10 @@ export interface RequestSignUp {
   password: string
 }
 
+export interface RequestUpdateUserData extends RequestSignUp {
+  newPassword: string
+}
+
 export interface UserData {
   userName: string
   email: string
@@ -21,7 +25,7 @@ export interface UserData {
 
 export interface RequestUserData {
   accessToken: string
-  user: UserData
+  user: UserData | null
   status: number
   message: string
 }
