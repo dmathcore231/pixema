@@ -1,13 +1,15 @@
 import "./styles.scss"
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import { useAppSelector, useAppDispatch } from "../../hooks"
-import { fetchUpdateUserData } from "../../redux/userSlice"
+import { fetchUpdateUserData, logout } from "../../redux/userSlice"
 import { FormInput } from "../../components/FormInput"
 import { Switch } from "../../components/Switch"
 import { Btn } from "../../components/Btn"
 
 export function Settings() {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const { user, status, errorMessage } = useAppSelector(state => state.user)
 
   const [valueName, setValueName] = useState('')
@@ -78,6 +80,11 @@ export function Settings() {
     setValueEmail(initialValueEmail)
   }
 
+  function handleClickLogout() {
+    dispatch(logout())
+    navigate('/')
+  }
+
   return (
     <div className="settings">
       <form className="settings__content" onSubmit={handleSubmit}>
@@ -90,9 +97,9 @@ export function Settings() {
               <FormInput
                 label={true}
                 children="Name"
-                htmlFor="name-input"
+                htmlFor="name"
                 type="text"
-                id="name-input"
+                id="name"
                 placeholder="Your name"
                 value={valueName}
                 required={true}
@@ -102,10 +109,10 @@ export function Settings() {
             <div className="settings__input">
               <FormInput
                 label={true}
-                htmlFor="email-input"
+                htmlFor="email"
                 children="Email"
                 type="email"
-                id="email-input"
+                id="email"
                 placeholder="Your email"
                 value={valueEmail}
                 required={true}
@@ -196,6 +203,15 @@ export function Settings() {
               Save
             </Btn>
           </div>
+        </div>
+        <div className="settings__item settings__item_logout">
+          <Btn
+            type='button'
+            className='btn_danger'
+            onClick={handleClickLogout}
+          >
+            Log out
+          </Btn>
         </div>
       </form>
     </div>

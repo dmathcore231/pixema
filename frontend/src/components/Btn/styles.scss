@@ -87,4 +87,17 @@ $component: 'btn';
     text-transform: none;
     border-radius: 0.625rem;
   }
+
+  &_danger {
+    --btn-bg-color: var(--danger-color);
+    --btn-color-hover: var(--white-color);
+    --btn-bg-color-hover: var(--danger-color-light);
+    --btn-color-active: var(--white-color);
+    --btn-bg-color-active: var(--danger-color-light);
+    --btn-font-size: 1rem;
+    --btn-font-weight: 600;
+    --btn-line-height: 1.5rem;
+    text-transform: none;
+    border-radius: 0.625rem;
+  }
 }

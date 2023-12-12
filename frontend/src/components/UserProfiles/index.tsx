@@ -10,7 +10,7 @@ import { truncateTitle } from "../../helpers"
 export function UserProfiles(): JSX.Element {
   const dispatch = useAppDispatch()
   const { user, accessToken, loading } = useAppSelector(state => state.user)
-  console.log(user)
+
   useEffect(() => {
     if (accessToken) {
       dispatch(fetchUserData({ accessToken }))

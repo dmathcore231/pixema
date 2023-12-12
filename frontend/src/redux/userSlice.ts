@@ -72,6 +72,15 @@ export const userSlice = createSlice({
   } as Partial<UserState>,
 
   reducers: {
+    logout: (state) => {
+      state.accessToken = ''
+      state.user = null
+      state.status = 0
+      state.error = false
+      state.loading = false
+      state.errorMessage = ''
+      setDataLocalStorage('accessToken', '')
+    },
   },
 
 
@@ -185,3 +194,4 @@ export const userSlice = createSlice({
 })
 
 export const userReducer = userSlice.reducer
+export const { logout } = userSlice.actions
