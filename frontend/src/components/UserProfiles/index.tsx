@@ -1,21 +1,12 @@
 import "./styles.scss"
-import { useEffect } from "react"
-import { useAppDispatch, useAppSelector } from "../../hooks"
-import { fetchUserData } from "../../redux/userSlice"
+import { useAppSelector } from "../../hooks"
 import userIcon from "../../images/interface/user-icon.png"
 import arrowRightIcon from "../../images/interface/arrow-right.png"
 import { Spinner } from "../Spinner"
 import { truncateTitle } from "../../helpers"
 
 export function UserProfiles(): JSX.Element {
-  const dispatch = useAppDispatch()
-  const { user, accessToken, loading } = useAppSelector(state => state.user)
-
-  useEffect(() => {
-    if (accessToken) {
-      dispatch(fetchUserData({ accessToken }))
-    }
-  }, [accessToken])
+  const { user, loading } = useAppSelector(state => state.user)
 
   if (loading) {
     return (

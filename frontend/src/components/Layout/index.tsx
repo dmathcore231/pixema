@@ -4,15 +4,27 @@ import { Header } from "../Header"
 import { Main } from "../Main"
 import { Footer } from "../Footer"
 import { NavBar } from "../NavBar"
-import { store } from "../../redux/store"
-import { fetchRefreshTokenJWT } from "../../redux/userSlice"
+import { fetchRefreshTokenJWT, fetchUserData } from "../../redux/userSlice"
+import { useAppDispatch } from "../../hooks"
+import { useEffect } from "react"
 import { getDataLocalStorage } from "../../helpers"
+import { fetchMovies } from "../../redux/movieSlice"
 
 export function Layout() {
-  const dataLocalStorage = getDataLocalStorage('accessToken')
-  if (dataLocalStorage) {
-    store.dispatch(fetchRefreshTokenJWT({ accessToken: dataLocalStorage }))
-  }
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = getDataLocalStorage('accessToken')
+      if (token) {
+        await dispatch(fetchRefreshTokenJWT({ accessToken: token }))
+        await dispatch(fetchUserData({ accessToken: token }))
+        await dispatch(fetchMovies())
+      }
+    }
+
+    fetchData()
+  }, [dispatch])
 
   return (
     <div className="layout">
