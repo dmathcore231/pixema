@@ -9,6 +9,8 @@ import { SignUp } from "./components/SignUp"
 import { Favorites } from "./pages/Favorites"
 import { Trends } from "./pages/Trends"
 import { ResetPassword } from "./components/ResetPassword"
+import { Dashboard } from "./pages/Dashboard"
+import { PrivateRouter } from "./PrivateRouter"
 
 export const router = createBrowserRouter([
   {
@@ -37,6 +39,14 @@ export const router = createBrowserRouter([
       {
         path: "/movies",
         element: <Main />
+      },
+      {
+        path: "/dashboard",
+        element: <PrivateRouter redirectPath="/sign-in">
+          <Dashboard />
+        </PrivateRouter>
+
+
       }
     ]
   },

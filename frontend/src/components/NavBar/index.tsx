@@ -10,6 +10,47 @@ export function NavBar(): JSX.Element {
   const { user } = useAppSelector((state) => state.user)
 
   if (user) {
+    const roleUser = user._role
+    if (roleUser === "admin") {
+      return (
+        <aside className="aside">
+          <nav className="navbar">
+            <ul className="navbar__nav">
+              <div className="nav-item">
+                <NavLink className="nav-link" to="/">
+                  <HomeIcon className="nav-link__icon" width="24" height="24" />
+                  <div className="subtitle subtitle_color_inherit">Home</div>
+                </NavLink>
+              </div>
+              <div className="nav-item">
+                <NavLink className="nav-link" to="/trends">
+                  <TrendsIcon className="nav-link__icon" width="24" height="24" />
+                  <div className="subtitle subtitle_color_inherit">Trends</div>
+                </NavLink>
+              </div>
+              <div className="nav-item">
+                <NavLink className="nav-link" to="/user/favorites">
+                  <FavoritesIcon className="nav-link__icon" width="24" height="24" />
+                  <div className="subtitle subtitle_color_inherit">Favorites</div>
+                </NavLink>
+              </div>
+              <div className="nav-item">
+                <NavLink className="nav-link" to="/user/settings">
+                  <SettingsIcon className="nav-link__icon" width="24" height="24" />
+                  <div className="subtitle subtitle_color_inherit">Settings</div>
+                </NavLink>
+              </div>
+              <div className="nav-item">
+                <NavLink className="nav-link" to="/dashboard">
+                  <HomeIcon className="nav-link__icon" width="24" height="24" />
+                  <div className="subtitle subtitle_color_inherit">Dashboard</div>
+                </NavLink>
+              </div>
+            </ul>
+          </nav>
+        </aside>
+      )
+    }
     return (
       <aside className="aside">
         <nav className="navbar">
