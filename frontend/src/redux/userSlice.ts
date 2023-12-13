@@ -1,60 +1,60 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AxiosError } from "axios"
-import { RequestSignUp, RequestSignIn, UserState, RequestUserData, ErrorResponse, RequestUpdateUserData } from "../types/interfaces/UserData"
+import { RequestSignUp, RequestSignIn, UserState, RequestUserData, ResponseNoData, RequestUpdateUserData } from "../types/interfaces/UserData"
 import { requestSignUp, requestSignIn, requestRefreshTokenJWT, requestUserData, requestUpdateUserData } from "../services/auth"
 import { getDataLocalStorage, setDataLocalStorage } from "../helpers"
 
-export const fetchUserRegistration = createAsyncThunk<RequestUserData, RequestSignUp, { rejectValue: ErrorResponse }>('user/fetchUserRegistration',
+export const fetchUserRegistration = createAsyncThunk<RequestUserData, RequestSignUp, { rejectValue: ResponseNoData }>('user/fetchUserRegistration',
   async (body: RequestSignUp, { rejectWithValue }) => {
     try {
       return await requestSignUp(body)
     } catch (error) {
       const err = error as AxiosError
-      const errResponse = err.response?.data as ErrorResponse
+      const errResponse = err.response?.data as ResponseNoData
       return rejectWithValue(errResponse)
     }
   })
 
-export const fetchUserAuthorization = createAsyncThunk<RequestUserData, RequestSignIn, { rejectValue: ErrorResponse }>('user/fetchUserAuthorization',
+export const fetchUserAuthorization = createAsyncThunk<RequestUserData, RequestSignIn, { rejectValue: ResponseNoData }>('user/fetchUserAuthorization',
   async (body: RequestSignIn, { rejectWithValue }) => {
     try {
       return await requestSignIn(body)
     } catch (error) {
       const err = error as AxiosError
-      const errResponse = err.response?.data as ErrorResponse
+      const errResponse = err.response?.data as ResponseNoData
       return rejectWithValue(errResponse)
     }
   })
 
-export const fetchRefreshTokenJWT = createAsyncThunk<RequestUserData, { accessToken: string }, { rejectValue: ErrorResponse }>('user/fetchRefreshTokenJWT',
+export const fetchRefreshTokenJWT = createAsyncThunk<RequestUserData, { accessToken: string }, { rejectValue: ResponseNoData }>('user/fetchRefreshTokenJWT',
   async (body: { accessToken: string }, { rejectWithValue }) => {
     try {
       return await requestRefreshTokenJWT(body)
     } catch (error) {
       const err = error as AxiosError
-      const errResponse = err.response?.data as ErrorResponse
+      const errResponse = err.response?.data as ResponseNoData
       return rejectWithValue(errResponse)
     }
   })
 
-export const fetchUserData = createAsyncThunk<RequestUserData, { accessToken: string }, { rejectValue: ErrorResponse }>('user/fetchUserData',
+export const fetchUserData = createAsyncThunk<RequestUserData, { accessToken: string }, { rejectValue: ResponseNoData }>('user/fetchUserData',
   async (body: { accessToken: string }, { rejectWithValue }) => {
     try {
       return await requestUserData(body)
     } catch (error) {
       const err = error as AxiosError
-      const errResponse = err.response?.data as ErrorResponse
+      const errResponse = err.response?.data as ResponseNoData
       return rejectWithValue(errResponse)
     }
   })
 
-export const fetchUpdateUserData = createAsyncThunk<RequestUserData, RequestUpdateUserData, { rejectValue: ErrorResponse }>('user/fetchUpdateUserData',
+export const fetchUpdateUserData = createAsyncThunk<RequestUserData, RequestUpdateUserData, { rejectValue: ResponseNoData }>('user/fetchUpdateUserData',
   async (body: RequestUpdateUserData, { rejectWithValue }) => {
     try {
       return await requestUpdateUserData(body)
     } catch (error) {
       const err = error as AxiosError
-      const errResponse = err.response?.data as ErrorResponse
+      const errResponse = err.response?.data as ResponseNoData
       return rejectWithValue(errResponse)
     }
   })

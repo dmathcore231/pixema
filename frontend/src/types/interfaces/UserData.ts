@@ -36,7 +36,9 @@ export interface UserState extends RequestUserData {
   errorMessage: string
 }
 
-export interface ErrorResponse {
+export interface ResponseNoData {
   status: number
   message: string
 }
+
+
