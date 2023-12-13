@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AxiosError } from "axios"
 import { RequestSignUp, RequestSignIn, UserState, RequestUserData, ErrorResponse, RequestUpdateUserData } from "../types/interfaces/UserData"
 import { requestSignUp, requestSignIn, requestRefreshTokenJWT, requestUserData, requestUpdateUserData } from "../services/auth"
-import { setDataLocalStorage } from "../helpers"
+import { getDataLocalStorage, setDataLocalStorage } from "../helpers"
 
 export const fetchUserRegistration = createAsyncThunk<RequestUserData, RequestSignUp, { rejectValue: ErrorResponse }>('user/fetchUserRegistration',
   async (body: RequestSignUp, { rejectWithValue }) => {
@@ -80,6 +80,9 @@ export const userSlice = createSlice({
       state.loading = false
       state.errorMessage = ''
       setDataLocalStorage('accessToken', '')
+      if (getDataLocalStorage('_r')) {
+        setDataLocalStorage('_r', '')
+      }
     },
   },
 
@@ -148,6 +151,9 @@ export const userSlice = createSlice({
       state.errorMessage = action.payload?.message
       state.accessToken = ''
       setDataLocalStorage('accessToken', '')
+      if (getDataLocalStorage('_r')) {
+        setDataLocalStorage('_r', '')
+      }
     })
 
     builder.addCase(fetchUserData.pending, (state) => {

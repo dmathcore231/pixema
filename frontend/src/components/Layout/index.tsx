@@ -1,5 +1,6 @@
 import "./styles.scss"
 import { Outlet } from "react-router-dom"
+import { useAppSelector } from "../../hooks"
 import { Header } from "../Header"
 import { Main } from "../Main"
 import { Footer } from "../Footer"
@@ -12,6 +13,7 @@ import { fetchMovies } from "../../redux/movieSlice"
 
 export function Layout() {
   const dispatch = useAppDispatch()
+  const { accessToken } = useAppSelector(state => state.user)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,18 +21,33 @@ export function Layout() {
       if (token) {
         await dispatch(fetchRefreshTokenJWT({ accessToken: token }))
         await dispatch(fetchUserData({ accessToken: token }))
-        await dispatch(fetchMovies())
       }
+      await dispatch(fetchMovies())
     }
-
     fetchData()
   }, [dispatch])
+
+  function isAuth() {
+    if (accessToken) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  function checkRole() {
+    if (getDataLocalStorage('_r') === 'true') {
+      return true
+    } else {
+      return false
+    }
+  }
 
   return (
     <div className="layout">
       <Header />
       <Main>
-        <NavBar />
+        <NavBar isAuth={isAuth()} _r={checkRole()} />
         <Outlet />
       </Main>
       <Footer />

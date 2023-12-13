@@ -1,14 +1,21 @@
 import { Navigate } from "react-router-dom"
-import { useAppSelector } from "./hooks"
 import { PrivateRouterProps } from "./types/interfaces/PrivateRouterProps"
+import { getDataLocalStorage } from "./helpers"
 
-export function PrivateRouter({ children, redirectPath }: PrivateRouterProps): JSX.Element {
-  const { user } = useAppSelector(state => state.user)
+export function PrivateRouter({ children, redirectPath, def }: PrivateRouterProps): JSX.Element {
 
-  if (user && user._role === "admin") {
-    return (
-      children
-    )
+  if (def) {
+    if (getDataLocalStorage('_r') === 'true' && getDataLocalStorage('accessToken')) {
+      return (
+        children
+      )
+    }
+  } else {
+    if (getDataLocalStorage('accessToken')) {
+      return (
+        children
+      )
+    }
   }
 
   return (

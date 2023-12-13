@@ -26,11 +26,15 @@ export const router = createBrowserRouter([
       },
       {
         path: "/user/settings",
-        element: <Settings />
+        element: <PrivateRouter redirectPath="/sign-in" def={false}>
+          <Settings />
+        </PrivateRouter>
       },
       {
         path: "/user/favorites",
-        element: <Favorites />
+        element: <PrivateRouter redirectPath="/sign-in" def={false}>
+          <Favorites />
+        </PrivateRouter>
       },
       {
         path: "/trends",
@@ -42,11 +46,9 @@ export const router = createBrowserRouter([
       },
       {
         path: "/dashboard",
-        element: <PrivateRouter redirectPath="/sign-in">
+        element: <PrivateRouter redirectPath="/" def={true}>
           <Dashboard />
         </PrivateRouter>
-
-
       }
     ]
   },
