@@ -3,6 +3,7 @@ const express = require('express')
 const authRouter = require('./src/modules/auth')
 const moviesRouter = require('./src/modules/movies')
 const movieRouter = require('./src/modules/movie')
+const dashboardRouter = require('./src/modules/dashboard')
 const { deleteExpiredTokens } = require('./src/modules/deleteExpiredTokens')
 
 const app = express()
@@ -18,6 +19,7 @@ app.use(express.json())
 app.use('/auth', authRouter)
 app.use('/movies', moviesRouter)
 app.use('/movie', movieRouter)
+app.use('/dashboard', dashboardRouter)
 
 async function main() {
   try {

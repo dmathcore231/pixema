@@ -40,7 +40,6 @@ async function createMovie(req, res) {
     await movie.save()
     res.status(201).send({ status: 201, message: 'Movie created successfully', movie })
   } catch (error) {
-    console.error(error)
     res.status(500).send({ status: 500, message: 'Internal Server Error' })
   }
 }
