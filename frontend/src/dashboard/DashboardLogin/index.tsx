@@ -53,32 +53,34 @@ export function DashboardLogin(): JSX.Element {
   }
 
   return (
-    <form className="dashboard-login" onSubmit={handleSubmit}>
-      <div className="dashboard-login__title">
-        <h2>Dashboard</h2>
-      </div>
-      <div className="dashboard-login__item">
-        <FormInput
-          label={true}
-          htmlFor='password'
-          children='Password'
-          type='password'
-          id='password'
-          placeholder='Enter password dashboard'
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required={true}
-          className={errorField === 'password' ? 'primary-input_error' : ''}
-        />
-      </div>
-      <div className="dashboard-login__item">
-        <Btn
-          type='submit'
-          className='btn_primary'
-        >
-          Sign In
-        </Btn>
-      </div>
-    </form>
+    <div className="dashboard-wrapper">
+      <form className="dashboard-login" onSubmit={handleSubmit}>
+        <div className="dashboard-login__title">
+          <h2>Dashboard</h2>
+        </div>
+        <div className="dashboard-login__item">
+          <FormInput
+            label={true}
+            htmlFor='password'
+            children='Password'
+            type='password'
+            id='password'
+            placeholder='Enter password dashboard'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required={true}
+            className={errorField === 'password' ? 'primary-input_error' : ''}
+          />
+        </div>
+        <div className="dashboard-login__item">
+          <Btn
+            type='submit'
+            className='btn_primary'
+          >
+            Sign In
+          </Btn>
+        </div>
+      </form>
+    </div>
   )
 }

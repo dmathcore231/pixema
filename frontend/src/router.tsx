@@ -11,9 +11,12 @@ import { SignUp } from "./components/SignUp"
 import { Favorites } from "./pages/Favorites"
 import { Trends } from "./pages/Trends"
 import { ResetPassword } from "./components/ResetPassword"
-import { Dashboard } from "./pages/Dashboard"
+import { Dashboard } from "./dashboard"
 import { DashboardLogin } from "./dashboard/DashboardLogin"
 import { DashboardMain } from "./dashboard/Main"
+import { DashboardMovies } from "./dashboard/DashboardMovies"
+import { DashboardUsers } from "./dashboard/DashboardUsers"
+import { DashboardStatistics } from "./dashboard/DashboardStatistics"
 
 export const router = createBrowserRouter([
   {
@@ -48,18 +51,36 @@ export const router = createBrowserRouter([
         element: <Main />
       },
       {
+        path: "/dashboard/login",
+        element: <PrivateRouter redirectPath="/sign-in" def={true}>
+          <DashboardLogin />
+        </PrivateRouter>
+      },
+      {
         element: <Dashboard />,
         children: [
-          {
-            path: "/dashboard",
-            element: <PrivateRouter redirectPath="/sign-in" def={true}>
-              <DashboardLogin />
-            </PrivateRouter>
-          },
           {
             path: "/dashboard/main",
             element: <DefRouter redirectPath="/sign-in" >
               <DashboardMain />
+            </DefRouter>
+          },
+          {
+            path: "/dashboard/movies",
+            element: <DefRouter redirectPath="/sign-in" >
+              <DashboardMovies />
+            </DefRouter>
+          },
+          {
+            path: "/dashboard/users",
+            element: <DefRouter redirectPath="/sign-in" >
+              <DashboardUsers />
+            </DefRouter>
+          },
+          {
+            path: "/dashboard/statistics",
+            element: <DefRouter redirectPath="/sign-in" >
+              <DashboardStatistics />
             </DefRouter>
           }
         ]

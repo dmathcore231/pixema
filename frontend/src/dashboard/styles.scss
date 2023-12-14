@@ -1,0 +1,6 @@
+@import "../styles/app.scss";
+
+.dashboard {
+  @include flex-column;
+  width: 66%;
+}

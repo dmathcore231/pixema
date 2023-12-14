@@ -38,7 +38,7 @@ export function NavBar({ isAuth, _r, _dash }: NavBarProps): JSX.Element {
               </NavLink>
             </div>
             <div className="nav-item">
-              <NavLink className="nav-link" to={_dash ? "/dashboard/main" : "/dashboard"}>
+              <NavLink className="nav-link" to={_dash ? "/dashboard/login" : "/dashboard"}>
                 <HomeIcon className="nav-link__icon" width="24" height="24" />
                 <div className="subtitle subtitle_color_inherit">Dashboard</div>
               </NavLink>

@@ -1,5 +1,10 @@
 @import "../../styles/app.scss";
 
+.dashboard-wrapper {
+  @include flex-center;
+  width: 66%;
+}
+
 .dashboard-login {
   background-color: var(--dark-color);
   padding: 2.5rem;
