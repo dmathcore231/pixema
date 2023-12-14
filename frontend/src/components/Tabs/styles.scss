@@ -3,12 +3,6 @@
 .tabs {
   display: inline-block;
 
-
-  &_filter {
-    border-bottom: 0.063rem solid var(--graphite-color);
-    padding-bottom: 2rem;
-  }
-
   &__item {
     display: inline-block;
     max-width: 12.688rem;

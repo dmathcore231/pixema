@@ -77,6 +77,14 @@
   &__item {
     @include flex-column;
 
+    &_border {
+
+      &_bottom {
+        border-bottom: 0.063rem solid var(--graphite-color);
+        padding-bottom: 2rem;
+      }
+    }
+
     &_flex-row {
       flex-direction: row;
       align-items: flex-end;

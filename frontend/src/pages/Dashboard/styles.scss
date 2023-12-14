@@ -4,23 +4,4 @@
   width: 66%;
   display: flex;
   justify-content: center;
-
-  &-modal {
-    background-color: var(--dark-color);
-    padding: 2.5rem;
-    @include flex-column;
-    gap: 1.5rem;
-    border-radius: 0.625rem;
-    min-width: 35.875rem;
-
-    &__item {
-      @include flex-column;
-      gap: 0.5rem;
-    }
-
-    &__title {
-      display: flex;
-    }
-  }
-
 }

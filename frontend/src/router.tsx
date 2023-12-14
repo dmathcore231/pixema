@@ -1,4 +1,6 @@
 import { createBrowserRouter } from "react-router-dom"
+import { PrivateRouter } from "./PrivateRouter"
+import { DefRouter } from "./DefRouter"
 import { Layout } from "./components/Layout"
 import { Main } from "./pages/Main"
 import { Movie } from "./pages/Movie"
@@ -10,7 +12,8 @@ import { Favorites } from "./pages/Favorites"
 import { Trends } from "./pages/Trends"
 import { ResetPassword } from "./components/ResetPassword"
 import { Dashboard } from "./pages/Dashboard"
-import { PrivateRouter } from "./PrivateRouter"
+import { DashboardLogin } from "./dashboard/DashboardLogin"
+import { DashboardMain } from "./dashboard/Main"
 
 export const router = createBrowserRouter([
   {
@@ -45,10 +48,21 @@ export const router = createBrowserRouter([
         element: <Main />
       },
       {
-        path: "/dashboard",
-        element: <PrivateRouter redirectPath="/" def={true}>
-          <Dashboard />
-        </PrivateRouter>
+        element: <Dashboard />,
+        children: [
+          {
+            path: "/dashboard",
+            element: <PrivateRouter redirectPath="/sign-in" def={true}>
+              <DashboardLogin />
+            </PrivateRouter>
+          },
+          {
+            path: "/dashboard/main",
+            element: <DefRouter redirectPath="/sign-in" >
+              <DashboardMain />
+            </DefRouter>
+          }
+        ]
       }
     ]
   },

@@ -124,7 +124,7 @@ export function FilterModal(
           </div>
           <div className="modal__body">
             <form className="filter-panel" onSubmit={handleSubmit} id="filter-form">
-              <div className="filter-panel__item">
+              <div className="filter-panel__item filter-panel__item_border_bottom">
                 <div className="select-title subtitle subtitle_size_xxs">
                   Sort by
                 </div>

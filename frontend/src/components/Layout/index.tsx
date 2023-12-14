@@ -43,11 +43,19 @@ export function Layout() {
     }
   }
 
+  function checkDashLogin() {
+    if (getDataLocalStorage('isAuth') === 'true') {
+      return true
+    } else {
+      return false
+    }
+  }
+
   return (
     <div className="layout">
       <Header />
       <Main>
-        <NavBar isAuth={isAuth()} _r={checkRole()} />
+        <NavBar isAuth={isAuth()} _r={checkRole()} _dash={checkDashLogin()} />
         <Outlet />
       </Main>
       <Footer />

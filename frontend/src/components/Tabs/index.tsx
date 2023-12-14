@@ -26,7 +26,7 @@ export function Tabs({ name, value, titleTabs, onClick, isChecked }: TabsProps):
   }
 
   return (
-    <div className="tabs tabs_filter">
+    <div className="tabs">
       {renderTabs()}
     </div>
   )

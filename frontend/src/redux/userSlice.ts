@@ -82,6 +82,7 @@ export const userSlice = createSlice({
       setDataLocalStorage('accessToken', '')
       if (getDataLocalStorage('_r')) {
         setDataLocalStorage('_r', '')
+        setDataLocalStorage('isAuth', '')
       }
     },
   },
@@ -153,6 +154,7 @@ export const userSlice = createSlice({
       setDataLocalStorage('accessToken', '')
       if (getDataLocalStorage('_r')) {
         setDataLocalStorage('_r', '')
+        setDataLocalStorage('isAuth', '')
       }
     })
 
