@@ -4,6 +4,7 @@ import userIcon from "../../images/interface/user-icon.png"
 import arrowRightIcon from "../../images/interface/arrow-right.png"
 import { Spinner } from "../Spinner"
 import { truncateTitle } from "../../helpers"
+import { NavLink } from "react-router-dom"
 
 export function UserProfiles(): JSX.Element {
   const { user, loading } = useAppSelector(state => state.user)
@@ -27,7 +28,7 @@ export function UserProfiles(): JSX.Element {
   }
 
   return (
-    <a href={user ? `/user/settings` : "/sign-in"} className="user-profiles">
+    <NavLink to={user ? `/user/settings` : "/sign-in"} className="user-profiles">
       <div className="user-profiles__wrapper">
         <div className="user-profiles__avatar">
           <img src={userIcon} alt="User Avatar" />
@@ -39,6 +40,6 @@ export function UserProfiles(): JSX.Element {
       <div className="arrow-icon arrow-icon_right">
         <img src={arrowRightIcon} alt="Arrow Right Icon" />
       </div>
-    </a>
+    </NavLink>
   )
 }

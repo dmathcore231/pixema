@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from "../../hooks"
 import { fetchDashboard } from "../../redux/dashboardSlice"
 import { FormInput } from "../../components/FormInput"
 import { Btn } from "../../components/Btn"
-import { getDataLocalStorage, setDataLocalStorage } from "../../helpers"
 
 export function DashboardLogin(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -20,10 +19,6 @@ export function DashboardLogin(): JSX.Element {
   const { status } = useAppSelector(state => state.dashboard)
 
   useEffect(() => {
-
-    if (getDataLocalStorage('isAuth') === 'true') {
-      navigate('/dashboard/main')
-    }
 
     if (isSubmit) {
       setIsSubmit(false)
@@ -43,7 +38,6 @@ export function DashboardLogin(): JSX.Element {
       setErrorField('')
       setIsSubmit(false)
       navigate('/dashboard/main')
-      setDataLocalStorage('isAuth', 'true')
     }
   }, [isSubmit, status])
 

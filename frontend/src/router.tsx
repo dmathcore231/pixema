@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router-dom"
 import { PrivateRouter } from "./PrivateRouter"
-import { DefRouter } from "./DefRouter"
 import { Layout } from "./components/Layout"
 import { Main } from "./pages/Main"
 import { Movie } from "./pages/Movie"
@@ -32,13 +31,13 @@ export const router = createBrowserRouter([
       },
       {
         path: "/user/settings",
-        element: <PrivateRouter redirectPath="/sign-in" def={false}>
+        element: <PrivateRouter redirectPath="/sign-in">
           <Settings />
         </PrivateRouter>
       },
       {
         path: "/user/favorites",
-        element: <PrivateRouter redirectPath="/sign-in" def={false}>
+        element: <PrivateRouter redirectPath="/sign-in">
           <Favorites />
         </PrivateRouter>
       },
@@ -61,27 +60,27 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "/dashboard/main",
-            element: <DefRouter redirectPath="/sign-in" >
+            element: <PrivateRouter redirectPath="/sign-in" def={true}>
               <DashboardMain />
-            </DefRouter>
+            </PrivateRouter>
           },
           {
             path: "/dashboard/movies",
-            element: <DefRouter redirectPath="/sign-in" >
+            element: <PrivateRouter redirectPath="/sign-in" def={true} >
               <DashboardMovies />
-            </DefRouter>
+            </PrivateRouter>
           },
           {
             path: "/dashboard/users",
-            element: <DefRouter redirectPath="/sign-in" >
+            element: <PrivateRouter redirectPath="/sign-in" def={true} >
               <DashboardUsers />
-            </DefRouter>
+            </PrivateRouter>
           },
           {
             path: "/dashboard/statistics",
-            element: <DefRouter redirectPath="/sign-in" >
+            element: <PrivateRouter redirectPath="/sign-in" def={true} >
               <DashboardStatistics />
-            </DefRouter>
+            </PrivateRouter>
           }
         ]
       }

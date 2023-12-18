@@ -69,6 +69,7 @@ export const userSlice = createSlice({
     error: false,
     loading: false,
     errorMessage: '',
+    def: false,
   } as Partial<UserState>,
 
   reducers: {
@@ -121,6 +122,11 @@ export const userSlice = createSlice({
       state.user = action.payload.user
       state.errorMessage = ''
       setDataLocalStorage('accessToken', action.payload.accessToken)
+      if (action.payload.user?._role === 'admin') {
+        state.def = true
+      } else {
+        state.def = false
+      }
     })
 
     builder.addCase(fetchUserAuthorization.rejected, (state, action) => {
@@ -143,6 +149,11 @@ export const userSlice = createSlice({
       state.user = action.payload.user
       state.errorMessage = ''
       setDataLocalStorage('accessToken', action.payload.accessToken)
+      if (action.payload.user?._role === 'admin') {
+        state.def = true
+      } else {
+        state.def = false
+      }
     })
 
     builder.addCase(fetchRefreshTokenJWT.rejected, (state, action) => {
