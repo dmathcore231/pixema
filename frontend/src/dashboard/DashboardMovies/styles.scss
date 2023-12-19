@@ -1,0 +1,8 @@
+@import '../../styles/app.scss';
+
+.dashboard-movies {
+  display: flex;
+  background-color: var(--dark-color);
+  border-radius: 0.625rem;
+  padding: 2rem;
+}

@@ -7,22 +7,22 @@ export function DashboardNav(): JSX.Element {
       <ul className='dashboard-panel-nav__list'>
         <li className='dashboard-panel-nav__item'>
           <NavLink className="dashboard-panel-nav__link" to="/dashboard/main">
-            <h3>Main</h3>
+            Main
           </NavLink>
         </li>
         <li className='dashboard-panel-nav__item'>
           <NavLink className="dashboard-panel-nav__link" to="/dashboard/users">
-            <h3>Users</h3>
+            Users
           </NavLink>
         </li>
         <li className='dashboard-panel-nav__item'>
           <NavLink className="dashboard-panel-nav__link" to="/dashboard/movies">
-            <h3>Movies</h3>
+            Movies
           </NavLink>
         </li>
         <li className='dashboard-panel-nav__item'>
           <NavLink className="dashboard-panel-nav__link" to="/dashboard/statistics">
-            <h3>Statistics</h3>
+            Statistics
           </NavLink>
         </li>
       </ul>

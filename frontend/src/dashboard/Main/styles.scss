@@ -1,23 +1,8 @@
 @import "../../styles/app.scss";
 
-.dashboard-panel {
+.dashboard-main {
   display: flex;
-  width: 100%;
-
-  &-nav {
-
-    &__list {
-      display: flex;
-      gap: 2rem;
-    }
-
-    &__item {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.6rem;
-    }
-  }
-
-
+  background-color: var(--dark-color);
+  border-radius: 0.625rem;
+  padding: 2rem;
 }

@@ -16,9 +16,12 @@ export function DashboardLogin(): JSX.Element {
 
   const passwordElement = document.querySelector('#password') as HTMLElement
 
-  const { status } = useAppSelector(state => state.dashboard)
+  const { status, isAuth } = useAppSelector(state => state.dashboard)
 
   useEffect(() => {
+    if (isAuth) {
+      navigate('/dashboard/main')
+    }
 
     if (isSubmit) {
       setIsSubmit(false)

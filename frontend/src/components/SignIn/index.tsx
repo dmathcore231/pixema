@@ -5,7 +5,6 @@ import { FormInput } from '../FormInput'
 import { Btn } from '../Btn'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { fetchUserAuthorization } from '../../redux/userSlice'
-import { setDataLocalStorage } from '../../helpers'
 
 export function SignIn(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -19,7 +18,7 @@ export function SignIn(): JSX.Element {
   const emailElement = document.querySelector('#email') as HTMLElement
   const passwordElement = document.querySelector('#password') as HTMLElement
 
-  const { status, errorMessage, user } = useAppSelector(state => state.user)
+  const { status, errorMessage } = useAppSelector(state => state.user)
 
   useEffect(() => {
     if (isSubmit) {
@@ -41,9 +40,6 @@ export function SignIn(): JSX.Element {
       passwordElement?.focus()
     }
     if (status === 200) {
-      if (user?._role === 'admin') {
-        setDataLocalStorage('_r', 'true')
-      }
       navigate('/')
     }
   }, [isSubmit, errorMessage, status])

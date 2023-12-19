@@ -1,0 +1,21 @@
+@import '../../styles/app.scss';
+
+.dashboard-users {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--dark-color);
+  border-radius: 0.625rem;
+  padding: 2rem;
+
+  &__title {
+    display: flex;
+  }
+
+  &__spinner {
+    fill: var(--dark-color);
+  }
+
+  .table-users {
+    width: 100%;
+  }
+}

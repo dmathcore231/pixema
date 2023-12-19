@@ -1,0 +1,40 @@
+@import '../../styles/app.scss';
+
+.dashboard-panel-nav {
+
+  padding-left: 0.625rem;
+
+  &__list {
+    display: flex;
+    gap: 2rem;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__link {
+    @include flex-center;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 2rem;
+    padding: 0.5rem 1.875rem;
+    color: var(--secondary-color);
+    border-top: 0.125rem solid var(--graphite-color);
+    border-left: 0.125rem solid var(--graphite-color);
+    border-right: 0.125rem solid var(--graphite-color);
+    border-radius: 0.625rem 0.625rem 0 0;
+
+    &.active {
+      color: var(--primary-color);
+      border: none;
+      border-top: 2px solid var(--graphite-color);
+      border-left: 2px solid var(--graphite-color);
+      border-right: 2px solid var(--graphite-color);
+      border-radius: 0.625rem 0.625rem 0 0;
+      background-color: var(--dark-color);
+    }
+  }
+}

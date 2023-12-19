@@ -15,7 +15,8 @@ const router = express.Router()
 async function getAllUser(_, res) {
   try {
     const users = await User.find({})
-    res.status(200).send({ status: 200, message: 'Success', users })
+    const totalUsers = users.length
+    res.status(200).send({ status: 200, message: 'Success', users, totalUsers: totalUsers })
   } catch (error) {
     res.status(500).send({ status: 500, message: 'Internal Server Error' })
   }
