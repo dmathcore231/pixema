@@ -1,5 +1,6 @@
 import "./styles.scss"
 import { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import { useAppSelector, useAppDispatch } from "../../hooks"
 import { fetchAllUsers } from "../../redux/dashboardSlice"
 import { Spinner } from "../../components/Spinner"
@@ -8,6 +9,8 @@ import { Btn } from "../../components/Btn"
 
 export function DashboardUsers(): JSX.Element {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
   const { users, loading, error } = useAppSelector(state => state.dashboard)
 
   useEffect(() => {
@@ -39,14 +42,19 @@ export function DashboardUsers(): JSX.Element {
       </div>
     )
   }
+  function handleClickBtnEdit(userId: string) {
+    navigate(`/dashboard/users/${userId}`)
+  }
 
   function renderUserTable() {
     if (users) {
       return (
         <table className="table-users">
           <thead className="table-users__head">
-            <tr className="table-users__total-user">
-              Total users: {users?.length}
+            <tr className="total-user">
+              <th className="total-user__item">
+                Total users: {users.length}
+              </th>
             </tr>
           </thead>
           <tbody className="table-users__body">
@@ -67,7 +75,7 @@ export function DashboardUsers(): JSX.Element {
                   <Btn
                     type="button"
                     className="btn"
-                    onClick={() => console.log(user)}
+                    onClick={() => handleClickBtnEdit(user._id)}
                   >
                     Edit
                   </Btn>

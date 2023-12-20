@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { requestDashboard, requestGetAllUsers } from "../services/dashboard"
+import { requestDashboard, requestGetAllUsers, requestGetUserById, requestUpdateUserData } from "../services/dashboard"
 import { AxiosError } from "axios"
 import { ResponseNoData, UserData } from "../types/interfaces/UserData"
-import { RequestDashboard, DashboardState, ResponseAllUsers } from "../types/interfaces/Dashboard"
+import { RequestDashboard, DashboardState, ResponseAllUsers, ResponseUserDataById, RequestUpdateUserData } from "../types/interfaces/Dashboard"
 
 export const fetchDashboard = createAsyncThunk<ResponseNoData, RequestDashboard, { rejectValue: ResponseNoData }>('dashboard/fetchDashboard',
   async (body: RequestDashboard, { rejectWithValue }) => {
@@ -26,6 +26,27 @@ export const fetchAllUsers = createAsyncThunk<ResponseAllUsers, void, { rejectVa
     }
   })
 
+export const fetchUserById = createAsyncThunk<ResponseUserDataById, string, { rejectValue: ResponseNoData }>('dashboard/fetchUserById',
+  async (userId, { rejectWithValue }) => {
+    try {
+      return await requestGetUserById(userId)
+    } catch (error) {
+      const err = error as AxiosError
+      const errResponse = err.response?.data as ResponseNoData
+      return rejectWithValue(errResponse)
+    }
+  })
+
+export const fetchUpdateUserData = createAsyncThunk<ResponseUserDataById, RequestUpdateUserData, { rejectValue: ResponseNoData }>('dashboard/fetchUpdateUserData',
+  async (body, { rejectWithValue }) => {
+    try {
+      return await requestUpdateUserData(body)
+    } catch (error) {
+      const err = error as AxiosError
+      const errResponse = err.response?.data as ResponseNoData
+      return rejectWithValue(errResponse)
+    }
+  })
 
 export const dashboardSlice = createSlice({
   name: 'dashboard',
@@ -37,10 +58,12 @@ export const dashboardSlice = createSlice({
     error: false,
     message: '',
     users: [] as UserData[],
+    userById: {} as UserData,
     totalUsers: 0
   } as Partial<DashboardState>,
 
-  reducers: {},
+  reducers: {
+  },
 
   extraReducers: (builder) => {
     builder.addCase(fetchDashboard.pending, (state) => {
@@ -79,6 +102,46 @@ export const dashboardSlice = createSlice({
     })
 
     builder.addCase(fetchAllUsers.rejected, (state, action) => {
+      state.loading = false
+      state.error = true
+      state.status = action.payload?.status
+      state.message = action.payload?.message
+    })
+
+    builder.addCase(fetchUserById.pending, (state) => {
+      state.loading = true
+      state.error = false
+    })
+
+    builder.addCase(fetchUserById.fulfilled, (state, action: PayloadAction<ResponseUserDataById>) => {
+      state.loading = false
+      state.error = false
+      state.status = action.payload.status
+      state.userById = action.payload.user
+      state.message = action.payload.message
+    })
+
+    builder.addCase(fetchUserById.rejected, (state, action) => {
+      state.loading = false
+      state.error = true
+      state.status = action.payload?.status
+      state.message = action.payload?.message
+    })
+
+    builder.addCase(fetchUpdateUserData.pending, (state) => {
+      state.loading = true
+      state.error = false
+    })
+
+    builder.addCase(fetchUpdateUserData.fulfilled, (state, action: PayloadAction<ResponseUserDataById>) => {
+      state.loading = false
+      state.error = false
+      state.status = action.payload.status
+      state.userById = action.payload.user
+      state.message = action.payload.message
+    })
+
+    builder.addCase(fetchUpdateUserData.rejected, (state, action) => {
       state.loading = false
       state.error = true
       state.status = action.payload?.status

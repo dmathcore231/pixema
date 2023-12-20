@@ -1,0 +1,14 @@
+@import '../../styles/app.scss';
+
+.user-form {
+  @include flex-column;
+  gap: 1.5rem;
+  padding: 2.5rem;
+  border-radius: 0.625rem;
+  min-width: 35.875rem;
+
+  &__btn-group {
+    display: flex;
+    gap: 5rem;
+  }
+}

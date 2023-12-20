@@ -22,25 +22,6 @@ async function getAllUser(_, res) {
   }
 }
 
-async function getUserById(req, res) {
-  const id = req.params.id
-
-  if (!id) {
-    return res.status(400).send({ status: 400, message: 'User ID is required' })
-  }
-
-  try {
-    const user = await User.findById(id)
-    if (user) {
-      res.status(200).send({ status: 200, message: 'Success', user })
-    } else {
-      res.status(404).send({ status: 404, message: 'User not found' })
-    }
-  } catch (error) {
-    res.status(500).send({ status: 500, message: 'Internal Server Error' })
-  }
-}
-
 async function createUser(req, res) {
   const { userName, email, password } = req.body
   const errMessages = []
@@ -252,7 +233,6 @@ async function updateUserById(req, res) {
 //user
 router.post('/user', createUser)
 router.post('/user/authenticate', authenticateUser)
-router.get('/user/:id', getUserById)
 router.get('/user', getUserByJwt)
 router.delete('/user/:id', deleteUserById)
 router.put('/user', updateUserById)

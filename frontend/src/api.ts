@@ -5,3 +5,4 @@ export const authenticateUserEndPoint = '/auth/user/authenticate'
 export const authorizationUserEndPoint = '/auth/user/authorization'
 export const refreshTokenJtwEndPoint = '/auth/refreshTokenJwt'
 export const dashboardEndPoint = '/dashboard'
+export const dashboardGetUserByIdEndPoint = `${dashboardEndPoint}/users`

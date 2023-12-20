@@ -16,6 +16,7 @@ import { DashboardMain } from "./dashboard/Main"
 import { DashboardMovies } from "./dashboard/DashboardMovies"
 import { DashboardUsers } from "./dashboard/DashboardUsers"
 import { DashboardStatistics } from "./dashboard/DashboardStatistics"
+import { DashboardUser } from "./dashboard/DashboardUser"
 
 export const router = createBrowserRouter([
   {
@@ -80,6 +81,12 @@ export const router = createBrowserRouter([
             path: "/dashboard/statistics",
             element: <PrivateRouter redirectPath="/sign-in" def={true} >
               <DashboardStatistics />
+            </PrivateRouter>
+          },
+          {
+            path: "/dashboard/users/:userId",
+            element: <PrivateRouter redirectPath="/sign-in" def={true} >
+              <DashboardUser />
             </PrivateRouter>
           }
         ]

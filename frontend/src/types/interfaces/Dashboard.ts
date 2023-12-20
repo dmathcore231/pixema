@@ -12,6 +12,7 @@ export interface DashboardState {
   error: boolean
   message: string
   users: UserData[]
+  userById: UserData
   totalUsers: number
 }
 
@@ -20,4 +21,17 @@ export interface ResponseAllUsers {
   status: number
   message: string
   totalUsers: number
+}
+
+export interface ResponseUserDataById {
+  user: UserData
+  status: number
+  message: string
+}
+
+export interface RequestUpdateUserData {
+  userName: string
+  email: string
+  userRole: string
+  userId: string
 }
