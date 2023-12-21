@@ -7,8 +7,20 @@
   border-radius: 0.625rem;
   min-width: 35.875rem;
 
+  &__btn {
+    width: 9.375rem;
+  }
+
   &__btn-group {
     display: flex;
     gap: 5rem;
+  }
+}
+
+.link-back {
+  display: flex;
+
+  &__item {
+    fill: var(--secondary-color);
   }
 }

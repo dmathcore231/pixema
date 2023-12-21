@@ -60,21 +60,21 @@ export function DashboardUsers(): JSX.Element {
           <tbody className="table-users__body">
             <tr className="table-users-col">
               <th className="table-users-col__item">Number</th>
-              <th className="table-users-col__item">ID</th>
               <th className="table-users-col__item">Name</th>
               <th className="table-users-col__item">Email</th>
+              <th className="table-users-col__item">Role</th>
               <th className="table-users-col__item">Edit</th>
             </tr>
             {users.map((user, index) => (
               <tr key={user._id} className="table-users-row">
                 <td className="table-users-row__item">{index + 1}</td>
-                <td className="table-users-row__item">{user._id}</td>
                 <td className="table-users-row__item">{user.userName}</td>
                 <td className="table-users-row__item">{user.email}</td>
+                <td className="table-users-row__item">{user._role}</td>
                 <td className="table-users-row__item">
                   <Btn
                     type="button"
-                    className="btn"
+                    className="btn_primary"
                     onClick={() => handleClickBtnEdit(user._id)}
                   >
                     Edit

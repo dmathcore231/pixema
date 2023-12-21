@@ -1,26 +1,44 @@
 import "./styles.scss"
 import { ModalProps } from "../../types/interfaces/ModalProps"
 import { CloseIcon } from "../../images/Icons/CloseIcon"
+import { Btn } from "../Btn"
 
-export function Modal({ isActive, modalClass, title, onClose, onSubmit, children, titleBtnSubmit, titleBtnClose }: ModalProps): JSX.Element | null {
+export function Modal({ isActive, modalClass, title, onClose, onSubmit, children, titleBtnSubmit, titleBtnClose, classBtnSubmit, classBtnClose }: ModalProps): JSX.Element | null {
   if (!isActive) {
     return null
   } else {
     return (
-      <div className={`modal ${modalClass ? modalClass : ""}`}>
-        <div className="modal__content modal__content_height_100">
+      <div className={"modal" + (modalClass ? " " + modalClass : "") + ""}>
+        <div className="modal__content">
           <div className="modal__header">
-            <h2 className="modal__title">{title}</h2>
-            <button className="btn btn_close modal__btn-close" onClick={onClose}>
-              <CloseIcon width="24" height="24" />
-            </button>
+            <div className="modal__title">
+              <h2>{title}</h2>
+            </div>
+            <div className="modal__btn-close">
+              <Btn
+                type='button'
+                className='btn_close'
+                onClick={onClose}>
+                <CloseIcon width="24" height="24" />
+              </Btn>
+            </div>
           </div>
           <div className="modal__body">
             {children}
           </div>
           <div className="modal__footer">
-            <button className="btn btn_secondary modal__btn-clear" onClick={onClose}>{titleBtnClose}</button>
-            <button className="btn btn_primary modal__btn-submit" onClick={onSubmit}>{titleBtnSubmit}</button>
+            <Btn
+              type='button'
+              className={(classBtnClose ? classBtnClose : "btn_secondary")}
+              onClick={onClose}>
+              {titleBtnClose}
+            </Btn>
+            <Btn
+              type='submit'
+              className={(classBtnSubmit ? classBtnSubmit : "btn_primary")}
+              onClick={onSubmit}>
+              {titleBtnSubmit}
+            </Btn>
           </div>
         </div>
       </div>

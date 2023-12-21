@@ -59,3 +59,17 @@ export const requestUpdateUserData = async (body: RequestUpdateUserData): Promis
     throw err
   }
 }
+
+export const requestDeleteUser = async (userId: string): Promise<ResponseNoData> => {
+  try {
+    const { data } = await clientRest.delete(`${dashboardGetUserByIdEndPoint}/${userId}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    return data
+  } catch (error) {
+    const err = error as AxiosError
+    throw err
+  }
+}

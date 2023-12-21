@@ -243,7 +243,7 @@ export function FilterModal(
               </div>
             </form>
           </div>
-          <div className="modal__footer">
+          <div className="modal__footer modal__footer_padding_top">
             <Btn
               className="btn_secondary modal__btn-clear"
               onClick={handleClickBtnClear}

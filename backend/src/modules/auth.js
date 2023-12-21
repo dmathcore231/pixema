@@ -172,25 +172,6 @@ async function getUserByJwt(req, res) {
   }
 }
 
-async function deleteUserById(req, res) {
-  const id = req.params.id
-
-  if (!id) {
-    return res.status(400).send({ status: 400, message: 'User ID is required' })
-  }
-
-  try {
-    const user = await User.findByIdAndDelete(id)
-    if (user) {
-      res.status(200).send({ status: 200, message: 'User deleted successfully' })
-    } else {
-      res.status(404).send({ status: 404, message: 'User not found' })
-    }
-  } catch (error) {
-    res.status(500).send({ status: 500, message: 'Internal Server Error' })
-  }
-}
-
 async function updateUserById(req, res) {
   const { userName, email, password, newPassword } = req.body
   const token = req.headers['authorization'].split(' ')[1]
@@ -234,7 +215,6 @@ async function updateUserById(req, res) {
 router.post('/user', createUser)
 router.post('/user/authenticate', authenticateUser)
 router.get('/user', getUserByJwt)
-router.delete('/user/:id', deleteUserById)
 router.put('/user', updateUserById)
 //all user
 router.get('/users', getAllUser)

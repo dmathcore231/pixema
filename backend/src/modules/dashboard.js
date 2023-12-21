@@ -84,10 +84,29 @@ async function updatedUser(req, res) {
   }
 }
 
+async function deleteUserById(req, res) {
+  const id = req.params.id
+
+  if (!id) {
+    return res.status(400).send({ status: 400, message: 'User ID is required' })
+  }
+
+  try {
+    const user = await User.findByIdAndDelete(id)
+    if (user) {
+      return res.status(200).send({ status: 200, message: 'User deleted successfully' })
+    } else {
+      return res.status(404).send({ status: 404, message: 'User not found' })
+    }
+  } catch (error) {
+    res.status(500).send({ status: 500, message: 'Internal Server Error' })
+  }
+}
 
 
 router.post('/', loginDashboardMain)
 router.get('/users/:id', getUserById)
 router.put('/users/:id', updatedUser)
+router.delete('/users/:id', deleteUserById)
 
 module.exports = router

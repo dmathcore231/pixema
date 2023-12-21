@@ -55,6 +55,11 @@ $component: 'btn';
     }
   }
 
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
   &_padding {
 
     &_none {

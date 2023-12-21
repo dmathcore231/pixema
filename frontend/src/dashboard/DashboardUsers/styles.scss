@@ -17,5 +17,12 @@
 
   .table-users {
     width: 100%;
+
+    &-row {
+
+      &__item {
+        padding-bottom: 1rem;
+      }
+    }
   }
 }

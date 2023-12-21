@@ -13,17 +13,12 @@
   z-index: 2;
 
   &__content {
+    @include flex-column;
+    gap: 2rem;
     background: var(--dark-color);
     padding: 3rem 2.5rem;
     width: 518px;
-
-    &_height {
-
-      &_100 {
-        height: 100vh;
-        overflow: auto;
-      }
-    }
+    border-radius: 0.625rem;
   }
 
   &_filter {
@@ -41,7 +36,7 @@
 
   &__footer {
     display: flex;
+    gap: 2.5rem;
     justify-content: space-between;
-    padding-top: 6rem;
   }
 }

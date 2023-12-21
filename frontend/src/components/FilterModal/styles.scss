@@ -46,9 +46,13 @@
   }
 
   &__footer {
-    display: flex;
-    gap: 2.5rem;
-    padding-top: 6rem;
+
+    &_padding {
+
+      &_top {
+        padding-top: 6rem;
+      }
+    }
   }
 
   /* width */

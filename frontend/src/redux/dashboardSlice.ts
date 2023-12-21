@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { requestDashboard, requestGetAllUsers, requestGetUserById, requestUpdateUserData } from "../services/dashboard"
+import { requestDashboard, requestGetAllUsers, requestGetUserById, requestUpdateUserData, requestDeleteUser } from "../services/dashboard"
 import { AxiosError } from "axios"
 import { ResponseNoData, UserData } from "../types/interfaces/UserData"
 import { RequestDashboard, DashboardState, ResponseAllUsers, ResponseUserDataById, RequestUpdateUserData } from "../types/interfaces/Dashboard"
@@ -48,6 +48,17 @@ export const fetchUpdateUserData = createAsyncThunk<ResponseUserDataById, Reques
     }
   })
 
+export const fetchDeleteUser = createAsyncThunk<ResponseNoData, string, { rejectValue: ResponseNoData }>('dashboard/fetchDeleteUser',
+  async (userId, { rejectWithValue }) => {
+    try {
+      return await requestDeleteUser(userId)
+    } catch (error) {
+      const err = error as AxiosError
+      const errResponse = err.response?.data as ResponseNoData
+      return rejectWithValue(errResponse)
+    }
+  })
+
 export const dashboardSlice = createSlice({
   name: 'dashboard',
 
@@ -87,6 +98,7 @@ export const dashboardSlice = createSlice({
       state.error = true
     })
 
+    // fetchAllUsers
     builder.addCase(fetchAllUsers.pending, (state) => {
       state.loading = true
       state.error = false
@@ -108,6 +120,7 @@ export const dashboardSlice = createSlice({
       state.message = action.payload?.message
     })
 
+    // fetchUserById
     builder.addCase(fetchUserById.pending, (state) => {
       state.loading = true
       state.error = false
@@ -128,6 +141,7 @@ export const dashboardSlice = createSlice({
       state.message = action.payload?.message
     })
 
+    // fetchUpdateUserDataF
     builder.addCase(fetchUpdateUserData.pending, (state) => {
       state.loading = true
       state.error = false
@@ -142,6 +156,26 @@ export const dashboardSlice = createSlice({
     })
 
     builder.addCase(fetchUpdateUserData.rejected, (state, action) => {
+      state.loading = false
+      state.error = true
+      state.status = action.payload?.status
+      state.message = action.payload?.message
+    })
+
+    // fetchDeleteUser
+    builder.addCase(fetchDeleteUser.pending, (state) => {
+      state.loading = true
+      state.error = false
+    })
+
+    builder.addCase(fetchDeleteUser.fulfilled, (state, action: PayloadAction<ResponseNoData>) => {
+      state.loading = false
+      state.error = false
+      state.status = action.payload.status
+      state.message = action.payload.message
+    })
+
+    builder.addCase(fetchDeleteUser.rejected, (state, action) => {
       state.loading = false
       state.error = true
       state.status = action.payload?.status

@@ -9,4 +9,6 @@ export interface ModalProps {
   children: ReactNode
   titleBtnSubmit?: string
   titleBtnClose?: string
+  classBtnSubmit?: string
+  classBtnClose?: string
 }

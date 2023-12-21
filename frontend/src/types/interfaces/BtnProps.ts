@@ -6,4 +6,5 @@ export interface BtnProps {
   children: ReactNode
   form?: string
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  disabled?: boolean
 }
