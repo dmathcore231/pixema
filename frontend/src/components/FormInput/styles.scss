@@ -27,12 +27,28 @@
 
   &_padding-right {
 
-
     &_small {
       padding-right: 3.25rem;
     }
   }
 
+  &_border-radius {
+    &_button {
+      border-radius: 0 0 0.625rem 0.625rem;
+    }
+
+    &_none {
+      border-radius: 0;
+
+      &_button {
+        border-radius: 0.625rem 0.625rem 0 0;
+
+        &:focus-visible {
+          border: 2px solid transparent;
+        }
+      }
+    }
+  }
 
   &_error {
     border: 2px solid var(--danger-color);

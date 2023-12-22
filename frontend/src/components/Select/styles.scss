@@ -1,0 +1,52 @@
+@import '../../styles/app';
+
+.select {
+  @include flex-column;
+  width: 100%;
+
+  &-dropdown {
+    @include flex-column;
+    opacity: 0;
+    transition: opacity 0.3s ease, max-height 0.3s ease;
+    max-height: 0;
+    overflow: hidden;
+
+    &_active {
+      @include flex-column;
+      opacity: 1;
+      max-height: fit-content;
+      transition-delay: 0s;
+      max-height: 165px;
+      overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        width: 0.5rem;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: var(--secondary-color);
+        border-radius: 0.313rem;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+        border-radius: 0.313rem;
+      }
+    }
+
+    &__item {
+      cursor: default;
+
+      &:hover {
+        border-color: var(--primary-color);
+      }
+    }
+  }
+
+  &-value {
+
+    &__item {
+      cursor: default;
+    }
+  }
+}

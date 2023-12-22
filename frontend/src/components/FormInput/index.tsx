@@ -1,7 +1,8 @@
 import "./styles.scss"
 import { FormInputProps } from "../../types/interfaces/FormInputProps"
 
-export function FormInput({ label, htmlFor, children, type, id, placeholder, value, required, className, disabled, min, max, onChange }: FormInputProps): JSX.Element {
+export function FormInput({ label, htmlFor, children, type, id, placeholder, value, required, className, disabled, min, max, readOnly, onChange, onClick }: FormInputProps): JSX.Element {
+
   function RenderInput(): JSX.Element {
     if (label) {
       return (
@@ -15,12 +16,14 @@ export function FormInput({ label, htmlFor, children, type, id, placeholder, val
             id={id}
             placeholder={placeholder}
             value={value}
-            onChange={onChange}
             required={required}
             disabled={disabled}
             min={min}
             max={max}
             autoComplete="off"
+            readOnly={readOnly}
+            onChange={onChange}
+            onClick={onClick}
           />
         </div>
       )
@@ -33,9 +36,14 @@ export function FormInput({ label, htmlFor, children, type, id, placeholder, val
             id={id}
             placeholder={placeholder}
             value={value}
-            onChange={onChange}
             required={required}
             disabled={disabled}
+            min={min}
+            max={max}
+            autoComplete="off"
+            readOnly={readOnly}
+            onChange={onChange}
+            onClick={onClick}
           />
         </>
       )

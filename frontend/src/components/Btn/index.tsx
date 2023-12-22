@@ -8,7 +8,7 @@ export function Btn({ type, className, children, form, onClick, disabled }: BtnP
       className={"btn" + (className ? " " + className : "")}
       form={form}
       onClick={onClick}
-      disabled={disabled ? true : false}
+      disabled={disabled ? disabled : false}
     >
       {children}
     </button>

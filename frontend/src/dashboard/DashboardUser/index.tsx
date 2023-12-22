@@ -9,6 +9,8 @@ import { Btn } from "../../components/Btn"
 import { NavLink } from "react-router-dom"
 import { ArrowLeft } from "../../images/Icons/ArrowLeft"
 import { Modal } from "../../components/Modal"
+import { Select } from "../../components/Select"
+import { OptionsSelect } from "../../types/OptionsSelect"
 
 export function DashboardUser(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -18,7 +20,7 @@ export function DashboardUser(): JSX.Element {
   const { userById, loading } = useAppSelector(state => state.dashboard)
   const { user } = useAppSelector(state => state.user)
 
-
+  const [isDisabled, setIsDisabled] = useState(false)
   const [isActiveModal, setIsActiveModal] = useState(false)
   const [isSubmitModal, setIsSubmitModal] = useState(false)
   const [isSubmit, setIsSubmit] = useState(false)
@@ -28,6 +30,23 @@ export function DashboardUser(): JSX.Element {
     userRole: '',
     userId: ''
   })
+
+  const optionsSelect = [
+    { label: 'User', value: 'user' },
+    { label: 'Admin', value: 'admin' },
+    { label: 'Moderator', value: 'moderator' }
+  ]
+
+  function setDefaultValueSelect(role: string) {
+    switch (role) {
+      case 'user':
+        return optionsSelect[0]
+      case 'admin':
+        return optionsSelect[1]
+      case 'moderator':
+        return optionsSelect[2]
+    }
+  }
 
   useEffect(() => {
     dispatch(fetchUserById(userId!))
@@ -41,8 +60,12 @@ export function DashboardUser(): JSX.Element {
         userRole: userById._role || '',
         userId: userById._id || ''
       })
+      setDefaultValueSelect(userById._role)
     }
-  }, [userById])
+    if (user && user._id === userId) {
+      setIsDisabled(true)
+    }
+  }, [userById, user, userId])
 
   useEffect(() => {
     if (isSubmit) {
@@ -57,7 +80,7 @@ export function DashboardUser(): JSX.Element {
       dispatch(fetchDeleteUser(formUserData.userId))
       navigate('/dashboard/users')
     }
-  }, [dispatch, isSubmitModal, formUserData])
+  }, [dispatch, isSubmitModal, formUserData, navigate])
 
   if (loading) {
     return (
@@ -80,8 +103,8 @@ export function DashboardUser(): JSX.Element {
         userRole: userById._role,
         userId: userById._id
       })
+      setDefaultValueSelect(userById._role)
     }
-
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -96,6 +119,10 @@ export function DashboardUser(): JSX.Element {
   function handelSubmitModalDeleteUser() {
     setIsSubmitModal(true)
     setIsActiveModal(false)
+  }
+
+  function handleSelectOptionChange(newValue: OptionsSelect) {
+    console.log(newValue)
   }
 
   return (
@@ -135,16 +162,16 @@ export function DashboardUser(): JSX.Element {
           onChange={e => setFormUserData({ ...formUserData, email: e.target.value })}
           required={true}
         />
-        <FormInput
-          label={true}
-          htmlFor='userRole'
-          children='Role'
-          type='text'
-          id='userRole'
-          placeholder='User Role'
-          value={formUserData.userRole}
-          onChange={e => setFormUserData({ ...formUserData, userRole: e.target.value })}
-          required={true}
+        <Select
+          options={optionsSelect}
+          defaultValue={setDefaultValueSelect(formUserData.userRole)}
+          inputProps={{
+            label: true,
+            htmlFor: 'userRole',
+            children: 'User Role',
+            id: 'userRole'
+          }}
+          onSelectOptionChange={handleSelectOptionChange}
         />
         <FormInput
           label={true}
@@ -162,7 +189,7 @@ export function DashboardUser(): JSX.Element {
             type='button'
             className='btn_danger'
             onClick={handelClickBtnDelete}
-            disabled={user!._id === formUserData.userId}
+            disabled={isDisabled}
           >
             Delete
           </Btn>
