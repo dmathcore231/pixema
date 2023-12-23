@@ -1,11 +1,11 @@
 import './styles.scss'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FormInput } from '../FormInput'
 import { OptionsSelect } from '../../types/OptionsSelect'
 
 export interface SelectProps {
   options: OptionsSelect[]
-  defaultValue?: OptionsSelect
+  defaultValue?: string
   inputProps: {
     label: boolean
     htmlFor?: string
@@ -17,7 +17,17 @@ export interface SelectProps {
 
 export function Select({ options, defaultValue, inputProps, onSelectOptionChange }: SelectProps): JSX.Element {
   const [isActiveDropdown, setIsActiveDropdown] = useState(false)
-  const [selectedOption, setSelectedOption] = useState(defaultValue ? defaultValue : { label: 'Select option', value: '0' })
+  const [selectedOption, setSelectedOption] = useState({ label: 'Select option', value: '0' })
+
+  useEffect(() => {
+    if (defaultValue) {
+      options.forEach((option) => {
+        if (option.value === defaultValue) {
+          setSelectedOption(option)
+        }
+      })
+    }
+  }, [defaultValue, options])
 
   function handleSelectOption(option: OptionsSelect) {
     setIsActiveDropdown(false)

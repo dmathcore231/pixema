@@ -37,30 +37,18 @@ export function DashboardUser(): JSX.Element {
     { label: 'Moderator', value: 'moderator' }
   ]
 
-  function setDefaultValueSelect(role: string) {
-    switch (role) {
-      case 'user':
-        return optionsSelect[0]
-      case 'admin':
-        return optionsSelect[1]
-      case 'moderator':
-        return optionsSelect[2]
-    }
-  }
-
   useEffect(() => {
     dispatch(fetchUserById(userId!))
   }, [dispatch, userId])
 
   useEffect(() => {
-    if (userById) {
+    if (userById && Object.keys(userById).length > 0) {
       setFormUserData({
-        userName: userById.userName || '',
-        email: userById.email || '',
-        userRole: userById._role || '',
-        userId: userById._id || ''
+        userName: userById.userName,
+        email: userById.email,
+        userRole: userById._role,
+        userId: userById._id
       })
-      setDefaultValueSelect(userById._role)
     }
     if (user && user._id === userId) {
       setIsDisabled(true)
@@ -96,14 +84,13 @@ export function DashboardUser(): JSX.Element {
   }
 
   function handleClickCancelBtn() {
-    if (userById) {
+    if (userById && Object.keys(userById).length > 0) {
       setFormUserData({
         userName: userById.userName,
         email: userById.email,
         userRole: userById._role,
         userId: userById._id
       })
-      setDefaultValueSelect(userById._role)
     }
   }
 
@@ -122,7 +109,7 @@ export function DashboardUser(): JSX.Element {
   }
 
   function handleSelectOptionChange(newValue: OptionsSelect) {
-    console.log(newValue)
+    setFormUserData({ ...formUserData, userRole: newValue.value })
   }
 
   return (
@@ -164,7 +151,7 @@ export function DashboardUser(): JSX.Element {
         />
         <Select
           options={optionsSelect}
-          defaultValue={setDefaultValueSelect(formUserData.userRole)}
+          defaultValue={formUserData.userRole}
           inputProps={{
             label: true,
             htmlFor: 'userRole',
@@ -224,7 +211,6 @@ export function DashboardUser(): JSX.Element {
           classBtnSubmit="btn_danger"
         />
       </form>
-
     </div>
   )
 }
