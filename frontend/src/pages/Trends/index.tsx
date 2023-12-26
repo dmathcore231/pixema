@@ -1,4 +1,5 @@
 import "./styles.scss"
+import { MultiSelect } from "../../components/MultiSelect"
 
 export function Trends(): JSX.Element {
   return (
@@ -8,6 +9,7 @@ export function Trends(): JSX.Element {
       </div>
       <div className="trends__content">
         content
+        <MultiSelect />
       </div>
     </div>
   )
