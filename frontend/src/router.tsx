@@ -17,6 +17,8 @@ import { DashboardMovies } from "./dashboard/DashboardMovies"
 import { DashboardUsers } from "./dashboard/DashboardUsers"
 import { DashboardStatistics } from "./dashboard/DashboardStatistics"
 import { DashboardUser } from "./dashboard/DashboardUser"
+import { DashboardMovie } from "./dashboard/DashboardMovie"
+import { DashboardAddMovie } from "./dashboard/DashboardAddMovie"
 
 export const router = createBrowserRouter([
   {
@@ -87,6 +89,18 @@ export const router = createBrowserRouter([
             path: "/dashboard/users/:userId",
             element: <PrivateRouter redirectPath="/sign-in" def={true} >
               <DashboardUser />
+            </PrivateRouter>
+          },
+          {
+            path: "/dashboard/movies/:movieId",
+            element: <PrivateRouter redirectPath="/sign-in" def={true} >
+              <DashboardMovie />
+            </PrivateRouter>
+          },
+          {
+            path: "/dashboard/movies/add",
+            element: <PrivateRouter redirectPath="/sign-in" def={true} >
+              <DashboardAddMovie />
             </PrivateRouter>
           }
         ]

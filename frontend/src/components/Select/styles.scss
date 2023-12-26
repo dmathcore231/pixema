@@ -38,15 +38,21 @@
       cursor: default;
 
       &:hover {
-        border-color: var(--primary-color);
+        background: var(--primary-color-light);
+      }
+
+      &:active {
+        background: var(--primary-color);
       }
     }
   }
 
   &-value {
 
+
     &__item {
       cursor: default;
+      position: relative;
     }
   }
 }

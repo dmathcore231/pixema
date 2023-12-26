@@ -1,0 +1,9 @@
+@import "../../styles/app.scss";
+
+.link-back {
+  display: flex;
+
+  &__item {
+    fill: var(--secondary-color);
+  }
+}

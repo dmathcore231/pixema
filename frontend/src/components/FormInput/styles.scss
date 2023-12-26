@@ -68,4 +68,15 @@
   flex-direction: column;
   gap: 0.3rem;
   width: 100%;
+
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  &__icon {
+    position: absolute;
+    right: 0.125rem;
+  }
 }

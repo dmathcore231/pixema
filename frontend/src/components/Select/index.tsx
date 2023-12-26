@@ -2,18 +2,9 @@ import './styles.scss'
 import { useState, useEffect } from 'react'
 import { FormInput } from '../FormInput'
 import { OptionsSelect } from '../../types/OptionsSelect'
-
-export interface SelectProps {
-  options: OptionsSelect[]
-  defaultValue?: string
-  inputProps: {
-    label: boolean
-    htmlFor?: string
-    children?: string
-    id?: string
-  }
-  onSelectOptionChange: (option: OptionsSelect) => void
-}
+import { ArrowRightSelect } from '../../images/Icons/ArrowRightSelect'
+import { ArrowDownSelect } from '../../images/Icons/ArrowDownSelect'
+import { SelectProps } from '../../types/interfaces/SelectProps'
 
 export function Select({ options, defaultValue, inputProps, onSelectOptionChange }: SelectProps): JSX.Element {
   const [isActiveDropdown, setIsActiveDropdown] = useState(false)
@@ -51,6 +42,7 @@ export function Select({ options, defaultValue, inputProps, onSelectOptionChange
           value={selectedOption.label}
           readOnly={true}
           onClick={() => setIsActiveDropdown(!isActiveDropdown)}
+          selectIcon={isActiveDropdown ? <ArrowDownSelect width='24' height='24' /> : <ArrowRightSelect width='24' height='24' />}
         />
       </div>
       <div className={`select-dropdown ${isActiveDropdown ? 'select-dropdown_active' : ''}`}>

@@ -1,6 +1,17 @@
 @import '../../styles/app.scss';
 
-.user-form {
+.dashboard-add-new-movie {
+  @include flex-column;
+  background-color: var(--dark-color);
+  border-radius: 0.625rem;
+  padding: 2rem;
+
+  &__title {
+    display: flex;
+  }
+}
+
+.movie-form {
   @include flex-column;
   gap: 1.5rem;
   padding: 2.5rem;
@@ -8,10 +19,6 @@
   min-width: 35.875rem;
 
   &__btn {
-    width: 9.375rem;
-  }
-
-  &__btn-group {
     display: flex;
     gap: 5rem;
   }

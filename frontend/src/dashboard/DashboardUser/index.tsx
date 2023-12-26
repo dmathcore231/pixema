@@ -6,11 +6,10 @@ import { useAppDispatch, useAppSelector } from "../../hooks"
 import { Spinner } from "../../components/Spinner"
 import { FormInput } from "../../components/FormInput"
 import { Btn } from "../../components/Btn"
-import { NavLink } from "react-router-dom"
-import { ArrowLeft } from "../../images/Icons/ArrowLeft"
 import { Modal } from "../../components/Modal"
 import { Select } from "../../components/Select"
 import { OptionsSelect } from "../../types/OptionsSelect"
+import { LinkBack } from "../../components/LinkBack"
 
 export function DashboardUser(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -117,15 +116,7 @@ export function DashboardUser(): JSX.Element {
       <div className="dashboard-users__title">
         <h2>User</h2>
       </div>
-      <div className="link-back">
-        <NavLink
-          className='link-back__item'
-          to='#'
-          onClick={() => window.history.back()}
-        >
-          <ArrowLeft width="35" height="35" />
-        </NavLink>
-      </div>
+      <LinkBack />
       <form className="user-form" onSubmit={handleSubmit}>
         <FormInput
           label={true}
