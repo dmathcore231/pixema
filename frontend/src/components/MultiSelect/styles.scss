@@ -19,6 +19,24 @@
       padding: 1rem 3.25rem 1rem 1.25rem;
       text-align: left;
       display: flex;
+      gap: 0.5rem;
+      align-items: center;
+
+      &_border {
+
+        &_bottom {
+
+          &_none {
+            border-radius: 0.625rem 0.625rem 0 0;
+          }
+        }
+      }
+
+      &_padding {
+        &_small {
+          padding: 0.688rem 3.25rem 0.688rem 1.25rem
+        }
+      }
     }
 
     &__icon {
@@ -31,6 +49,80 @@
       font-size: 1rem;
       font-weight: 400;
       line-height: 1.5rem;
+    }
+
+    &__active-item {
+      @include flex-center;
+      background-color: var(--dark-color);
+      padding: 5px;
+      gap: 0.5rem;
+      border-radius: 0.3rem;
+
+      &-close {
+        @include flex-center;
+        width: 1.25rem;
+        height: 1.25rem;
+        cursor: pointer;
+
+        &:hover {
+          background-color: var(--primary-color-light);
+        }
+
+        &:active {
+          background-color: var(--primary-color);
+        }
+      }
+    }
+  }
+
+  &-dropdown {
+    @include flex-column;
+    opacity: 0;
+    transition: opacity 0.3s ease, max-height 0.3s ease;
+    max-height: 0;
+    overflow: hidden;
+
+    &_active {
+      @include flex-column;
+      opacity: 1;
+      max-height: fit-content;
+      transition-delay: 0s;
+      max-height: 165px;
+      overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        width: 0.5rem;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: var(--secondary-color);
+        border-radius: 0.313rem;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+        border-radius: 0.313rem;
+      }
+    }
+
+    &__item {
+      width: 100%;
+      background-color: var(--graphite-color);
+      color: var(--white-color);
+      font-size: 1rem;
+      font-weight: 400;
+      border: 2px solid transparent;
+      outline: none;
+      padding: 1rem 1.25rem;
+      text-align: left;
+      display: flex;
+
+      &_border {
+
+        &_bottom {
+          border-radius: 0 0 0.625rem 0.625rem;
+        }
+      }
     }
   }
 }

@@ -105,4 +105,14 @@ $component: 'btn';
     text-transform: none;
     border-radius: 0.625rem;
   }
+
+  &_fill {
+    &_white {
+      fill: var(--white-color);
+
+      &:active {
+        fill: var(--light-color);
+      }
+    }
+  }
 }
