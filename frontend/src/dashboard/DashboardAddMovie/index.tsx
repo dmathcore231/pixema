@@ -3,6 +3,9 @@ import { useState } from 'react'
 import { FormInput } from '../../components/FormInput'
 import { LinkBack } from '../../components/LinkBack'
 import { Btn } from '../../components/Btn'
+import { MultiSelect } from '../../components/MultiSelect'
+import { OptionsSelect } from '../../types/OptionsSelect'
+import { GENRE } from '../../helpers'
 
 export function DashboardAddMovie(): JSX.Element {
   const [formMovie, setFormMovie] = useState({
@@ -10,7 +13,7 @@ export function DashboardAddMovie(): JSX.Element {
     year: '',
     rating: '',
     imdbId: '',
-    genre: '',
+    genre: [] as OptionsSelect[],
     poster: '',
     description: '',
   })
@@ -72,15 +75,12 @@ export function DashboardAddMovie(): JSX.Element {
           required={true}
           value={formMovie.imdbId}
         />
-        <FormInput
+        <MultiSelect
           label={true}
-          htmlFor='genre'
           children='Genre'
-          type='text'
           id='genre'
-          placeholder='Genre of the movie'
-          required={true}
-          value={formMovie.genre}
+          options={GENRE}
+          maxActiveOptions={4}
         />
         <FormInput
           label={true}

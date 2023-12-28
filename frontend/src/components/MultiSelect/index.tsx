@@ -1,16 +1,21 @@
 import './styles.scss'
 import { useState, useEffect } from 'react'
+import { useRef } from 'react'
 import { ArrowRightSelect } from '../../images/Icons/ArrowRightSelect'
 import { ArrowDownSelect } from '../../images/Icons/ArrowDownSelect'
 import { OptionsSelect } from '../../types/OptionsSelect'
 import { Btn } from '../Btn'
 import { CloseIcon } from '../../images/Icons/CloseIcon'
 import { MultiSelectProps } from '../../types/interfaces/MultiSelectProps'
+import { truncateTitle } from '../../helpers'
 
-export function MultiSelect({ placeholder, className, options, getActiveOptions }: MultiSelectProps): JSX.Element {
+export function MultiSelect({ placeholder, className, options, label, id, children, maxActiveOptions, getActiveOptions }: MultiSelectProps): JSX.Element {
   const [isActiveDropdown, setIsActiveDropdown] = useState(false)
   const [activeOptions, setActiveOptions] = useState<OptionsSelect[]>([])
   const [noneActiveOptions, setNoneActiveOptions] = useState<OptionsSelect[]>(options)
+  const [error, setError] = useState('')
+
+  const multiSelectElementRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (getActiveOptions) {
@@ -19,7 +24,11 @@ export function MultiSelect({ placeholder, className, options, getActiveOptions 
   }, [activeOptions, getActiveOptions])
 
   function handleClickValue() {
-    if (noneActiveOptions.length > 0) {
+    if (maxActiveOptions && activeOptions.length === maxActiveOptions) {
+      setError('maxActiveOptions')
+      return null
+    } else if (noneActiveOptions.length > 0) {
+      setError('')
       setIsActiveDropdown(prev => !prev)
     }
   }
@@ -40,8 +49,20 @@ export function MultiSelect({ placeholder, className, options, getActiveOptions 
 
   return (
     <div className={"multi-select" + (className ? " " + className : "")}>
-      <div className='multi-select-value'>
-        <div className={`multi-select-value__item` + (isActiveDropdown ? ' multi-select-value__item_border_bottom_none' : '') + (activeOptions.length > 0 ? ' multi-select-value__item_padding_small' : '')}
+      {label
+        ? <label htmlFor={id} className="multi-select__label subtitle subtitle_size_xxs">
+          {children}
+        </label>
+        : null
+      }
+      <div className='multi-select-value' id={id}>
+        <div
+          ref={multiSelectElementRef}
+          className={`multi-select-value__item`
+            + (isActiveDropdown ? ' multi-select-value__item_border_bottom_none' : '')
+            + (activeOptions.length > 0 ? ' multi-select-value__item_padding_small' : '')
+            + (error === 'maxActiveOptions' ? ' multi-select-value_error' : '')
+          }
           onClick={handleClickValue}>
           {activeOptions.length > 0
             ? activeOptions.map((item) => (
@@ -53,7 +74,7 @@ export function MultiSelect({ placeholder, className, options, getActiveOptions 
                 subtitle subtitle_size subtitle subtitle_size_xxs'
                   data-value={item.value}
                 >
-                  {item.label}
+                  {truncateTitle(item.label, 15)}
                 </div>
                 <div className='multi-select-value__active-item-close'>
                   <Btn
