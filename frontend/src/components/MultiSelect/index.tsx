@@ -21,7 +21,7 @@ export function MultiSelect({ placeholder, className, options, label, id, childr
     if (getActiveOptions) {
       getActiveOptions(activeOptions)
     }
-  }, [activeOptions, getActiveOptions])
+  }, [activeOptions])
 
   function handleClickValue() {
     if (maxActiveOptions && activeOptions.length === maxActiveOptions) {
@@ -62,6 +62,7 @@ export function MultiSelect({ placeholder, className, options, label, id, childr
             + (isActiveDropdown ? ' multi-select-value__item_border_bottom_none' : '')
             + (activeOptions.length > 0 ? ' multi-select-value__item_padding_small' : '')
             + (error === 'maxActiveOptions' ? ' multi-select-value_error' : '')
+            + (className && className === 'multi-select-error' ? ' multi-select-value_error' : '')
           }
           onClick={handleClickValue}>
           {activeOptions.length > 0

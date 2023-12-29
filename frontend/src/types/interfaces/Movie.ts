@@ -18,4 +18,6 @@ export interface MovieState {
   loading: boolean,
   error: boolean,
   movies: Movie[],
+  status: number,
+  message: string,
 }

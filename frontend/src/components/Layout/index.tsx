@@ -12,7 +12,7 @@ import { fetchMovies } from "../../redux/movieSlice"
 
 export function Layout() {
   const dispatch = useAppDispatch()
-
+  console.log('Layout render')
   useEffect(() => {
     const fetchData = async () => {
       const token = getDataLocalStorage('accessToken')

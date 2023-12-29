@@ -4,6 +4,7 @@ const authRouter = require('./src/modules/auth')
 const moviesRouter = require('./src/modules/movies')
 const movieRouter = require('./src/modules/movie')
 const dashboardRouter = require('./src/modules/dashboard')
+const path = require('path');
 const { deleteExpiredTokens } = require('./src/modules/deleteExpiredTokens')
 
 const app = express()
@@ -13,6 +14,13 @@ app.use((_, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
   next()
+})
+
+app.use(express.static(path.join(__dirname, 'public')))
+app.get('/public/posters/:filename', (req, res) => {
+  const { filename } = req.params;
+  const imagePath = path.join(__dirname, 'public', 'posters', filename);
+  res.sendFile(imagePath);
 })
 
 app.use(express.json())

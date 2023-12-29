@@ -1,47 +1,55 @@
 const express = require('express')
 const Movie = require('../models/moviesSchema')
 const missingFields = require('../helpers/missingFields')
+const multer = require('multer');
 
 const router = express.Router()
 
+const upload = multer({ dest: 'public/posters' });
 async function createMovie(req, res) {
-  const { title, year, rating, imdbId, genre, poster, description } = req.body
-  const errMessages = []
-  missingFields(title, 'Title', errMessages)
-  missingFields(year, 'Year', errMessages)
-  missingFields(rating, 'Rating', errMessages)
-  missingFields(imdbId, 'IMDb ID', errMessages)
-  missingFields(genre, 'Genre', errMessages)
-  missingFields(poster, 'Poster', errMessages)
-  missingFields(description, 'Description', errMessages)
+  upload.single('poster')(req, res, async function (err) {
+    if (err) {
+      return res.status(500).send({ status: 500, message: 'File upload failed' })
+    }
+    const posterPath = req.file.path
 
-  if (errMessages.length > 0) {
-    return res.status(400).send({
-      status: 400, message:
-        `Missing fields: ${errMessages.join(', ')}`
-    })
-  }
+    const { title, year, rating, imdbId, genre, description } = req.body
+    const errMessages = []
+    missingFields(title, 'Title', errMessages)
+    missingFields(year, 'Year', errMessages)
+    missingFields(rating, 'Rating', errMessages)
+    missingFields(imdbId, 'IMDb ID', errMessages)
+    missingFields(genre, 'Genre', errMessages)
+    missingFields(description, 'Description', errMessages)
 
-  try {
-    const existingTitle = await Movie.findOne({ title })
-    if (existingTitle) {
-      return res.status(400).send({ status: 400, message: 'Title already exists' })
+    if (errMessages.length > 0) {
+      return res.status(400).send({
+        status: 400, message:
+          `Missing fields: ${errMessages.join(', ')}`
+      })
     }
 
-    const movie = new Movie({
-      title,
-      year,
-      rating,
-      imdbId,
-      genre,
-      poster,
-      description
-    })
-    await movie.save()
-    res.status(201).send({ status: 201, message: 'Movie created successfully', movie })
-  } catch (error) {
-    res.status(500).send({ status: 500, message: 'Internal Server Error' })
-  }
+    try {
+      const existingTitle = await Movie.findOne({ title })
+      if (existingTitle) {
+        return res.status(400).send({ status: 400, message: 'Title already exists' })
+      }
+
+      const movie = new Movie({
+        title,
+        year,
+        rating,
+        imdbId,
+        genre,
+        poster: `http://localhost:3000/${posterPath}`,
+        description
+      })
+      await movie.save()
+      res.status(201).send({ status: 201, message: 'Movie created successfully', movie })
+    } catch (error) {
+      res.status(500).send({ status: 500, message: 'Internal Server Error' })
+    }
+  })
 }
 
 async function getMovieById(req, res) {
