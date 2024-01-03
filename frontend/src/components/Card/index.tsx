@@ -2,14 +2,14 @@ import "./styles.scss"
 import { GenresList } from "../GenresList"
 import { truncateTitle } from "../../helpers"
 import { CardProps } from "../../types/interfaces/CardProps"
-
+import noPoster from "../../images/no-poster.png"
 
 export function Card({ img, title, genres, rating }: CardProps): JSX.Element {
   return (
     <div className="card">
       <a href="#" className="card__link">
         <div className="card__image">
-          <img src={img} alt="movie poster" className="card__poster" />
+          <img src={img ? img : noPoster} alt="movie poster" className="card__poster" />
           <div className="card__rating subtitle subtitle_size_xs">
             {rating}
           </div>

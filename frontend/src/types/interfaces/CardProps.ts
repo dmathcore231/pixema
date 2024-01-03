@@ -1,6 +1,6 @@
 
 export interface CardProps {
-  img: string
+  img?: string
   title: string
   genres: string[]
   rating: number

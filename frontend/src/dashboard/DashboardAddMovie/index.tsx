@@ -9,6 +9,7 @@ import { MultiSelect } from '../../components/MultiSelect'
 import { GENRE } from '../../helpers'
 import { OptionsSelect } from '../../types/OptionsSelect'
 import { fetchCreateMovie } from '../../redux/movieSlice'
+import { Card } from '../../components/Card'
 
 export function DashboardAddMovie(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -17,7 +18,7 @@ export function DashboardAddMovie(): JSX.Element {
   const [formMovie, setFormMovie] = useState({
     title: '',
     year: '',
-    rating: '',
+    rating: 0,
     imdbId: '',
     genre: [] as string[],
     poster: null as File | null,
@@ -34,7 +35,7 @@ export function DashboardAddMovie(): JSX.Element {
       const formData = new FormData()
       formData.append('title', formMovie.title)
       formData.append('year', formMovie.year)
-      formData.append('rating', formMovie.rating)
+      formData.append('rating', formMovie.rating.toString());
       formData.append('imdbId', formMovie.imdbId)
       formMovie.genre.forEach((genre, index) => {
         if (genre) {
@@ -74,7 +75,15 @@ export function DashboardAddMovie(): JSX.Element {
   }
 
   function handleClickCancelBtn() {
-    console.log('handleClickCancelBtn')
+    setFormMovie({
+      title: '',
+      year: '',
+      rating: 0,
+      imdbId: '',
+      genre: [],
+      poster: null,
+      description: '',
+    })
   }
 
   function handleMultiSelectChange(activeOptions: OptionsSelect[]) {
@@ -129,7 +138,7 @@ export function DashboardAddMovie(): JSX.Element {
           placeholder='Rating of the movie'
           required={true}
           value={formMovie.rating}
-          onChange={e => setFormMovie({ ...formMovie, rating: e.target.value })}
+          onChange={e => setFormMovie({ ...formMovie, rating: parseInt(e.target.value) })}
           className={errorField === 'rating' ? 'primary-input_error' : ''}
         />
         <FormInput
@@ -176,6 +185,16 @@ export function DashboardAddMovie(): JSX.Element {
           onChange={e => setFormMovie({ ...formMovie, description: e.target.value })}
           className={errorField === 'description' ? 'primary-input_error' : ''}
         />
+        <div className='movie-form-preview'>
+          <div className='movie-form-preview__item'>
+            <Card
+              title={formMovie.title}
+              img={formMovie.poster ? URL.createObjectURL(formMovie.poster) : ''}
+              genres={formMovie.genre}
+              rating={formMovie.rating}
+            />
+          </div>
+        </div>
         <div className='movie-form__btn'>
           <Btn
             type='button'

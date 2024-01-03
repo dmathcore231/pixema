@@ -2,11 +2,11 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
   gap: 1.875rem;
-  width: 100%;
+  justify-content: space-between;
 
   &__item {
-    width: calc(20% - 1.5rem);
+    flex: 0 0 18%;
+    max-width: 18%;
   }
 }
