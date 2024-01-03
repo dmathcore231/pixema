@@ -186,6 +186,7 @@ export function DashboardAddMovie(): JSX.Element {
           className={errorField === 'description' ? 'primary-input_error' : ''}
         />
         <div className='movie-form-preview'>
+          <label htmlFor="movie-form-preview" className="movie-form-preview__label subtitle subtitle_size_xxs">Preview</label>
           <div className='movie-form-preview__item'>
             <Card
               title={formMovie.title}

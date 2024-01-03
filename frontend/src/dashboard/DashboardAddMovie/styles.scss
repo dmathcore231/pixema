@@ -19,16 +19,19 @@
   min-width: 35.875rem;
 
   &-preview {
-    display: flex;
-    justify-content: center;
-    border: 2px solid var(--primary-color);
+    @include flex-column;
+    gap: 0.3rem;
     border-radius: 0.625rem;
-    padding: 1rem;
 
     &__item {
       @include flex-center;
-      max-width: 267px;
-      max-height: 429px;
+      background-color: var(--graphite-color);
+      border-radius: 0.625rem;
+      padding: 1rem;
+    }
+
+    &__label {
+      display: flex;
     }
   }
 
