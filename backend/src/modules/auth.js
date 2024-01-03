@@ -95,22 +95,29 @@ async function authenticateUser(req, res) {
       expiresIn: expiresInAccessToken,
     })
 
-    const refreshToken = jwt.sign({ id: user._id }, secretKey, {
-      expiresIn: expiresInRefreshToken,
-    })
+    const checkRefreshToken = await Token.findOne({ userID: user._id })
 
-    const refreshTokenData = new Token({
-      tokenData: refreshToken,
-      userID: user._id,
-      expiresAt: jwt.decode(refreshToken).exp
-    })
+    if (checkRefreshToken) {
+      res.send({ status: 200, user, accessToken })
+    } else {
+      const refreshToken = jwt.sign({ id: user._id }, secretKey, {
+        expiresIn: expiresInRefreshToken,
+      })
 
-    await refreshTokenData.save()
-    res.send({ status: 200, user, accessToken })
+      const refreshTokenData = new Token({
+        tokenData: refreshToken,
+        userID: user._id,
+        expiresAt: jwt.decode(refreshToken).exp
+      })
+
+      await refreshTokenData.save()
+      res.send({ status: 200, user, accessToken })
+    }
   } catch (error) {
     res.status(500).send({ status: 500, message: 'Internal Server Error' })
   }
 }
+
 async function refreshToken(req, res) {
   const accessTokenReq = req.body.accessToken
 
