@@ -52,4 +52,12 @@
     gap: 0.5rem;
     width: 100%;
   }
+
+  &_error {
+    border: 2px solid var(--danger-color);
+
+    &:focus {
+      border: 2px solid var(--danger-color);
+    }
+  }
 }

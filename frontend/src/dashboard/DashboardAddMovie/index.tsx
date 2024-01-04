@@ -297,40 +297,30 @@ export function DashboardAddMovie(): JSX.Element {
           className={errorField === 'duration' ? 'primary-input_error' : ''}
           min={1}
         />
-        <FormInput
-          label={true}
-          htmlFor='description'
-          children='Description'
-          type='text'
-          id='description'
-          placeholder='Description of the movie'
-          required={true}
-          value={formMovie.description}
-          onChange={e => setFormMovie({ ...formMovie, description: e.target.value })}
-          className={errorField === 'description' ? 'primary-input_error' : ''}
-        />
         <TextArea
           label={true}
           htmlFor='description'
           children='Description'
-          maxlength={500}
+          maxlength={800}
           minlength={10}
           id='description'
           placeholder='Description of the movie'
           required={true}
           value={formMovie.description}
           onChange={e => setFormMovie({ ...formMovie, description: e.target.value })}
-          className={errorField === 'description' ? 'primary-input_error' : ''}
+          className={errorField === 'description' ? 'text-area_error' : ''}
         />
         <div className='movie-form-preview'>
           <label htmlFor="movie-form-preview" className="movie-form-preview__label subtitle subtitle_size_xxs">Preview Card</label>
           <div className='movie-form-preview__item'>
-            <Card
-              title={formMovie.title}
-              img={formMovie.poster ? URL.createObjectURL(formMovie.poster) : ''}
-              genres={formMovie.genre}
-              rating={formMovie.rating}
-            />
+            <div className='movie-form-preview__wrapper'>
+              <Card
+                title={formMovie.title}
+                img={formMovie.poster ? URL.createObjectURL(formMovie.poster) : ''}
+                genres={formMovie.genre}
+                rating={formMovie.rating}
+              />
+            </div>
           </div>
         </div>
         <div className='movie-form__btn'>

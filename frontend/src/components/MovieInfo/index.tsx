@@ -9,56 +9,54 @@ export function MovieInfo({ description, year, releaseDate, boxOffice, country, 
         {description}
       </div>
       <div className="movie-info__details">
-        <ul className="movie-info__list">
-          <li className="title-list__item subtitle subtitle_size_xs subtitle_color_light">
-            Year
+        <ul className="movie-info-list">
+          <li className="movie-info-list__item">
+            <div className="movie-info-list__title
+            subtitle subtitle_size_xs subtitle_color_secondary">Year</div>
+            <div className="movie-info-list__value
+            subtitle subtitle_size_xs subtitle_weight_500">{year}</div>
           </li>
-          <li className="title-list__item subtitle subtitle_size_xs subtitle_color_light">
-            Released
+          <li className="movie-info-list__item">
+            <div className="movie-info-list__title
+            subtitle subtitle_size_xs subtitle_color_secondary">Release date</div>
+            <div className="movie-info-list__value
+            subtitle subtitle_size_xs subtitle_weight_500">{releaseDate}</div>
           </li>
-          <li className="title-list__item subtitle subtitle_size_xs subtitle_color_light">
-            BoxOffice
+          <li className="movie-info-list__item">
+            <div className="movie-info-list__title
+            subtitle subtitle_size_xs subtitle_color_secondary">Box office</div>
+            <div className="movie-info-list__value
+            subtitle subtitle_size_xs subtitle_weight_500">{boxOffice}</div>
           </li>
-          <li className="title-list__item subtitle subtitle_size_xs subtitle_color_light">
-            Country
+          <li className="movie-info-list__item">
+            <div className="movie-info-list__title
+            subtitle subtitle_size_xs subtitle_color_secondary">Country</div>
+            <div className="movie-info-list__value
+            subtitle subtitle_size_xs subtitle_weight_500">{country}</div>
           </li>
-          <li className="title-list__item subtitle subtitle_size_xs subtitle_color_light">
-            Production
+          <li className="movie-info-list__item">
+            <div className="movie-info-list__title
+            subtitle subtitle_size_xs subtitle_color_secondary">Production</div>
+            <div className="movie-info-list__value
+            subtitle subtitle_size_xs subtitle_weight_500">{production}</div>
           </li>
-          <li className="title-list__item subtitle subtitle_size_xs subtitle_color_light">
-            Actors
+          <li className="movie-info-list__item">
+            <div className="movie-info-list__title
+            subtitle subtitle_size_xs subtitle_color_secondary">Actors</div>
+            <div className="movie-info-list__value
+            subtitle subtitle_size_xs subtitle_weight_500">{actors}</div>
           </li>
-          <li className="title-list__item subtitle subtitle_size_xs subtitle_color_light">
-            Directors
+          <li className="movie-info-list__item">
+            <div className="movie-info-list__title
+            subtitle subtitle_size_xs subtitle_color_secondary">Directors</div>
+            <div className="movie-info-list__value
+            subtitle subtitle_size_xs subtitle_weight_500">{directors}</div>
           </li>
-          <li className="title-list__item subtitle subtitle_size_xs subtitle_color_light">
-            Writers
-          </li>
-        </ul>
-        <ul className="movie-info__list">
-          <li className="value-list__item subtitle subtitle_size_xs subtitle_weight_500">
-            {year}
-          </li>
-          <li className="value-list__item subtitle subtitle_size_xs subtitle_weight_500">
-            {releaseDate}
-          </li>
-          <li className="value-list__item subtitle subtitle_size_xs subtitle_weight_500">
-            {boxOffice}
-          </li>
-          <li className="value-list__item subtitle subtitle_size_xs subtitle_weight_500">
-            {country}
-          </li>
-          <li className="value-list__item subtitle subtitle_size_xs subtitle_weight_500">
-            {production}
-          </li>
-          <li className="value-list__item subtitle subtitle_size_xs subtitle_weight_500">
-            {actors}
-          </li>
-          <li className="value-list__item subtitle subtitle_size_xs subtitle_weight_500">
-            {directors}
-          </li>
-          <li className="value-list__item subtitle subtitle_size_xs subtitle_weight_500">
-            {writers}
+          <li className="movie-info-list__item">
+            <div className="movie-info-list__title
+            subtitle subtitle_size_xs subtitle_color_secondary">Writers</div>
+            <div className="movie-info-list__value
+            subtitle subtitle_size_xs subtitle_weight_500">{writers}</div>
           </li>
         </ul>
       </div>
