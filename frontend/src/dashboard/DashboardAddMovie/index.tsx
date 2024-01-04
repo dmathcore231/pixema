@@ -10,6 +10,7 @@ import { GENRE } from '../../helpers'
 import { OptionsSelect } from '../../types/OptionsSelect'
 import { fetchCreateMovie } from '../../redux/movieSlice'
 import { Card } from '../../components/Card'
+import { TextArea } from '../../components/TextArea'
 
 export function DashboardAddMovie(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -301,6 +302,19 @@ export function DashboardAddMovie(): JSX.Element {
           htmlFor='description'
           children='Description'
           type='text'
+          id='description'
+          placeholder='Description of the movie'
+          required={true}
+          value={formMovie.description}
+          onChange={e => setFormMovie({ ...formMovie, description: e.target.value })}
+          className={errorField === 'description' ? 'primary-input_error' : ''}
+        />
+        <TextArea
+          label={true}
+          htmlFor='description'
+          children='Description'
+          maxlength={500}
+          minlength={10}
           id='description'
           placeholder='Description of the movie'
           required={true}

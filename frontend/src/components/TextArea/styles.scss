@@ -1,0 +1,55 @@
+@import '../../styles/app.scss';
+
+.text-area {
+  width: 100%;
+  background-color: var(--graphite-color);
+  color: var(--white-color);
+  font-size: 1rem;
+  font-weight: 400;
+  border: 2px solid transparent;
+  border-radius: 0.625rem;
+  outline: none;
+  padding: 1rem 1.25rem;
+  text-align: left;
+  resize: none;
+  height: 7.188rem;
+
+  &:focus {
+    border: 2px solid var(--primary-color);
+  }
+
+  &:focus-visible {
+    border: 2px solid var(--primary-color);
+  }
+
+  &::placeholder {
+    color: var(--secondary-color);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5rem;
+  }
+
+  &::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--secondary-color);
+    border-radius: 0.313rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 0.313rem;
+  }
+
+  &-label {
+    display: flex;
+  }
+
+  &-container {
+    @include flex-column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+}
