@@ -13,14 +13,22 @@ async function createMovie(req, res) {
     }
     const posterPath = req.file.path
 
-    const { title, year, rating, imdbId, genre, description } = req.body
+    const { title, year, releaseDate, boxOffice, country, production, actors, directors, writers, rating, imdbRating, genre, description, duration } = req.body
     const errMessages = []
     missingFields(title, 'Title', errMessages)
     missingFields(year, 'Year', errMessages)
+    missingFields(releaseDate, 'Release Date', errMessages)
+    missingFields(boxOffice, 'Box Office', errMessages)
+    missingFields(country, 'Country', errMessages)
+    missingFields(production, 'Production', errMessages)
+    missingFields(actors, 'Actors', errMessages)
+    missingFields(directors, 'Directors', errMessages)
+    missingFields(writers, 'Writers', errMessages)
     missingFields(rating, 'Rating', errMessages)
-    missingFields(imdbId, 'IMDb ID', errMessages)
+    missingFields(imdbRating, 'IMDb Rating', errMessages)
     missingFields(genre, 'Genre', errMessages)
     missingFields(description, 'Description', errMessages)
+    missingFields(duration, 'Duration', errMessages)
 
     if (errMessages.length > 0) {
       return res.status(400).send({
@@ -38,10 +46,18 @@ async function createMovie(req, res) {
       const movie = new Movie({
         title,
         year,
+        releaseDate,
+        boxOffice,
+        country,
+        production,
+        actors,
+        directors,
+        writers,
         rating,
-        imdbId,
+        imdbRating,
         genre,
         poster: `http://localhost:3000/${posterPath}`,
+        duration,
         description
       })
       await movie.save()

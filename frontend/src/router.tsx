@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom"
-import { PrivateRouter } from "./PrivateRouter"
+import { PrivateRouter } from "./utils/PrivateRouter"
 import { Layout } from "./components/Layout"
 import { Main } from "./pages/Main"
 import { Movie } from "./pages/Movie"

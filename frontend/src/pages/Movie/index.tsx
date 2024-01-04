@@ -1,6 +1,10 @@
 import "./styles.scss"
-import Poster from "../../images/poster.png"
-import PosterTwo from "../../images/posterTwo.png"
+import { useParams } from "react-router-dom"
+import { fetchGetMovieById } from "../../redux/movieSlice"
+import { useEffect } from "react"
+import { useAppDispatch, useAppSelector } from "../../hooks"
+import { Spinner } from "../../components/Spinner"
+import { Error } from "../../components/Error"
 import { GenresList } from "../../components/GenresList"
 import { Presentation } from "../../components/Presentation"
 import { BtnGroup } from "../../components/BtnGroup"
@@ -11,42 +15,74 @@ import { Card } from "../../components/Card"
 import { Carousel } from "../../components/Carousel"
 
 export function Movie(): JSX.Element {
+  const dispatch = useAppDispatch()
+  const { movie, loading, error } = useAppSelector(state => state.movies)
+  const { id } = useParams()
 
-  return (
-    <div className="movie">
-      <div className="movie__poster">
-        <img src={Poster} alt="Movie poster" />
-        <BtnGroup
-          itemsName={["favorites", "share"]}
-          itemsValue={[<FavoritesIcon width="24" height="24" />, <ShareIcon width="24" height="24" />]}
-          onClick={(e) => console.log(e)}
-        />
-      </div>
+  useEffect(() => {
+    dispatch(fetchGetMovieById(id as string))
+  }, [dispatch, id])
 
-      <div className="movie__content">
-        <div className="movie__genres">
-          <GenresList itemList={["Adventure", "Action", "Fantasy"]} />
+  if (loading) {
+    return (
+      <div className="movie">
+        <div className="movie__loader">
+          <Spinner width="40" height="40" />
         </div>
-        <div className="movie__title">
-          <h1>Wonder Woman 1984</h1>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="movie-error">
+        <Error />
+      </div>
+    )
+  }
+
+  if (movie && Object.keys(movie).length > 0) {
+    return (
+      <div className="movie">
+        <div className="movie__poster">
+          <img src={movie.poster} alt="Movie poster" className="movie__poster-img" />
+          <BtnGroup
+            itemsName={["favorites", "share"]}
+            itemsValue={[<FavoritesIcon width="24" height="24" />, <ShareIcon width="24" height="24" />]}
+            onClick={(e) => console.log(e)}
+          />
         </div>
-        <Presentation itemList={[7.6, 7.6, 130]} />
-        <MovieInfo
-          description="In 1984, after saving the world in Wonder Woman (2017), the immortal Amazon warrior, Princess Diana of Themyscira, finds herself trying to stay under the radar, working as an archaeologist at the Smithsonian Museum. With the memory of the brave U.S. pilot, Captain Steve Trevor, etched on her mind, Diana Prince becomes embroiled in a sinister conspiracy of global proportions when a transparent, golden-yellow citrine gemstone catches the eye of the power-hungry entrepreneur, Maxwell Lord. "
-          year={2020}
-          releaseDate="15 Jul 2020"
-          boxOffice="$381,409,310"
-          country="United Kingdom, United States"
-          production={["DC", "Warner Bros"]}
-          actors={["Gal Gadot, Chris Pine, Kristen Wiig, Pedro Pascal"]}
-          directors="Patty Jenkins"
-          writers="Patty Jenkins, Geoff Johns"
-        />
+        <div className="movie__content">
+          <div className="movie__genres">
+            <GenresList itemList={movie!.genre} />
+          </div>
+          <div className="movie__title">
+            <h1>{movie.title}</h1>
+          </div>
+          <Presentation itemList={[movie.rating, movie.imdbRating, movie.duration]} />
+          <MovieInfo
+            description={movie.description}
+            year={movie.year}
+            releaseDate={movie.releaseDate}
+            boxOffice={`$${Number(movie.boxOffice).toLocaleString("en-US")}`}
+            country={movie.country}
+            production={movie.production}
+            actors={movie.actors}
+            directors={movie.directors}
+            writers={movie.writers}
+          />
+        </div>
+        {/* <div className="movie__carousel">
+          <Carousel
+            data={ } title="Recommended" />
+        </div> */}
       </div>
-      <div className="movie__carousel">
-        <Carousel
-          data={[<Card img={PosterTwo} />, <Card img={PosterTwo} />, <Card img={PosterTwo} />, <Card img={Poster} />, <Card img={Poster} />, <Card img={PosterTwo} />, <Card img={Poster} />, <Card img={Poster} />]} title="Recommended" />
+    )
+  } else {
+    return (
+      <div className="movie">
+        <Error />
       </div>
-    </div>
-  )
+    )
+  }
 }

@@ -5,8 +5,8 @@ export interface MovieInfoProps {
   releaseDate: string
   boxOffice: string
   country: string
-  production: string[]
-  actors: string[]
+  production: string
+  actors: string
   directors: string
   writers: string
 }

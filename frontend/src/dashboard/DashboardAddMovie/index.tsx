@@ -18,10 +18,18 @@ export function DashboardAddMovie(): JSX.Element {
   const [formMovie, setFormMovie] = useState({
     title: '',
     year: '',
+    releaseDate: '',
+    boxOffice: 0,
+    country: '',
+    production: '',
+    actors: '',
+    directors: '',
+    writers: '',
     rating: 0,
-    imdbId: '',
+    imdbRating: 0,
     genre: [] as string[],
     poster: null as File | null,
+    duration: 0,
     description: '',
   })
   const [isSubmit, setIsSubmit] = useState(false)
@@ -35,14 +43,22 @@ export function DashboardAddMovie(): JSX.Element {
       const formData = new FormData()
       formData.append('title', formMovie.title)
       formData.append('year', formMovie.year)
+      formData.append('releaseDate', formMovie.releaseDate)
+      formData.append('boxOffice', formMovie.boxOffice.toString())
+      formData.append('country', formMovie.country)
+      formData.append('production', formMovie.production)
+      formData.append('actors', formMovie.actors)
+      formData.append('directors', formMovie.directors)
+      formData.append('writers', formMovie.writers)
       formData.append('rating', formMovie.rating.toString());
-      formData.append('imdbId', formMovie.imdbId)
+      formData.append('imdbRating', formMovie.imdbRating.toString());
       formMovie.genre.forEach((genre, index) => {
         if (genre) {
           formData.append(`genre[${index}]`, genre)
         }
       })
       formData.append('poster', formMovie.poster as File)
+      formData.append('duration', formMovie.duration.toString())
       formData.append('description', formMovie.description)
       dispatch(fetchCreateMovie(formData))
     }
@@ -78,10 +94,18 @@ export function DashboardAddMovie(): JSX.Element {
     setFormMovie({
       title: '',
       year: '',
+      releaseDate: '',
+      boxOffice: 0,
+      country: '',
+      production: '',
+      actors: '',
+      directors: '',
+      writers: '',
       rating: 0,
-      imdbId: '',
+      imdbRating: 0,
       genre: [],
       poster: null,
+      duration: 0,
       description: '',
     })
   }
@@ -129,6 +153,90 @@ export function DashboardAddMovie(): JSX.Element {
         />
         <FormInput
           label={true}
+          htmlFor='releaseDate'
+          children='Release Date'
+          type='text'
+          id='releaseDate'
+          placeholder='Release Date of the movie'
+          required={true}
+          value={formMovie.releaseDate}
+          onChange={e => setFormMovie({ ...formMovie, releaseDate: e.target.value })}
+          className={errorField === 'releaseDate' ? 'primary-input_error' : ''}
+        />
+        <FormInput
+          label={true}
+          htmlFor='boxOffice'
+          children='Box Office'
+          type='number'
+          id='boxOffice'
+          placeholder='Box Office of the movie'
+          required={true}
+          value={formMovie.boxOffice}
+          onChange={e => setFormMovie({ ...formMovie, boxOffice: parseInt(e.target.value) })}
+          className={errorField === 'boxOffice' ? 'primary-input_error' : ''}
+        />
+        <FormInput
+          label={true}
+          htmlFor='country'
+          children='Country'
+          type='text'
+          id='country'
+          placeholder='Country of the movie'
+          required={true}
+          value={formMovie.country}
+          onChange={e => setFormMovie({ ...formMovie, country: e.target.value })}
+          className={errorField === 'country' ? 'primary-input_error' : ''}
+        />
+        <FormInput
+          label={true}
+          htmlFor='production'
+          children='Production'
+          type='text'
+          id='production'
+          placeholder='Production of the movie'
+          required={true}
+          value={formMovie.production}
+          onChange={e => setFormMovie({ ...formMovie, production: e.target.value })}
+          className={errorField === 'production' ? 'primary-input_error' : ''}
+        />
+        <FormInput
+          label={true}
+          htmlFor='actors'
+          children='Actors'
+          type='text'
+          id='actors'
+          placeholder='Actors of the movie'
+          required={true}
+          value={formMovie.actors}
+          onChange={e => setFormMovie({ ...formMovie, actors: e.target.value })}
+          className={errorField === 'actors' ? 'primary-input_error' : ''}
+        />
+        <FormInput
+          label={true}
+          htmlFor='directors'
+          children='Directors'
+          type='text'
+          id='directors'
+          placeholder='Directors of the movie'
+          required={true}
+          value={formMovie.directors}
+          onChange={e => setFormMovie({ ...formMovie, directors: e.target.value })}
+          className={errorField === 'directors' ? 'primary-input_error' : ''}
+        />
+        <FormInput
+          label={true}
+          htmlFor='writers'
+          children='Writers'
+          type='text'
+          id='writers'
+          placeholder='Writers of the movie'
+          required={true}
+          value={formMovie.writers}
+          onChange={e => setFormMovie({ ...formMovie, writers: e.target.value })}
+          className={errorField === 'writers' ? 'primary-input_error' : ''}
+        />
+        <FormInput
+          label={true}
           htmlFor='rating'
           children='Rating'
           type='number'
@@ -143,15 +251,17 @@ export function DashboardAddMovie(): JSX.Element {
         />
         <FormInput
           label={true}
-          htmlFor='imdbId'
-          children='IMDB ID'
-          type='text'
-          id='imdbId'
-          placeholder='IMDB ID of the movie'
+          htmlFor='imdbRating'
+          children='IMDb Rating'
+          type='number'
+          min={1}
+          max={10}
+          id='imdbRating'
+          placeholder='IMDb Rating of the movie'
           required={true}
-          value={formMovie.imdbId}
-          onChange={e => setFormMovie({ ...formMovie, imdbId: e.target.value })}
-          className={errorField === 'imdbId' ? 'primary-input_error' : ''}
+          value={formMovie.imdbRating}
+          onChange={e => setFormMovie({ ...formMovie, imdbRating: parseInt(e.target.value) })}
+          className={errorField === 'imdbRating' ? 'primary-input_error' : ''}
         />
         <MultiSelect
           label={true}
@@ -175,6 +285,19 @@ export function DashboardAddMovie(): JSX.Element {
         />
         <FormInput
           label={true}
+          htmlFor='duration'
+          children='Duration'
+          type='number'
+          id='duration'
+          placeholder='Duration of the movie'
+          required={true}
+          value={formMovie.duration}
+          onChange={e => setFormMovie({ ...formMovie, duration: parseInt(e.target.value) })}
+          className={errorField === 'duration' ? 'primary-input_error' : ''}
+          min={1}
+        />
+        <FormInput
+          label={true}
           htmlFor='description'
           children='Description'
           type='text'
@@ -186,7 +309,7 @@ export function DashboardAddMovie(): JSX.Element {
           className={errorField === 'description' ? 'primary-input_error' : ''}
         />
         <div className='movie-form-preview'>
-          <label htmlFor="movie-form-preview" className="movie-form-preview__label subtitle subtitle_size_xxs">Preview</label>
+          <label htmlFor="movie-form-preview" className="movie-form-preview__label subtitle subtitle_size_xxs">Preview Card</label>
           <div className='movie-form-preview__item'>
             <Card
               title={formMovie.title}

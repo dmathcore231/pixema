@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom"
-import { PrivateRouterProps } from "./types/interfaces/PrivateRouterProps"
-import { useAppSelector } from "./hooks"
+import { PrivateRouterProps } from "../types/interfaces/PrivateRouterProps"
+import { useAppSelector } from "../hooks"
 import { useEffect, useState } from "react"
 
 export function PrivateRouter({ children, redirectPath, def }: PrivateRouterProps): JSX.Element {
