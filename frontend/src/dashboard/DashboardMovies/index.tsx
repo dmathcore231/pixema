@@ -60,6 +60,9 @@ export function DashboardMovies(): JSX.Element {
       </div>
     )
   }
+  function handleClickBtnEdit(id: string) {
+    navigate(`/dashboard/movies/${id}`)
+  }
 
   return (
     <div className='dashboard-movies'>
@@ -106,7 +109,7 @@ export function DashboardMovies(): JSX.Element {
                   <Btn
                     type="button"
                     className="btn_primary"
-                    onClick={() => console.log('edit')}
+                    onClick={() => handleClickBtnEdit(movie._id)}
                   >
                     Edit
                   </Btn>

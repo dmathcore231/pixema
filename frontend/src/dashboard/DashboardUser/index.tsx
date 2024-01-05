@@ -10,6 +10,7 @@ import { Modal } from "../../components/Modal"
 import { Select } from "../../components/Select"
 import { OptionsSelect } from "../../types/OptionsSelect"
 import { LinkBack } from "../../components/LinkBack"
+import { ROLEUSER } from "../../helpers"
 
 export function DashboardUser(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -29,12 +30,6 @@ export function DashboardUser(): JSX.Element {
     userRole: '',
     userId: ''
   })
-
-  const optionsSelect = [
-    { label: 'User', value: 'user' },
-    { label: 'Admin', value: 'admin' },
-    { label: 'Moderator', value: 'moderator' }
-  ]
 
   useEffect(() => {
     dispatch(fetchUserById(userId!))
@@ -141,7 +136,7 @@ export function DashboardUser(): JSX.Element {
           required={true}
         />
         <Select
-          options={optionsSelect}
+          options={ROLEUSER}
           defaultValue={formUserData.userRole}
           inputProps={{
             label: true,

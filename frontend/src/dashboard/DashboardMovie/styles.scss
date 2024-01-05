@@ -1,1 +1,20 @@
 @import '../../styles/app.scss';
+
+.dashboard-movie {
+  @include flex-column;
+  background-color: var(--dark-color);
+  border-radius: 0.625rem;
+  padding: 2rem;
+
+  &__title {
+    display: flex;
+  }
+}
+
+.movie-form {
+  @include flex-column;
+  gap: 1.5rem;
+  padding: 2.5rem;
+  border-radius: 0.625rem;
+  min-width: 35.875rem;
+}

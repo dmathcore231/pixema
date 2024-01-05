@@ -1,3 +1,4 @@
+import { OptionsSelect } from "../types/OptionsSelect"
 
 export function truncateTitle(title: string, maxLength: number): string {
   if (title.length > maxLength) {
@@ -39,4 +40,10 @@ export const GENRE = [
   { value: 'Thriller', label: 'Thriller' },
   { value: 'War', label: 'War' },
   { value: 'Western', label: 'Western' },
-];
+]
+
+export const ROLEUSER: OptionsSelect[] = [
+  { label: 'User', value: 'user' },
+  { label: 'Admin', value: 'admin' },
+  { label: 'Moderator', value: 'moderator' }
+]
