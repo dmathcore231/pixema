@@ -10,4 +10,19 @@
     justify-content: space-between;
     align-items: center;
   }
+
+  &__spinner {
+    fill: var(--dark-color);
+  }
+}
+
+.table-movies {
+  width: 100%;
+
+  &-row {
+
+    &__item {
+      padding-bottom: 1rem;
+    }
+  }
 }
