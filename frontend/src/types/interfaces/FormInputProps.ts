@@ -15,6 +15,7 @@ export interface FormInputProps {
   max?: number
   readOnly?: boolean
   selectIcon?: ReactNode
+  step?: string
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   onClick?: (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => void
 }

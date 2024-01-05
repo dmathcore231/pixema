@@ -121,6 +121,14 @@ export function DashboardAddMovie(): JSX.Element {
     setFormMovie({ ...formMovie, poster: file })
   }
 
+  function handleChangeNumberInput(value: string, key: string) {
+    if (value) {
+      setFormMovie({ ...formMovie, [key]: parseFloat(value) })
+    } else {
+      setFormMovie({ ...formMovie, [key]: '' as unknown as number })
+    }
+  }
+
   return (
     <div className='dashboard-add-new-movie'>
       <div className='dashboard-add-new-movie__title'>
@@ -169,11 +177,12 @@ export function DashboardAddMovie(): JSX.Element {
           htmlFor='boxOffice'
           children='Box Office'
           type='number'
+          min={0}
           id='boxOffice'
           placeholder='Box Office of the movie'
           required={true}
           value={formMovie.boxOffice}
-          onChange={e => setFormMovie({ ...formMovie, boxOffice: parseInt(e.target.value) })}
+          onChange={e => handleChangeNumberInput(e.target.value, 'boxOffice')}
           className={errorField === 'boxOffice' ? 'primary-input_error' : ''}
         />
         <FormInput
@@ -243,11 +252,12 @@ export function DashboardAddMovie(): JSX.Element {
           type='number'
           min={1}
           max={10}
+          step={"0.1"}
           id='rating'
           placeholder='Rating of the movie'
           required={true}
           value={formMovie.rating}
-          onChange={e => setFormMovie({ ...formMovie, rating: parseInt(e.target.value) })}
+          onChange={e => handleChangeNumberInput(e.target.value, 'rating')}
           className={errorField === 'rating' ? 'primary-input_error' : ''}
         />
         <FormInput
@@ -257,11 +267,12 @@ export function DashboardAddMovie(): JSX.Element {
           type='number'
           min={1}
           max={10}
+          step={"0.1"}
           id='imdbRating'
           placeholder='IMDb Rating of the movie'
           required={true}
           value={formMovie.imdbRating}
-          onChange={e => setFormMovie({ ...formMovie, imdbRating: parseInt(e.target.value) })}
+          onChange={e => handleChangeNumberInput(e.target.value, 'imdbRating')}
           className={errorField === 'imdbRating' ? 'primary-input_error' : ''}
         />
         <MultiSelect
