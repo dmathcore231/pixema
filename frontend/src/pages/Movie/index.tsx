@@ -12,6 +12,7 @@ import { ShareIcon } from "../../images/Icons/ShareIcon"
 import { FavoritesIcon } from "../../images/Icons/FavoritesIcon"
 import { MovieInfo } from "../../components/MovieInfo"
 import { Carousel } from "../../components/Carousel"
+import { LinkBack } from "../../components/LinkBack"
 
 export function Movie(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -44,6 +45,9 @@ export function Movie(): JSX.Element {
     return (
       <>
         <div className="movie">
+          <div className="movie__link-back">
+            <LinkBack />
+          </div>
           <div className="movie__poster">
             <img src={movie.poster} alt="Movie poster" className="movie__poster-img" />
             <BtnGroup

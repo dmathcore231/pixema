@@ -5,5 +5,13 @@
 
   &__item {
     fill: var(--secondary-color);
+
+    &:hover {
+      fill: var(--primary-color-light);
+    }
+
+    &:active {
+      fill: var(--primary-color);
+    }
   }
 }

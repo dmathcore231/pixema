@@ -3,6 +3,7 @@
 .movie {
   display: grid;
   grid-template-areas:
+    'link-back . .'
     'poster content .'
     'poster carousel carousel';
   grid-column-gap: 2.625rem;
@@ -39,5 +40,10 @@
   &__carousel {
     overflow: hidden;
     grid-area: carousel;
+  }
+
+  &__link-back {
+    grid-area: link-back;
+    padding-bottom: 1rem;
   }
 }
