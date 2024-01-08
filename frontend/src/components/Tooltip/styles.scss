@@ -1,0 +1,17 @@
+@import "../../styles/app";
+
+.tooltip-container {
+  position: relative;
+}
+
+.tooltip {
+  position: absolute;
+  left: 1.25rem;
+  bottom: 1.75rem;
+  padding: 0.313rem;
+  background-color: var(--graphite-color);
+  border: 0.125rem solid var(--dark-color);
+  border-radius: 0.625rem;
+  white-space: nowrap;
+
+}
