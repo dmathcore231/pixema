@@ -11,9 +11,7 @@ import { BtnGroup } from "../../components/BtnGroup"
 import { ShareIcon } from "../../images/Icons/ShareIcon"
 import { FavoritesIcon } from "../../images/Icons/FavoritesIcon"
 import { MovieInfo } from "../../components/MovieInfo"
-import { Card } from "../../components/Card"
 import { Carousel } from "../../components/Carousel"
-import { LinkBack } from "../../components/LinkBack"
 
 export function Movie(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -74,10 +72,10 @@ export function Movie(): JSX.Element {
               writers={movie.writers}
             />
           </div>
-          {/* <div className="movie__carousel">
-          <Carousel
-            data={ } title="Recommended" />
-        </div> */}
+          <div className="movie__carousel">
+            <Carousel
+              data={null} title="Recommended" />
+          </div>
         </div>
       </>
     )

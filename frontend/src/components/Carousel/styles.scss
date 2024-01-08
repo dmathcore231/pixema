@@ -32,7 +32,7 @@
   }
 
   &-body {
-    display: flex;
+    @include flex-center;
     width: 100%;
     max-width: 100%;
     overflow-x: scroll;
@@ -40,6 +40,10 @@
 
     &::-webkit-scrollbar {
       display: none;
+    }
+
+    &__item {
+      max-width: 25%;
     }
   }
 }

@@ -1,5 +1,5 @@
 
 export interface CarouselProps {
-  data: JSX.Element[]
+  data: JSX.Element[] | null
   title: string
 }
