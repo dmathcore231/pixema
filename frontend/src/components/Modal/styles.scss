@@ -1,33 +1,43 @@
+$component: 'modal';
 @import "../../styles/app.scss";
 
-.modal {
+.#{$component} {
+  --modal-align-items: center;
+  --modal-jc: center;
+  --modal-color-shadow: rgba(0, 0, 0, 0.5019607843);
+  --modal-bg-color: var(--dark-color);
+  --modal-content-padding: 3rem 2.5rem;
+  --modal-content-width: 32.375rem;
+  --modal-content-height: auto;
+  --modal-content-border-radius: 0.625rem;
+  --modal-content-gap: 2rem;
+  --modal-header-jc: space-between;
+  --modal-footer-gap: 2.5rem;
+  --modal-footer-jc: center;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #00000080;
+  background-color: var(--modal-color-shadow);
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: var(--modal-jc);
+  align-items: var(--modal-align-items);
   z-index: 2;
 
   &__content {
     @include flex-column;
-    gap: 2rem;
-    background: var(--dark-color);
-    padding: 3rem 2.5rem;
-    width: 518px;
-    border-radius: 0.625rem;
-  }
-
-  &_filter {
-    justify-content: end;
+    gap: var(--modal-content-gap);
+    background: var(--modal-bg-color);
+    padding: var(--modal-content-padding);
+    width: var(--modal-content-width);
+    height: var(--modal-content-height);
+    border-radius: var(--modal-content-border-radius);
   }
 
   &__header {
     display: flex;
-    justify-content: space-between;
+    justify-content: var(--modal-header-jc);
   }
 
   &__body {
@@ -36,7 +46,12 @@
 
   &__footer {
     display: flex;
-    gap: 2.5rem;
-    justify-content: space-between;
+    gap: var(--modal-footer-gap);
+    justify-content: var(--modal-footer-jc);
+  }
+
+  &_filter {
+    --modal-jc: end;
+    --modal-content-height: 100%;
   }
 }
