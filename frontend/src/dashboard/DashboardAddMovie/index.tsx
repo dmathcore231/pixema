@@ -11,6 +11,7 @@ import { OptionsSelect } from '../../types/OptionsSelect'
 import { fetchCreateMovie } from '../../redux/movieSlice'
 import { Card } from '../../components/Card'
 import { TextArea } from '../../components/TextArea'
+import { Switch } from '../../components/Switch'
 
 export function DashboardAddMovie(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -32,7 +33,9 @@ export function DashboardAddMovie(): JSX.Element {
     poster: null as File | null,
     duration: 0,
     description: '',
+    isRecommended: false
   })
+
   const [isSubmit, setIsSubmit] = useState(false)
   const [errorField, setErrorField] = useState('')
 
@@ -61,6 +64,8 @@ export function DashboardAddMovie(): JSX.Element {
       formData.append('poster', formMovie.poster as File)
       formData.append('duration', formMovie.duration.toString())
       formData.append('description', formMovie.description)
+      formData.append('isRecommended', formMovie.isRecommended.toString())
+
       dispatch(fetchCreateMovie(formData))
     }
   }, [formMovie, isSubmit, dispatch])
@@ -108,6 +113,7 @@ export function DashboardAddMovie(): JSX.Element {
       poster: null,
       duration: 0,
       description: '',
+      isRecommended: false
     })
   }
 
@@ -321,15 +327,30 @@ export function DashboardAddMovie(): JSX.Element {
           onChange={e => setFormMovie({ ...formMovie, description: e.target.value })}
           className={errorField === 'description' ? 'text-area_error' : ''}
         />
+        <div className='movie-form-recommended'>
+          <div className='movie-form-recommended__item'>
+            <label className='movie-form-recommended__label subtitle subtitle_size_xxs'>
+              Recommended
+            </label>
+            <div className='movie-form-recommended__placeholder'>
+              Add a movie to recommendations
+            </div>
+          </div>
+          <div className='movie-form-c__item'>
+            <Switch onChange={e => setFormMovie({ ...formMovie, isRecommended: e.target.checked })} />
+          </div>
+
+        </div>
         <div className='movie-form-preview'>
           <label htmlFor="movie-form-preview" className="movie-form-preview__label subtitle subtitle_size_xxs">Preview Card</label>
           <div className='movie-form-preview__item'>
             <div className='movie-form-preview__wrapper'>
               <Card
                 title={formMovie.title}
-                img={formMovie.poster ? URL.createObjectURL(formMovie.poster) : ''}
+                poster={formMovie.poster ? URL.createObjectURL(formMovie.poster) : ''}
                 genres={formMovie.genre}
                 rating={formMovie.rating}
+                isRecommended={formMovie.isRecommended}
               />
             </div>
           </div>

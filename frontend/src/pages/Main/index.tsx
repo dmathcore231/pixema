@@ -35,10 +35,11 @@ export function Main(): JSX.Element {
             >
               <Card
                 id={movie._id}
-                img={movie.poster}
+                poster={movie.poster}
                 title={movie.title}
                 genres={movie.genre}
                 rating={movie.rating}
+                isRecommended={movie.isRecommended}
               />
             </div>
           ))}

@@ -1,7 +1,8 @@
 
 export interface CardProps {
   id?: string
-  img?: string
+  poster?: string
+  isRecommended?: boolean
   title: string
   genres: string[]
   rating: number

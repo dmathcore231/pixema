@@ -13,6 +13,7 @@ import { FavoritesIcon } from "../../images/Icons/FavoritesIcon"
 import { MovieInfo } from "../../components/MovieInfo"
 import { Card } from "../../components/Card"
 import { Carousel } from "../../components/Carousel"
+import { LinkBack } from "../../components/LinkBack"
 
 export function Movie(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -43,40 +44,42 @@ export function Movie(): JSX.Element {
 
   if (movie && Object.keys(movie).length > 0) {
     return (
-      <div className="movie">
-        <div className="movie__poster">
-          <img src={movie.poster} alt="Movie poster" className="movie__poster-img" />
-          <BtnGroup
-            itemsName={["favorites", "share"]}
-            itemsValue={[<FavoritesIcon width="24" height="24" />, <ShareIcon width="24" height="24" />]}
-            onClick={(e) => console.log(e)}
-          />
-        </div>
-        <div className="movie__content">
-          <div className="movie__genres">
-            <GenresList itemList={movie!.genre} />
+      <>
+        <div className="movie">
+          <div className="movie__poster">
+            <img src={movie.poster} alt="Movie poster" className="movie__poster-img" />
+            <BtnGroup
+              itemsName={["favorites", "share"]}
+              itemsValue={[<FavoritesIcon width="24" height="24" />, <ShareIcon width="24" height="24" />]}
+              onClick={(e) => console.log(e)}
+            />
           </div>
-          <div className="movie__title">
-            <h1>{movie.title}</h1>
+          <div className="movie__content">
+            <div className="movie__genres">
+              <GenresList itemList={movie!.genre} />
+            </div>
+            <div className="movie__title">
+              <h1>{movie.title}</h1>
+            </div>
+            <Presentation itemList={[movie.rating, movie.imdbRating, movie.duration, movie.isRecommended]} />
+            <MovieInfo
+              description={movie.description}
+              year={movie.year}
+              releaseDate={movie.releaseDate}
+              boxOffice={`$${Number(movie.boxOffice).toLocaleString("en-US")}`}
+              country={movie.country}
+              production={movie.production}
+              actors={movie.actors}
+              directors={movie.directors}
+              writers={movie.writers}
+            />
           </div>
-          <Presentation itemList={[movie.rating, movie.imdbRating, movie.duration]} />
-          <MovieInfo
-            description={movie.description}
-            year={movie.year}
-            releaseDate={movie.releaseDate}
-            boxOffice={`$${Number(movie.boxOffice).toLocaleString("en-US")}`}
-            country={movie.country}
-            production={movie.production}
-            actors={movie.actors}
-            directors={movie.directors}
-            writers={movie.writers}
-          />
-        </div>
-        {/* <div className="movie__carousel">
+          {/* <div className="movie__carousel">
           <Carousel
             data={ } title="Recommended" />
         </div> */}
-      </div>
+        </div>
+      </>
     )
   } else {
     return (

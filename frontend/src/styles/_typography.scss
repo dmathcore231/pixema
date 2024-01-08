@@ -50,6 +50,10 @@ h3 {
     &_light {
       color: var(--light-color);
     }
+
+    &_primary {
+      color: var(--primary-color);
+    }
   }
 
   &_weight {

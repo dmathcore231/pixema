@@ -13,7 +13,7 @@ async function createMovie(req, res) {
     }
     const posterPath = req.file.path
 
-    const { title, year, releaseDate, boxOffice, country, production, actors, directors, writers, rating, imdbRating, genre, description, duration } = req.body
+    const { title, year, releaseDate, boxOffice, country, production, actors, directors, writers, rating, imdbRating, genre, description, duration, isRecommended } = req.body
     const errMessages = []
     missingFields(title, 'Title', errMessages)
     missingFields(year, 'Year', errMessages)
@@ -29,6 +29,7 @@ async function createMovie(req, res) {
     missingFields(genre, 'Genre', errMessages)
     missingFields(description, 'Description', errMessages)
     missingFields(duration, 'Duration', errMessages)
+    missingFields(isRecommended, 'Recommended', errMessages)
 
     if (errMessages.length > 0) {
       return res.status(400).send({
@@ -58,7 +59,8 @@ async function createMovie(req, res) {
         genre,
         poster: `http://localhost:3000/${posterPath}`,
         duration,
-        description
+        description,
+        isRecommended
       })
       await movie.save()
       res.status(201).send({ status: 201, message: 'Movie created successfully', movie })

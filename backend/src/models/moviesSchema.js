@@ -15,7 +15,8 @@ const movieSchema = new mongoose.Schema({
   genre: Array,
   poster: String,
   duration: Number,
-  description: String
+  description: String,
+  isRecommended: Boolean
 })
 
 const Movie = mongoose.model('Movie', movieSchema)

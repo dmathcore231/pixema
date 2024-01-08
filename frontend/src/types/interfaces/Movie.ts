@@ -16,6 +16,7 @@ export interface Movie {
   poster: string,
   duration: number,
   description: string,
+  isRecommended: boolean
 }
 
 export interface ResponseMovie {
