@@ -18,20 +18,7 @@
       transition-delay: 0s;
       max-height: 165px;
       overflow-y: auto;
-
-      &::-webkit-scrollbar {
-        width: 0.5rem;
-      }
-
-      &::-webkit-scrollbar-track {
-        background: var(--secondary-color);
-        border-radius: 0.313rem;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background: var(--primary-color);
-        border-radius: 0.313rem;
-      }
+      @include primary-scroll;
     }
 
     &__item {

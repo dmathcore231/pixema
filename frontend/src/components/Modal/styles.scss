@@ -33,6 +33,8 @@ $component: 'modal';
     width: var(--modal-content-width);
     height: var(--modal-content-height);
     border-radius: var(--modal-content-border-radius);
+    overflow-y: auto;
+    @include primary-scroll;
   }
 
   &__header {

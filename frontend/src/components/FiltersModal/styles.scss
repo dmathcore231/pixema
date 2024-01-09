@@ -4,6 +4,30 @@
 .filters {
   @include flex-column;
   width: 100%;
+  gap: 1.5rem;
 
-  &__item {}
+  &__item {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 2.5rem;
+
+    &_border {
+
+      &_bottom {
+        border-bottom: 1px solid var(--graphite-color);
+        padding-bottom: 2rem;
+      }
+    }
+
+    &_flex_col {
+      @include flex-column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
+
+  &__label {
+    display: flex;
+  }
 }

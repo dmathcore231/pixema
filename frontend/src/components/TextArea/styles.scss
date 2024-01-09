@@ -13,6 +13,7 @@
   text-align: left;
   resize: none;
   height: 7.188rem;
+  @include primary-scroll;
 
   &:focus {
     border: 2px solid var(--primary-color);
@@ -27,20 +28,6 @@
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5rem;
-  }
-
-  &::-webkit-scrollbar {
-    width: 0.5rem;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: var(--secondary-color);
-    border-radius: 0.313rem;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-    border-radius: 0.313rem;
   }
 
   &-label {
