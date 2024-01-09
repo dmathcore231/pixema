@@ -9,5 +9,6 @@ export interface MultiSelectProps {
   id?: string
   children?: ReactNode
   maxActiveOptions?: number
+  clearActiveOptions?: boolean
   getActiveOptions?: (activeOptions: OptionsSelect[]) => void
 }

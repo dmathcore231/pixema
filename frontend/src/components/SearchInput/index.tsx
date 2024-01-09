@@ -9,6 +9,7 @@ import { FiltersModal } from "../FiltersModal"
 
 export function SearchInput(): JSX.Element {
   const [isActive, setIsActive] = useState(false)
+  const [clickBtnClear, setClickBtnClear] = useState(false)
 
   return (
     <>
@@ -36,10 +37,13 @@ export function SearchInput(): JSX.Element {
         titleBtnClose="Clear filter"
         titleBtnSubmit="Show results"
         onSubmit={() => setIsActive(false)}
-        onCloseInFooter={() => console.log("click clear")}
+        onCloseInFooter={() => setClickBtnClear(true)}
         onClose={() => setIsActive(false)}
       >
-        <FiltersModal />
+        <FiltersModal
+          stateClear={clickBtnClear}
+          setStateClear={setClickBtnClear}
+        />
       </Modal>
     </>
   )

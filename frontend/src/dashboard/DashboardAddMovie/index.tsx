@@ -35,10 +35,9 @@ export function DashboardAddMovie(): JSX.Element {
     description: '',
     isRecommended: false
   })
-
   const [isSubmit, setIsSubmit] = useState(false)
   const [errorField, setErrorField] = useState('')
-
+  const [isCancel, setIsCancel] = useState(false)
   const { status, message } = useAppSelector(state => state.movies)
 
   useEffect(() => {
@@ -91,6 +90,11 @@ export function DashboardAddMovie(): JSX.Element {
     }
   }, [status, message, navigate])
 
+  useEffect(() => {
+    if (isCancel) {
+      setIsCancel(prev => !prev)
+    }
+  }, [isCancel])
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setIsSubmit(prev => !prev)
@@ -115,6 +119,7 @@ export function DashboardAddMovie(): JSX.Element {
       description: '',
       isRecommended: false
     })
+    setIsCancel(prev => !prev)
   }
 
   function handleMultiSelectChange(activeOptions: OptionsSelect[]) {
@@ -288,6 +293,7 @@ export function DashboardAddMovie(): JSX.Element {
           options={GENRE}
           maxActiveOptions={4}
           getActiveOptions={(activeOptions) => handleMultiSelectChange(activeOptions)}
+          clearActiveOptions={isCancel}
           className={errorField === 'genre' && formMovie.genre.length === 0 ? 'multi-select-error' : ''
           }
         />

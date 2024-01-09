@@ -9,7 +9,7 @@ import { CloseIcon } from '../../images/Icons/CloseIcon'
 import { MultiSelectProps } from '../../types/interfaces/MultiSelectProps'
 import { truncateTitle } from '../../helpers'
 
-export function MultiSelect({ placeholder, className, options, label, id, children, maxActiveOptions, getActiveOptions }: MultiSelectProps): JSX.Element {
+export function MultiSelect({ placeholder, className, options, label, id, children, maxActiveOptions, clearActiveOptions, getActiveOptions }: MultiSelectProps): JSX.Element {
   const [isActiveDropdown, setIsActiveDropdown] = useState(false)
   const [activeOptions, setActiveOptions] = useState<OptionsSelect[]>([])
   const [noneActiveOptions, setNoneActiveOptions] = useState<OptionsSelect[]>(options)
@@ -22,6 +22,13 @@ export function MultiSelect({ placeholder, className, options, label, id, childr
       getActiveOptions(activeOptions)
     }
   }, [activeOptions])
+
+  useEffect(() => {
+    if (clearActiveOptions) {
+      setActiveOptions([])
+      setNoneActiveOptions(options)
+    }
+  }, [clearActiveOptions, options])
 
   function handleClickValue() {
     if (maxActiveOptions && activeOptions.length === maxActiveOptions) {

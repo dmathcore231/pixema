@@ -1,16 +1,58 @@
 import './styles.scss'
+import { useState, useEffect } from 'react'
 import { Tabs } from '../Tabs'
 import { OptionsSelect } from '../../types/OptionsSelect'
 import { FormInput } from '../FormInput'
 import { MultiSelect } from '../MultiSelect'
 import { GENRE } from '../../helpers'
 import { COUNTRY } from '../../helpers'
+import { FiltersModalProps } from '../../types/interfaces/FiltersModalProps'
+import { FormDataModalFilters } from '../../types/FormDataModalFilters'
 
-export function FiltersModal(): JSX.Element {
+export function FiltersModal({ stateClear, setStateClear }: FiltersModalProps): JSX.Element {
+  const optionsTabs: OptionsSelect[] = [
+    { label: 'Rating', value: 'rating' },
+    { label: 'Year', value: 'year' },
+  ]
+
+  const [formData, setFormData] = useState<FormDataModalFilters>({
+    sort: optionsTabs[0],
+    title: '',
+    genre: [],
+    years: {
+      from: 0,
+      to: 0
+    },
+    rating: {
+      from: 0,
+      to: 0
+    },
+    country: [],
+  })
 
   function handleClickTabs(option: OptionsSelect) {
-    console.log(option)
+    setFormData({ ...formData, sort: option })
   }
+
+  useEffect(() => {
+    if (stateClear) {
+      setFormData({
+        sort: optionsTabs[0],
+        title: '',
+        genre: [],
+        years: {
+          from: 0,
+          to: 0
+        },
+        rating: {
+          from: 0,
+          to: 0
+        },
+        country: [],
+      })
+      setStateClear(false)
+    }
+  }, [stateClear, setStateClear])
 
   return (
     <form className="filters" id="filters-form">
@@ -19,11 +61,9 @@ export function FiltersModal(): JSX.Element {
           Sort by
         </label>
         <Tabs
-          options={[
-            { label: 'Rating', value: 'rating' },
-            { label: 'Year', value: 'year' },
-          ]}
+          options={optionsTabs}
           onChangeTabs={handleClickTabs}
+          defaultCheckedOption={optionsTabs[0]}
         />
       </div>
       <div className='filters__item'>
@@ -34,6 +74,8 @@ export function FiltersModal(): JSX.Element {
           type="text"
           id="title"
           placeholder="Your text"
+          value={formData.title}
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
         />
       </div>
       <div className='filters__item'>
@@ -42,6 +84,9 @@ export function FiltersModal(): JSX.Element {
           id="genre"
           children="Genre"
           options={GENRE}
+          maxActiveOptions={5}
+          getActiveOptions={(activeOptions) => setFormData({ ...formData, genre: activeOptions })}
+          clearActiveOptions={stateClear}
         />
       </div>
       <div className='filters__item'>
@@ -53,6 +98,7 @@ export function FiltersModal(): JSX.Element {
           id="years-from"
           placeholder="From"
           min={1890}
+          value={formData.years.from}
         />
         <FormInput
           label={false}
@@ -89,6 +135,8 @@ export function FiltersModal(): JSX.Element {
           children="Country"
           options={COUNTRY}
           maxActiveOptions={8}
+          getActiveOptions={(activeOptions) => setFormData({ ...formData, country: activeOptions })}
+          clearActiveOptions={stateClear}
         />
       </div>
     </form>
