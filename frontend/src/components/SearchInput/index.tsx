@@ -5,6 +5,7 @@ import { FormInput } from "../FormInput"
 import { useState } from "react"
 import { Btn } from "../Btn"
 import { Modal } from "../Modal"
+import { FiltersModal } from "../FiltersModal"
 
 export function SearchInput(): JSX.Element {
   const [isActive, setIsActive] = useState(false)
@@ -31,14 +32,14 @@ export function SearchInput(): JSX.Element {
       </form>
       <Modal isActive={isActive}
         modalClass="modal_filter"
-        title="Filter"
+        title="Filters"
         titleBtnClose="Clear filter"
         titleBtnSubmit="Show results"
         onSubmit={() => setIsActive(false)}
         onCloseInFooter={() => console.log("click clear")}
         onClose={() => setIsActive(false)}
       >
-        test
+        <FiltersModal />
       </Modal>
     </>
   )

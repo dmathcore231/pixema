@@ -1,33 +1,29 @@
 import "./styles.scss"
+import { useState } from "react"
+import { OptionsSelect } from "../../types/OptionsSelect"
+import { TabsProps } from "../../types/interfaces/TabsProps"
 
-interface TabsProps {
-  name: string
-  value: string[]
-  titleTabs: string[]
-  onClick: (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => void
-  isChecked: string
-}
+export function Tabs({ options, defaultCheckedOption, onChangeTabs }: TabsProps): JSX.Element {
+  const [isCheckedOption, setIsCheckedOption] = useState<OptionsSelect>(defaultCheckedOption || options[0])
 
-export function Tabs({ name, value, titleTabs, onClick, isChecked }: TabsProps): JSX.Element {
-
-  function renderTabs(): JSX.Element[] {
-    const tabsItems: JSX.Element[] = []
-
-    for (let i = 0; i < value.length; i++) {
-      tabsItems.push(
-        <div className="tabs__item" key={i}>
-          <input type="radio" name={name} value={value[i]} onClick={onClick} id={value[i]} defaultChecked={isChecked === value[i]} />
-          <label htmlFor={value[i]}>{titleTabs[i]}</label>
-        </div>
-      )
-    }
-
-    return tabsItems;
+  function handleClickTabs(option: OptionsSelect) {
+    setIsCheckedOption(option)
+    onChangeTabs(option)
   }
 
   return (
     <div className="tabs">
-      {renderTabs()}
+      {options.map((option) => (
+        <div
+          className={"tabs__item" + (isCheckedOption.value === option.value ? " tabs__item_active" : "")}
+          key={option.value}
+          onClick={() => handleClickTabs(option)}
+          data-value={option.value}
+        >
+          {option.label}
+        </div>
+      ))}
     </div>
   )
+
 }
