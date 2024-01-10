@@ -1,4 +1,4 @@
 
 export interface PresentationProps {
-  itemList: [number | string, number | string, number, boolean]
+  itemList: [number, number | string, number, boolean]
 }

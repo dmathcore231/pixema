@@ -15,6 +15,14 @@
       &_success {
         background-color: var(--success-color);
       }
+
+      &_danger {
+        background-color: var(--danger-color);
+      }
+
+      &_yellow {
+        background-color: var(--yellow-color);
+      }
     }
   }
 }
