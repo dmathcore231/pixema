@@ -12,7 +12,8 @@ export function Card({ poster, title, genres, rating, id, isRecommended }: CardP
       <Link to={id ? `/movie/${id}` : "#"} className="card__link">
         <div className="card__image">
           <img src={poster ? poster : noPoster} alt="movie poster" className="card__poster" />
-          <div className="card__rating subtitle subtitle_size_xs">
+          <div className={`card__rating subtitle subtitle_size_xs`
+            + (rating <= 7 && rating >= 5 ? ' card__rating_color_yellow' : rating < 5 ? ' card__rating_color_red' : '')}>
             {rating}
           </div>
           {isRecommended

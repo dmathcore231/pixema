@@ -52,6 +52,16 @@
     position: absolute;
     top: 1.25rem;
     left: 1.25rem;
+
+    &_color {
+      &_yellow {
+        background-color: var(--yellow-color);
+      }
+
+      &_red {
+        background-color: var(--danger-color);
+      }
+    }
   }
 
   &__recommendation {
