@@ -95,6 +95,7 @@ export function DashboardAddMovie(): JSX.Element {
       setIsCancel(prev => !prev)
     }
   }, [isCancel])
+
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setIsSubmit(prev => !prev)

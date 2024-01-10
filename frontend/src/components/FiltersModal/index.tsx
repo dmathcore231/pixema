@@ -1,5 +1,6 @@
 import './styles.scss'
 import { useState, useEffect } from 'react'
+import { useAppDispatch, useAppSelector } from '../../hooks'
 import { Tabs } from '../Tabs'
 import { OptionsSelect } from '../../types/OptionsSelect'
 import { FormInput } from '../FormInput'
@@ -8,8 +9,13 @@ import { GENRE } from '../../helpers'
 import { COUNTRY } from '../../helpers'
 import { FiltersModalProps } from '../../types/interfaces/FiltersModalProps'
 import { FormDataModalFilters } from '../../types/FormDataModalFilters'
+import { fetchGetMoviesByFilters } from '../../redux/movieSlice'
 
-export function FiltersModal({ stateClear, setStateClear }: FiltersModalProps): JSX.Element {
+export function FiltersModal({ stateClear, setStateClear, stateSubmit, setStateSubmit }: FiltersModalProps): JSX.Element {
+  const dispatch = useAppDispatch()
+
+  const { moviesByFilters } = useAppSelector(state => state.movies)
+
   const optionsTabs: OptionsSelect[] = [
     { label: 'Rating', value: 'rating' },
     { label: 'Year', value: 'year' },
@@ -17,42 +23,52 @@ export function FiltersModal({ stateClear, setStateClear }: FiltersModalProps): 
 
   const [formData, setFormData] = useState<FormDataModalFilters>({
     sort: optionsTabs[0],
-    title: '',
+    title: null,
     genre: [],
     years: {
-      from: 0,
-      to: 0
+      from: null,
+      to: null
     },
     rating: {
-      from: 0,
-      to: 0
+      from: null,
+      to: null
     },
     country: [],
   })
 
-  function handleClickTabs(option: OptionsSelect) {
-    setFormData({ ...formData, sort: option })
-  }
 
   useEffect(() => {
     if (stateClear) {
       setFormData({
         sort: optionsTabs[0],
-        title: '',
+        title: null,
         genre: [],
         years: {
-          from: 0,
-          to: 0
+          from: null,
+          to: null
         },
         rating: {
-          from: 0,
-          to: 0
+          from: null,
+          to: null
         },
         country: [],
       })
       setStateClear(false)
     }
   }, [stateClear, setStateClear])
+
+  useEffect(() => {
+    if (stateSubmit) {
+      console.log(formData)
+      dispatch(fetchGetMoviesByFilters(formData))
+      setStateSubmit(false)
+      console.log(moviesByFilters)
+    }
+  }, [stateSubmit, setStateSubmit, formData, dispatch])
+
+  function handleClickTabs(option: OptionsSelect) {
+    setFormData({ ...formData, sort: option })
+  }
 
   return (
     <form className="filters" id="filters-form">
@@ -74,7 +90,7 @@ export function FiltersModal({ stateClear, setStateClear }: FiltersModalProps): 
           type="text"
           id="title"
           placeholder="Your text"
-          value={formData.title}
+          value={formData.title === null ? '' : formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
         />
       </div>
@@ -98,7 +114,8 @@ export function FiltersModal({ stateClear, setStateClear }: FiltersModalProps): 
           id="years-from"
           placeholder="From"
           min={1890}
-          value={formData.years.from}
+          value={formData.years.from === null || isNaN(formData.years.from) ? '' : formData.years.from}
+          onChange={(e) => setFormData({ ...formData, years: { ...formData.years, from: parseFloat(e.target.value) } })}
         />
         <FormInput
           label={false}
@@ -106,6 +123,8 @@ export function FiltersModal({ stateClear, setStateClear }: FiltersModalProps): 
           id="years-to"
           placeholder="To"
           min={1890}
+          value={formData.years.to === null || isNaN(formData.years.to) ? '' : formData.years.to}
+          onChange={(e) => setFormData({ ...formData, years: { ...formData.years, to: parseFloat(e.target.value) } })}
         />
       </div>
       <div className='filters__item'>
@@ -118,6 +137,8 @@ export function FiltersModal({ stateClear, setStateClear }: FiltersModalProps): 
           placeholder="From"
           min={0}
           max={10}
+          value={formData.rating.from === null || isNaN(formData.rating.from) ? '' : formData.rating.from}
+          onChange={(e) => setFormData({ ...formData, rating: { ...formData.rating, from: parseFloat(e.target.value) } })}
         />
         <FormInput
           label={false}
@@ -126,6 +147,8 @@ export function FiltersModal({ stateClear, setStateClear }: FiltersModalProps): 
           placeholder="To"
           min={0}
           max={10}
+          value={formData.rating.to === null || isNaN(formData.rating.to) ? '' : formData.rating.to}
+          onChange={(e) => setFormData({ ...formData, rating: { ...formData.rating, to: parseFloat(e.target.value) } })}
         />
       </div>
       <div className='filters__item'>

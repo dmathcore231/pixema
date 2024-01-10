@@ -1,4 +1,5 @@
 export const moviesEndPoint = '/movies'
+export const moviesFiltersEndPoint = `${moviesEndPoint}/filters`
 export const movieEmdPoint = '/movie'
 export const authEndPoint = '/auth/user'
 export const authAllUsersEndPoint = '/auth/users'

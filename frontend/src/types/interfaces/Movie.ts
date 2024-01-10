@@ -25,6 +25,12 @@ export interface ResponseMovie {
   status: number
 }
 
+export interface ResponseMovies {
+  movies: Movie[],
+  message: string,
+  status: number
+}
+
 export interface MovieState {
   loading: boolean,
   error: boolean,
@@ -32,4 +38,5 @@ export interface MovieState {
   status: number,
   message: string,
   movie: Movie
+  moviesByFilters: Movie[]
 }

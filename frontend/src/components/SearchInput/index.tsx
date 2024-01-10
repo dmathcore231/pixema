@@ -1,15 +1,20 @@
 import "../FormInput/styles.scss"
 import "./styles.scss"
-import filterIcon from "../../images/interface/filter-icon.png"
 import { FormInput } from "../FormInput"
 import { useState } from "react"
 import { Btn } from "../Btn"
 import { Modal } from "../Modal"
 import { FiltersModal } from "../FiltersModal"
+import { BurgerIcon } from "../../images/Icons/BurgerIcon"
 
 export function SearchInput(): JSX.Element {
   const [isActive, setIsActive] = useState(false)
   const [clickBtnClear, setClickBtnClear] = useState(false)
+  const [clickBtnSubmit, setClickBtnSubmit] = useState(false)
+
+  function handleSubmitModal() {
+    setClickBtnSubmit(true)
+  }
 
   return (
     <>
@@ -24,11 +29,11 @@ export function SearchInput(): JSX.Element {
         />
         <Btn
           type="button"
-          className="btn_search"
+          className="btn_padding_none btn_search"
           onClick={() => setIsActive(true)}
           form="search-form"
         >
-          <img src={filterIcon} alt="filter" />
+          <BurgerIcon width="24" height="24" />
         </Btn>
       </form>
       <Modal isActive={isActive}
@@ -36,13 +41,15 @@ export function SearchInput(): JSX.Element {
         title="Filters"
         titleBtnClose="Clear filter"
         titleBtnSubmit="Show results"
-        onSubmit={() => setIsActive(false)}
+        onSubmit={() => handleSubmitModal()}
         onCloseInFooter={() => setClickBtnClear(true)}
         onClose={() => setIsActive(false)}
       >
         <FiltersModal
           stateClear={clickBtnClear}
           setStateClear={setClickBtnClear}
+          stateSubmit={clickBtnSubmit}
+          setStateSubmit={setClickBtnSubmit}
         />
       </Modal>
     </>

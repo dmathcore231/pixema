@@ -2,15 +2,15 @@ import { OptionsSelect } from '../types/OptionsSelect'
 
 export type FormDataModalFilters = {
   sort: OptionsSelect
-  title: string
+  title: string | null
   genre: OptionsSelect[]
   years: {
-    from: number
-    to: number
+    from: number | null
+    to: number | null
   }
   rating: {
-    from: number
-    to: number
+    from: number | null
+    to: number | null
   }
   country: OptionsSelect[]
 }
