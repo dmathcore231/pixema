@@ -1,4 +1,4 @@
-
+import { FormDataModalFilters } from '../FormDataModalFilters'
 export interface Movie {
   _id: string,
   title: string,
@@ -31,6 +31,10 @@ export interface ResponseMovies {
   status: number
 }
 
+export interface ResponseMovieByFilters extends ResponseMovies {
+  activeFilters: FormDataModalFilters[]
+}
+
 export interface MovieState {
   loading: boolean,
   error: boolean,
@@ -39,4 +43,5 @@ export interface MovieState {
   message: string,
   movie: Movie
   moviesByFilters: Movie[]
+  activeFilters: FormDataModalFilters[]
 }

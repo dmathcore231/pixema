@@ -10,17 +10,20 @@ import { COUNTRY } from '../../helpers'
 import { FiltersModalProps } from '../../types/interfaces/FiltersModalProps'
 import { FormDataModalFilters } from '../../types/FormDataModalFilters'
 import { fetchGetMoviesByFilters } from '../../redux/movieSlice'
+import { Btn } from '../Btn'
+import { Spinner } from '../Spinner'
 
-export function FiltersModal({ stateClear, setStateClear, stateSubmit, setStateSubmit }: FiltersModalProps): JSX.Element {
+export function FiltersModal({ setStateIsActive }: FiltersModalProps): JSX.Element {
   const dispatch = useAppDispatch()
 
-  const { moviesByFilters } = useAppSelector(state => state.movies)
+  const { loading, status, message } = useAppSelector(state => state.movies)
 
+  const [isSubmit, setIsSubmit] = useState(false)
+  const [isClear, setIsClear] = useState(false)
   const optionsTabs: OptionsSelect[] = [
     { label: 'Rating', value: 'rating' },
     { label: 'Year', value: 'year' },
   ]
-
   const [formData, setFormData] = useState<FormDataModalFilters>({
     sort: optionsTabs[0],
     title: null,
@@ -36,9 +39,8 @@ export function FiltersModal({ stateClear, setStateClear, stateSubmit, setStateS
     country: [],
   })
 
-
   useEffect(() => {
-    if (stateClear) {
+    if (isClear) {
       setFormData({
         sort: optionsTabs[0],
         title: null,
@@ -53,25 +55,34 @@ export function FiltersModal({ stateClear, setStateClear, stateSubmit, setStateS
         },
         country: [],
       })
-      setStateClear(false)
+      setIsClear(false)
     }
-  }, [stateClear, setStateClear])
+  }, [isClear, optionsTabs])
 
   useEffect(() => {
-    if (stateSubmit) {
-      console.log(formData)
+    if (isSubmit) {
       dispatch(fetchGetMoviesByFilters(formData))
-      setStateSubmit(false)
-      console.log(moviesByFilters)
+      setIsSubmit(false)
     }
-  }, [stateSubmit, setStateSubmit, formData, dispatch])
+  }, [isSubmit, dispatch, formData])
+
+  useEffect(() => {
+    if (isSubmit && !loading) {
+      setStateIsActive(false)
+    }
+  }, [isSubmit, status, message, loading, setStateIsActive])
 
   function handleClickTabs(option: OptionsSelect) {
     setFormData({ ...formData, sort: option })
   }
 
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setIsSubmit(true)
+  }
+
   return (
-    <form className="filters" id="filters-form">
+    <form className="filters" id="filters-form" onSubmit={handleSubmit}>
       <div className='filters__item filters__item_border_bottom filters__item_flex_col'>
         <label className="filters__label subtitle subtitle_size_xxs">
           Sort by
@@ -102,7 +113,7 @@ export function FiltersModal({ stateClear, setStateClear, stateSubmit, setStateS
           options={GENRE}
           maxActiveOptions={5}
           getActiveOptions={(activeOptions) => setFormData({ ...formData, genre: activeOptions })}
-          clearActiveOptions={stateClear}
+          clearActiveOptions={isClear}
         />
       </div>
       <div className='filters__item'>
@@ -114,8 +125,8 @@ export function FiltersModal({ stateClear, setStateClear, stateSubmit, setStateS
           id="years-from"
           placeholder="From"
           min={1890}
-          value={formData.years.from === null || isNaN(formData.years.from) ? '' : formData.years.from}
-          onChange={(e) => setFormData({ ...formData, years: { ...formData.years, from: parseFloat(e.target.value) } })}
+          value={formData.years.from ?? ''}
+          onChange={(e) => setFormData({ ...formData, years: { ...formData.years, from: e.target.value !== '' ? parseFloat(e.target.value) : null } })}
         />
         <FormInput
           label={false}
@@ -123,8 +134,9 @@ export function FiltersModal({ stateClear, setStateClear, stateSubmit, setStateS
           id="years-to"
           placeholder="To"
           min={1890}
-          value={formData.years.to === null || isNaN(formData.years.to) ? '' : formData.years.to}
-          onChange={(e) => setFormData({ ...formData, years: { ...formData.years, to: parseFloat(e.target.value) } })}
+          max={new Date().getFullYear()}
+          value={formData.years.to ?? ''}
+          onChange={(e) => setFormData({ ...formData, years: { ...formData.years, to: e.target.value !== '' ? parseFloat(e.target.value) : null } })}
         />
       </div>
       <div className='filters__item'>
@@ -137,8 +149,8 @@ export function FiltersModal({ stateClear, setStateClear, stateSubmit, setStateS
           placeholder="From"
           min={0}
           max={10}
-          value={formData.rating.from === null || isNaN(formData.rating.from) ? '' : formData.rating.from}
-          onChange={(e) => setFormData({ ...formData, rating: { ...formData.rating, from: parseFloat(e.target.value) } })}
+          value={formData.rating.from ?? ''}
+          onChange={(e) => setFormData({ ...formData, rating: { ...formData.rating, from: e.target.value !== '' ? parseFloat(e.target.value) : null } })}
         />
         <FormInput
           label={false}
@@ -147,8 +159,8 @@ export function FiltersModal({ stateClear, setStateClear, stateSubmit, setStateS
           placeholder="To"
           min={0}
           max={10}
-          value={formData.rating.to === null || isNaN(formData.rating.to) ? '' : formData.rating.to}
-          onChange={(e) => setFormData({ ...formData, rating: { ...formData.rating, to: parseFloat(e.target.value) } })}
+          value={formData.rating.to ?? ''}
+          onChange={(e) => setFormData({ ...formData, rating: { ...formData.rating, to: e.target.value !== '' ? parseFloat(e.target.value) : null } })}
         />
       </div>
       <div className='filters__item'>
@@ -159,8 +171,24 @@ export function FiltersModal({ stateClear, setStateClear, stateSubmit, setStateS
           options={COUNTRY}
           maxActiveOptions={8}
           getActiveOptions={(activeOptions) => setFormData({ ...formData, country: activeOptions })}
-          clearActiveOptions={stateClear}
+          clearActiveOptions={isClear}
         />
+      </div>
+      <div className='filters__item filters__item_padding_top'>
+        <Btn
+          type='button'
+          className="btn_secondary"
+          onClick={() => setIsClear(true)}
+        >
+          Clear filter
+        </Btn>
+        <Btn
+          type='submit'
+          className="btn_primary"
+          disabled={loading}
+        >
+          {loading ? <Spinner width="24" height="24" /> : 'Show results'}
+        </Btn>
       </div>
     </form>
   )

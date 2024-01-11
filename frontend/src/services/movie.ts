@@ -1,7 +1,7 @@
 import { AxiosError } from "axios"
 import { clientRest } from "../utils/client"
 import { moviesEndPoint, movieEmdPoint, moviesFiltersEndPoint } from "../api"
-import { Movie, ResponseMovie, ResponseMovies } from "../types/interfaces/Movie"
+import { Movie, ResponseMovie, ResponseMovieByFilters } from "../types/interfaces/Movie"
 import { FormDataModalFilters } from "../types/FormDataModalFilters"
 
 export const requestMovies = async (): Promise<Movie[]> => {
@@ -46,7 +46,7 @@ export const requestGetMovieById = async (id: string): Promise<ResponseMovie> =>
   }
 }
 
-export const requestGetMoviesByFilters = async (filtersData: FormDataModalFilters): Promise<ResponseMovies> => {
+export const requestGetMoviesByFilters = async (filtersData: FormDataModalFilters): Promise<ResponseMovieByFilters> => {
   try {
     const genreValues = filtersData.genre.map((genre) => genre.value)
     const countryValues = filtersData.country.map((country) => country.value)

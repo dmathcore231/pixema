@@ -25,6 +25,12 @@
       align-items: flex-start;
       gap: 0.5rem;
     }
+
+    &_padding {
+      &_top {
+        padding-top: 5.438rem;
+      }
+    }
   }
 
   &__label {

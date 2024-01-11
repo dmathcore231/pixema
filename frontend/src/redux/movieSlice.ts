@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AxiosError } from "axios"
 import { requestMovies, requestCreateMovie, requestGetMovieById, requestGetMoviesByFilters } from "../services/movie"
-import { Movie, MovieState, ResponseMovie, ResponseMovies } from "../types/interfaces/Movie"
+import { Movie, MovieState, ResponseMovie, ResponseMovieByFilters } from "../types/interfaces/Movie"
 import { ResponseNoData } from "../types/interfaces/UserData"
 import { FormDataModalFilters } from "../types/FormDataModalFilters"
 
@@ -32,7 +32,7 @@ export const fetchGetMovieById = createAsyncThunk<ResponseMovie, string, { rejec
     }
   })
 
-export const fetchGetMoviesByFilters = createAsyncThunk<ResponseMovies, FormDataModalFilters, { rejectValue: ResponseNoData }>('movies/fetchGetMoviesByFilters',
+export const fetchGetMoviesByFilters = createAsyncThunk<ResponseMovieByFilters, FormDataModalFilters, { rejectValue: ResponseNoData }>('movies/fetchGetMoviesByFilters',
   async (filtersData, { rejectWithValue }) => {
     try {
       return await requestGetMoviesByFilters(filtersData)
@@ -53,7 +53,8 @@ export const moviesSlice = createSlice({
     status: 0,
     message: '',
     movie: {} as Movie,
-    moviesByFilters: [] as Movie[]
+    moviesByFilters: [] as Movie[],
+    activeFilters: [] as FormDataModalFilters[],
   } as Partial<MovieState>,
 
   reducers: {
@@ -126,12 +127,13 @@ export const moviesSlice = createSlice({
       state.status = 0
     })
 
-    builder.addCase(fetchGetMoviesByFilters.fulfilled, (state, action: PayloadAction<ResponseMovies>) => {
+    builder.addCase(fetchGetMoviesByFilters.fulfilled, (state, action: PayloadAction<ResponseMovieByFilters>) => {
       state.loading = false
       state.error = false
       state.status = action.payload.status
       state.message = action.payload.message
       state.moviesByFilters = action.payload.movies
+      state.activeFilters = action.payload.activeFilters
     })
 
     builder.addCase(fetchGetMoviesByFilters.rejected, (state, action) => {

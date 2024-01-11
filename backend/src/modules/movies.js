@@ -14,9 +14,51 @@ async function getAllMovies(_, res) {
 
 async function getMovieByFilters(req, res) {
   const { sort, title, genre, years, rating, country } = req.query
+  const filters = {}
+  const sortOptions = {}
+
+  if (sort === 'rating' && !rating) {
+    sortOptions.rating = -1
+  } else if (sort === 'rating' && rating) {
+    sortOptions.rating = -1
+    if (rating.from && rating.to) {
+      filters.rating = { $gte: rating.from, $lte: rating.to }
+    } else if (rating.from) {
+      filters.rating = { $gte: rating.from, $lte: 10 }
+    } else if (rating.to) {
+      filters.rating = { $gte: 0, $lte: rating.to }
+    }
+  }
+
+  if (sort === 'year' && !years) {
+    sortOptions.year = -1
+  } else if (sort === 'year' && years) {
+    if (years.from && years.to) {
+      filters.year = { $gte: years.from, $lte: years.to }
+    } else if (years.from) {
+      filters.year = { $gte: years.from, $lte: new Date().getFullYear() }
+    } else if (years.to) {
+      filters.year = { $gte: 0, $lte: years.to }
+    }
+  }
+
+  if (title) {
+    filters.title = { $regex: title, $options: 'i' }
+  }
+
+  if (genre) {
+    filters.genre = { $in: genre }
+  }
+
+  //need fix
+  // if (country) {
+  //   filters.country = { $in: country.map(c => c.toLowerCase()) }
+  //   filters.country.$options = 'i'
+  // }
+
   try {
-    console.log(req.query)
-    res.send({ status: 200, message: 'Success' })
+    const movies = await Movie.find(filters).sort(sortOptions)
+    res.status(200).send({ status: 200, message: 'Success', movies, filters: req.query })
   } catch (error) {
     res.status(500).send({ status: 500, message: 'Internal Server Error' })
   }

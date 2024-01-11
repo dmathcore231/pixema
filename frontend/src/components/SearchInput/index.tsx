@@ -9,13 +9,6 @@ import { BurgerIcon } from "../../images/Icons/BurgerIcon"
 
 export function SearchInput(): JSX.Element {
   const [isActive, setIsActive] = useState(false)
-  const [clickBtnClear, setClickBtnClear] = useState(false)
-  const [clickBtnSubmit, setClickBtnSubmit] = useState(false)
-
-  function handleSubmitModal() {
-    setClickBtnSubmit(true)
-  }
-
   return (
     <>
       <form className="search-form">
@@ -37,19 +30,13 @@ export function SearchInput(): JSX.Element {
         </Btn>
       </form>
       <Modal isActive={isActive}
+        modalSubmit={false}
         modalClass="modal_filter"
         title="Filters"
-        titleBtnClose="Clear filter"
-        titleBtnSubmit="Show results"
-        onSubmit={() => handleSubmitModal()}
-        onCloseInFooter={() => setClickBtnClear(true)}
         onClose={() => setIsActive(false)}
       >
         <FiltersModal
-          stateClear={clickBtnClear}
-          setStateClear={setClickBtnClear}
-          stateSubmit={clickBtnSubmit}
-          setStateSubmit={setClickBtnSubmit}
+          setStateIsActive={setIsActive}
         />
       </Modal>
     </>
