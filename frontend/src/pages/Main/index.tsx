@@ -6,10 +6,11 @@ import { useAppSelector } from "../../hooks"
 import { ShowMoreBox } from "../../components/ShowMoreBox"
 import { Error } from "../../components/Error"
 import { fetchMovies } from "../../redux/movieSlice"
+import { ActiveFilters } from "../../components/activeFilters"
 
 export function Main(): JSX.Element {
   const dispatch = useAppDispatch()
-  const { movies, loading, error } = useAppSelector(state => state.movies)
+  const { movies, loading, error, moviesByFilters, activeFilters } = useAppSelector(state => state.movies)
 
   useEffect(() => {
     dispatch(fetchMovies())
@@ -26,9 +27,35 @@ export function Main(): JSX.Element {
         <Error />
       )
     }
-    if (movies) {
+
+    if (moviesByFilters && activeFilters) {
       return (
         <>
+          <div className="main-page__filters">
+            <ActiveFilters />
+          </div>
+          <div className="main-page__list">
+            {moviesByFilters.map(movie => (
+              <div key={movie._id}
+                className="main-page__item"
+              >
+                <Card
+                  id={movie._id}
+                  poster={movie.poster}
+                  title={movie.title}
+                  genres={movie.genre}
+                  rating={movie.rating}
+                  isRecommended={movie.isRecommended}
+                />
+              </div>
+            ))}
+          </div>
+        </>
+      )
+    }
+    if (movies && !activeFilters) {
+      return (
+        <div className="main-page__list">
           {movies.map(movie => (
             <div key={movie._id}
               className="main-page__item"
@@ -43,7 +70,7 @@ export function Main(): JSX.Element {
               />
             </div>
           ))}
-        </>
+        </div>
       )
     } else {
       return (

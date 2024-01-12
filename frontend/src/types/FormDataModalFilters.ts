@@ -1,7 +1,7 @@
 import { OptionsSelect } from '../types/OptionsSelect'
 
 export type FormDataModalFilters = {
-  sort: OptionsSelect
+  sort: OptionsSelect | string
   title: string | null
   genre: OptionsSelect[]
   years: {
@@ -12,5 +12,7 @@ export type FormDataModalFilters = {
     from: number | null
     to: number | null
   }
-  country: OptionsSelect[]
+  country: OptionsSelect[],
+  [key: string]: string | number | OptionsSelect[] | null | object
 }
+

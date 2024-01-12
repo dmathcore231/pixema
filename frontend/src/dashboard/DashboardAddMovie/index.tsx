@@ -292,7 +292,7 @@ export function DashboardAddMovie(): JSX.Element {
           children='Genre'
           id='genre'
           options={GENRE}
-          maxActiveOptions={4}
+          maxActiveOptions={3}
           getActiveOptions={(activeOptions) => handleMultiSelectChange(activeOptions)}
           clearActiveOptions={isCancel}
           className={errorField === 'genre' && formMovie.genre.length === 0 ? 'multi-select-error' : ''

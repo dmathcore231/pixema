@@ -32,7 +32,7 @@ export interface ResponseMovies {
 }
 
 export interface ResponseMovieByFilters extends ResponseMovies {
-  activeFilters: FormDataModalFilters[]
+  filters: Partial<FormDataModalFilters>
 }
 
 export interface MovieState {
@@ -42,6 +42,6 @@ export interface MovieState {
   status: number,
   message: string,
   movie: Movie
-  moviesByFilters: Movie[]
-  activeFilters: FormDataModalFilters[]
+  moviesByFilters: Movie[] | null
+  activeFilters: Partial<FormDataModalFilters> | null
 }

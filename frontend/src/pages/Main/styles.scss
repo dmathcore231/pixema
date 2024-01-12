@@ -1,13 +1,23 @@
+@import '../../styles/app';
+
 .main-page {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1.875rem;
+  @include flex-column;
   justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
   width: 100%;
+
 
   &__item {
     flex: 0 0 18%;
     max-width: 18%;
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.875rem;
+    justify-content: center;
   }
 }

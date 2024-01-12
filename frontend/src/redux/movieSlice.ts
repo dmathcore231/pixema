@@ -53,8 +53,8 @@ export const moviesSlice = createSlice({
     status: 0,
     message: '',
     movie: {} as Movie,
-    moviesByFilters: [] as Movie[],
-    activeFilters: [] as FormDataModalFilters[],
+    moviesByFilters: null,
+    activeFilters: null,
   } as Partial<MovieState>,
 
   reducers: {
@@ -133,7 +133,7 @@ export const moviesSlice = createSlice({
       state.status = action.payload.status
       state.message = action.payload.message
       state.moviesByFilters = action.payload.movies
-      state.activeFilters = action.payload.activeFilters
+      state.activeFilters = action.payload.filters
     })
 
     builder.addCase(fetchGetMoviesByFilters.rejected, (state, action) => {
@@ -141,6 +141,8 @@ export const moviesSlice = createSlice({
       state.message = action.payload?.message
       state.loading = false
       state.error = true
+      state.moviesByFilters = null
+      state.activeFilters = null
     })
   }
 })

@@ -169,7 +169,7 @@ export function FiltersModal({ setStateIsActive }: FiltersModalProps): JSX.Eleme
           id="country"
           children="Country"
           options={COUNTRY}
-          maxActiveOptions={8}
+          maxActiveOptions={5}
           getActiveOptions={(activeOptions) => setFormData({ ...formData, country: activeOptions })}
           clearActiveOptions={isClear}
         />
