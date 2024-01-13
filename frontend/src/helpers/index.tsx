@@ -19,7 +19,7 @@ export function getDataLocalStorage<T extends string>(name: string): T | null {
   return null
 }
 
-export const GENRE = [
+export const GENRE: OptionsSelect[] = [
   { value: 'action', label: 'Action' },
   { value: 'adventure', label: 'Adventure' },
   { value: 'animation', label: 'Animation' },
@@ -42,7 +42,7 @@ export const GENRE = [
   { value: 'western', label: 'Western' },
 ]
 
-export const COUNTRY = [
+export const COUNTRY: OptionsSelect[] = [
   { value: 'australia', label: 'Australia' },
   { value: 'austria', label: 'Austria' },
   { value: 'belarus', label: 'Belarus' },
