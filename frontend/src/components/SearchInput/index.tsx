@@ -1,13 +1,17 @@
 import "../FormInput/styles.scss"
 import "./styles.scss"
+import { useAppSelector } from "../../hooks"
 import { FormInput } from "../FormInput"
 import { useState } from "react"
 import { Btn } from "../Btn"
 import { Modal } from "../Modal"
 import { FiltersModal } from "../FiltersModal"
 import { BurgerIcon } from "../../images/Icons/BurgerIcon"
+import { ActiveBurgerIcon } from "../../images/Icons/ActiveBurgerIcon"
 
 export function SearchInput(): JSX.Element {
+  const { activeFilters } = useAppSelector(state => state.movies)
+
   const [isActive, setIsActive] = useState(false)
   return (
     <>
@@ -26,7 +30,9 @@ export function SearchInput(): JSX.Element {
           onClick={() => setIsActive(true)}
           form="search-form"
         >
-          <BurgerIcon width="24" height="24" />
+          {activeFilters
+            ? <ActiveBurgerIcon width={'24'} height={'24'} />
+            : <BurgerIcon width='24' height='24' />}
         </Btn>
       </form>
       <Modal isActive={isActive}
