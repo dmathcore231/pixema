@@ -158,8 +158,6 @@ async function getUserByJwt(req, res) {
   if (!token) {
     return res.status(401).send({ status: 401, message: 'Access token is required', accessToken: null })
   }
-
-
   try {
     const decoded = jwt.verify(token, secretKey)
 
@@ -172,7 +170,7 @@ async function getUserByJwt(req, res) {
 
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
-      res.status(401).send({ status: 401, message: 'Invalid access token' })
+      res.status(401).send({ status: 401, message: '!Invalid access token' })
     } else {
       res.status(500).send({ status: 500, message: 'Internal Server Error' })
     }

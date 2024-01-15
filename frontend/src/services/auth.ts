@@ -2,6 +2,7 @@ import { AxiosError } from "axios"
 import { clientRest } from "../utils/client"
 import { authEndPoint, refreshTokenJtwEndPoint, authenticateUserEndPoint } from "../api"
 import { RequestSignIn, RequestSignUp, RequestUserData, RequestUpdateUserData } from "../types/interfaces/UserData"
+import { setDataLocalStorage } from "../helpers"
 
 export const requestSignUp = async (body: RequestSignUp): Promise<RequestUserData> => {
   try {
@@ -35,9 +36,11 @@ export const requestRefreshTokenJWT = async (body: { accessToken: string }): Pro
   try {
     const { data } = await clientRest.post(refreshTokenJtwEndPoint, body, {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${body.accessToken}`
       }
     })
+    setDataLocalStorage('accessToken', data.accessToken)
     return data
   } catch (error) {
     const err = error as AxiosError

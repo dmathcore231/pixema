@@ -1,17 +1,16 @@
 import { useEffect } from "react"
-import { getDataLocalStorage } from "../helpers"
-import { useAppDispatch } from "../hooks"
+import { useAppDispatch, useAppSelector } from "../hooks"
 import { fetchUserData } from "../redux/userSlice"
 
 export function UserData(): JSX.Element | null {
   const dispatch = useAppDispatch()
+  const { accessToken } = useAppSelector((state) => state.user)
 
   useEffect(() => {
-    const token = getDataLocalStorage("accessToken")
-    if (token) {
-      dispatch(fetchUserData({ accessToken: token }))
+    if (accessToken) {
+      console.log(accessToken + ' userData')
+      dispatch(fetchUserData({ accessToken: accessToken }))
     }
-  }, [dispatch])
-
+  }, [dispatch, accessToken])
   return null
 }
