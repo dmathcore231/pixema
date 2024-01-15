@@ -17,28 +17,31 @@ async function getMovieByFilters(req, res) {
   const filters = {}
   const sortOptions = {}
 
-  if (sort === 'rating' && !rating) {
-    sortOptions.rating = -1
-  } else if (sort === 'rating' && rating) {
-    sortOptions.rating = -1
-    if (rating.from && rating.to) {
-      filters.rating = { $gte: rating.from, $lte: rating.to }
-    } else if (rating.from) {
-      filters.rating = { $gte: rating.from, $lte: 10 }
-    } else if (rating.to) {
-      filters.rating = { $gte: 0, $lte: rating.to }
+  if (sort) {
+    if (sort === 'rating') {
+      sortOptions.rating = -1
+    } else if (sort === 'year') {
+      sortOptions.year = -1
     }
   }
 
-  if (sort === 'year' && !years) {
-    sortOptions.year = -1
-  } else if (sort === 'year' && years) {
+  if (years) {
     if (years.from && years.to) {
       filters.year = { $gte: years.from, $lte: years.to }
     } else if (years.from) {
       filters.year = { $gte: years.from, $lte: new Date().getFullYear() }
     } else if (years.to) {
       filters.year = { $gte: 0, $lte: years.to }
+    }
+  }
+
+  if (rating) {
+    if (rating.from && rating.to) {
+      filters.rating = { $gte: rating.from, $lte: rating.to }
+    } else if (rating.from) {
+      filters.rating = { $gte: rating.from, $lte: 10 }
+    } else if (rating.to) {
+      filters.rating = { $gte: 0, $lte: rating.to }
     }
   }
 
@@ -49,12 +52,6 @@ async function getMovieByFilters(req, res) {
   if (genre) {
     filters.genre = { $in: genre }
   }
-
-  //need fix
-  // if (country) {
-  //   filters.country = { $in: country.map(c => c.toLowerCase()) }
-  //   filters.country.$options = 'i'
-  // }
 
   try {
     const movies = await Movie.find(filters).sort(sortOptions)

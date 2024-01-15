@@ -31,7 +31,12 @@ export function ActiveFilters(): JSX.Element {
     },
     country: [],
   })
-  const [filterRemove, setFilterRemove] = useState(null as { key: string, value: string } | null)
+  const [filterRemove, setFilterRemove] = useState(null as { key: string, value: string } | null | {
+    [key: string]: {
+      from: number | null
+      to: number | null
+    }
+  })
 
   useEffect(() => {
     if (activeFilters) {
@@ -45,36 +50,75 @@ export function ActiveFilters(): JSX.Element {
           )
           : prevFormData.genre || [],
         years: {
-          from: activeFilters.years?.from || prevFormData.years.from,
-          to: activeFilters.years?.to || prevFormData.years.to,
+          from: Number(activeFilters.years?.from) || prevFormData.years.from,
+          to: Number(activeFilters.years?.to) || prevFormData.years.to,
         },
         rating: {
-          from: activeFilters.rating?.from || prevFormData.rating.from,
-          to: activeFilters.rating?.to || prevFormData.rating.to,
+          from: Number(activeFilters.rating?.from) || prevFormData.rating.from,
+          to: Number(activeFilters.rating?.to) || prevFormData.rating.to,
         },
         country: activeFilters.country || prevFormData.country,
       }))
     }
-  }, [activeFilters])
 
-  console.log(formData)
+  }, [activeFilters])
 
   useEffect(() => {
     if (filterRemove) {
       if (filterRemove.key === 'sort' || filterRemove.key === 'title') {
         setFormData(prevFormData => ({
           ...prevFormData,
-          [filterRemove.key]: null
+          [filterRemove.key as string]: null
         }))
       } else if (filterRemove.key === 'genre') {
-        console.log(filterRemove.key)
-        console.log(filterRemove.value)
-        console.log(formData)
+        setFormData(prevFormData => ({
+          ...prevFormData,
+          genre: prevFormData.genre.filter(item => item.value !== filterRemove.value)
+        }))
+      } else {
+        const valueIsNumber = Number(filterRemove.value)
+        if (filterRemove.key === 'from' && valueIsNumber > 10) {
+          setFormData(prevFormData => ({
+            ...prevFormData,
+            years: {
+              ...prevFormData.years,
+              from: null
+            }
+          }))
+        } else if (filterRemove.key === 'to' && valueIsNumber > 10) {
+          setFormData(prevFormData => ({
+            ...prevFormData,
+            years: {
+              ...prevFormData.years,
+              to: null
+            }
+          }))
+        } else if (filterRemove.key === 'from') {
+          setFormData(prevFormData => ({
+            ...prevFormData,
+            rating: {
+              ...prevFormData.rating,
+              from: null
+            }
+          }))
+        } else if (filterRemove.key === 'to') {
+          setFormData(prevFormData => ({
+            ...prevFormData,
+            rating: {
+              ...prevFormData.rating,
+              to: null
+            }
+          }))
+        }
       }
     }
-    console.log(formData)
   }, [filterRemove])
 
+  useEffect(() => {
+    if (filterRemove) {
+      dispatch(fetchGetMoviesByFilters(formData))
+    }
+  }, [formData])
 
   function renderActiveFilters() {
     if (activeFilters) {
@@ -96,7 +140,6 @@ export function ActiveFilters(): JSX.Element {
                         type='button'
                         className='btn_close'
                         onClick={() => setFilterRemove({ key, value: item })}
-                      // onClick={() => console.log(`key: ${key}, value: ${item}`)}
                       >
                         <CloseIcon width="24" height="24" />
                       </Btn>
@@ -116,7 +159,7 @@ export function ActiveFilters(): JSX.Element {
                 <Btn
                   type='button'
                   className='btn_close'
-                // onClick={() => setFilterRemove({ [key]: value })}
+                  onClick={() => setFilterRemove({ key, value: value as string })}
                 >
                   <CloseIcon width="24" height="24" />
                 </Btn>
@@ -143,7 +186,7 @@ export function ActiveFilters(): JSX.Element {
                 <Btn
                   type='button'
                   className='btn_close'
-                // onClick={() => setFilterRemove({ [key]: value })}
+                  onClick={() => setFilterRemove({ key, value: value as string })}
                 >
                   <CloseIcon width="24" height="24" />
                 </Btn>

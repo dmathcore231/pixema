@@ -13,8 +13,10 @@ export function Main(): JSX.Element {
   const { movies, loading, error, moviesByFilters, activeFilters } = useAppSelector(state => state.movies)
 
   useEffect(() => {
-    dispatch(fetchMovies())
-  }, [dispatch])
+    if (!activeFilters) {
+      dispatch(fetchMovies())
+    }
+  }, [dispatch, activeFilters])
 
   function renderCardsMovies(): JSX.Element {
     if (loading) {
