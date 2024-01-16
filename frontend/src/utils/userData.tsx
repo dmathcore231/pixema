@@ -8,7 +8,6 @@ export function UserData(): JSX.Element | null {
 
   useEffect(() => {
     if (accessToken) {
-      console.log(accessToken + ' userData')
       dispatch(fetchUserData({ accessToken: accessToken }))
     }
   }, [dispatch, accessToken])

@@ -3,208 +3,194 @@ import { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { Btn } from '../Btn'
 import { CloseIcon } from '../../images/Icons/CloseIcon'
-import { fetchGetMoviesByFilters } from '../../redux/movieSlice'
-import { OptionsSelect } from '../../types/OptionsSelect'
+import { fetchGetMoviesByFilters, setActiveFilters } from '../../redux/movieSlice'
 import { FormDataModalFilters } from '../../types/FormDataModalFilters'
-import { GENRE } from '../../helpers'
+
 
 export function ActiveFilters(): JSX.Element {
   const dispatch = useAppDispatch()
 
   const { activeFilters } = useAppSelector(state => state.movies)
 
-  const optionsTabs: OptionsSelect[] = [
-    { label: 'Rating', value: 'rating' },
-    { label: 'Year', value: 'year' },
-  ]
-  const [formData, setFormData] = useState<FormDataModalFilters>({
-    sort: optionsTabs[0],
-    title: null,
-    genre: [],
-    years: {
-      from: null,
-      to: null
-    },
-    rating: {
-      from: null,
-      to: null
-    },
-    country: [],
-  })
-  const [filterRemove, setFilterRemove] = useState(null as { key: string, value: string } | null | {
-    [key: string]: {
-      from: number | null
-      to: number | null
-    }
-  })
+  const [formData, setFormData] = useState<FormDataModalFilters>(null as unknown as FormDataModalFilters)
+  const [isDeleteFilters, setIsDeleteFilters] = useState(false)
 
   useEffect(() => {
     if (activeFilters) {
-      setFormData(prevFormData => ({
-        ...prevFormData,
-        sort: activeFilters.sort === "rating" ? optionsTabs[0] : optionsTabs[1],
-        title: activeFilters.title || prevFormData.title,
-        genre: activeFilters.genre
-          ? GENRE.filter(item =>
-            ((activeFilters.genre as unknown) as string[]).includes(item.value)
-          )
-          : prevFormData.genre || [],
-        years: {
-          from: Number(activeFilters.years?.from) || prevFormData.years.from,
-          to: Number(activeFilters.years?.to) || prevFormData.years.to,
-        },
-        rating: {
-          from: Number(activeFilters.rating?.from) || prevFormData.rating.from,
-          to: Number(activeFilters.rating?.to) || prevFormData.rating.to,
-        },
-        country: activeFilters.country || prevFormData.country,
-      }))
+      setFormData(activeFilters)
     }
-
   }, [activeFilters])
 
   useEffect(() => {
-    if (filterRemove) {
-      if (filterRemove.key === 'sort' || filterRemove.key === 'title') {
-        setFormData(prevFormData => ({
-          ...prevFormData,
-          [filterRemove.key as string]: null
-        }))
-      } else if (filterRemove.key === 'genre') {
-        setFormData(prevFormData => ({
-          ...prevFormData,
-          genre: prevFormData.genre.filter(item => item.value !== filterRemove.value)
-        }))
-      } else {
-        const valueIsNumber = Number(filterRemove.value)
-        if (filterRemove.key === 'from' && valueIsNumber > 10) {
-          setFormData(prevFormData => ({
-            ...prevFormData,
-            years: {
-              ...prevFormData.years,
-              from: null
-            }
-          }))
-        } else if (filterRemove.key === 'to' && valueIsNumber > 10) {
-          setFormData(prevFormData => ({
-            ...prevFormData,
-            years: {
-              ...prevFormData.years,
-              to: null
-            }
-          }))
-        } else if (filterRemove.key === 'from') {
-          setFormData(prevFormData => ({
-            ...prevFormData,
-            rating: {
-              ...prevFormData.rating,
-              from: null
-            }
-          }))
-        } else if (filterRemove.key === 'to') {
-          setFormData(prevFormData => ({
-            ...prevFormData,
-            rating: {
-              ...prevFormData.rating,
-              to: null
-            }
-          }))
-        }
-      }
-    }
-  }, [filterRemove])
-
-  useEffect(() => {
-    if (filterRemove) {
+    if (isDeleteFilters) {
       dispatch(fetchGetMoviesByFilters(formData))
+      dispatch(setActiveFilters(formData))
+      setIsDeleteFilters(false)
     }
-  }, [formData])
+  }, [formData, isDeleteFilters, dispatch])
 
   function renderActiveFilters() {
     if (activeFilters) {
-      return Object.entries(activeFilters).map(([key, value]) => {
-        if (Array.isArray(value)) {
-          return (
-            <div className='active-filters-item' key={key}>
+      if (activeFilters.sort) {
+        return (
+          <>
+            <div className='active-filters-item'>
               <div className='active-filters-item__title subtitle subtitle_size_xs subtitle_weight_500'>
-                {`${key}:`}
-              </div>
-              <div className='active-filters-item__wrapper'>
-                {value.map((item, index) => (
-                  <div className='active-filters-item active-filters-item_multi' key={index}>
-                    <div className='active-filters-item__title subtitle subtitle_size_xs subtitle_weight_500'>
-                      {item}
-                    </div>
-                    <div className='active-filters-item__btn'>
-                      <Btn
-                        type='button'
-                        className='btn_close'
-                        onClick={() => setFilterRemove({ key, value: item })}
-                      >
-                        <CloseIcon width="24" height="24" />
-                      </Btn>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )
-        } else if (typeof value === 'object' && value !== null) {
-          const subFilters = Object.entries(value).map(([key, value]) => (
-            <div className='active-filters-item active-filters-item_multi' key={key}>
-              <div className='active-filters-item__title subtitle subtitle_size_xs subtitle_weight_500'>
-                {`${key}: ${value}`}
+                {`Sort by: ${activeFilters.sort.label}`}
               </div>
               <div className='active-filters-item__btn'>
                 <Btn
                   type='button'
-                  className='btn_close'
-                  onClick={() => setFilterRemove({ key, value: value as string })}
-                >
-                  <CloseIcon width="24" height="24" />
-                </Btn>
-              </div>
-            </div>
-          ))
-          return (
-            <div className='active-filters-item' key={key}>
-              <div className='active-filters-item__title subtitle subtitle_size_xs subtitle_weight_500'>
-                {`${key}:`}
-              </div>
-              <div className='active-filters-item__wrapper'>
-                {subFilters}
-              </div>
-            </div>
-          )
-        } else {
-          return (
-            <div className='active-filters-item' key={key}>
-              <div className='active-filters-item__title subtitle subtitle_size_xs subtitle_weight_500'>
-                {`${key}: ${value}`}
-              </div>
-              <div className='active-filters-item__btn'>
-                <Btn
-                  type='button'
-                  className='btn_close'
-                  onClick={() => setFilterRemove({ key, value: value as string })}
+                  className='btn_close btn_padding_none'
+                  onClick={() => {
+                    setFormData({ ...formData, sort: null })
+                    setIsDeleteFilters(true)
+                  }}
                 >
                   <CloseIcon width="24" height="24" />
                 </Btn>
               </div>
             </div >
-          )
-        }
-      })
+            {
+              activeFilters.title
+                ? <div className='active-filters-item'>
+                  <div className='active-filters-item__title subtitle subtitle_size_xs subtitle_weight_500'>
+                    {`Title: ${activeFilters.title}`}
+                  </div>
+                  <div className='active-filters-item__btn'>
+                    <Btn
+                      type='button'
+                      className='btn_close btn_padding_none'
+                      onClick={() => {
+                        setFormData({ ...formData, title: null })
+                        setIsDeleteFilters(true)
+                      }}
+                    >
+                      <CloseIcon width="24" height="24" />
+                    </Btn>
+                  </div>
+                </div>
+                : null
+            }
+            {
+              activeFilters.genre && activeFilters.genre.length > 0
+                ? <div className='active-filters-item'>
+                  <div className='active-filters-item__title subtitle subtitle_size_xs subtitle_weight_500'>
+                    Genre:
+                  </div>
+                  <div className='active-filters-item__wrapper'>
+                    {activeFilters.genre.map((item, index) => {
+                      return (
+                        <div className="active-filters-item active-filters-item_multi" key={index}>
+                          <div className='active-filters-item__title subtitle subtitle_size_xs subtitle_weight_500'> {item.label}
+                          </div>
+                          <div className='active-filters-item__btn'>
+                            <Btn
+                              type='button'
+                              className='btn_close'
+                              onClick={() => {
+                                setFormData({ ...formData, genre: formData.genre.filter(genre => genre.value !== item.value) })
+                                setIsDeleteFilters(true)
+                              }}
+                            >
+                              <CloseIcon width="24" height="24" />
+                            </Btn>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+                : null
+            }
+            {
+              activeFilters.years && activeFilters.years.from || activeFilters.years.to
+                ? <div className='active-filters-item'>
+                  <div className='active-filters-item__title subtitle subtitle_size_xs subtitle_weight_500'>
+                    Years:
+                  </div>
+                  <div className='active-filters-item__wrapper'>
+                    {Object.entries(activeFilters.years).map(([key, value], index) => {
+                      if (value) {
+                        return (
+                          <div className="active-filters-item active-filters-item_multi" key={index}>
+                            <div className='active-filters-item__title subtitle subtitle_size_xs subtitle_weight_500'> {key}: {value}
+                            </div>
+                            <div className='active-filters-item__btn'>
+                              <Btn
+                                type='button'
+                                className='btn_close'
+                                onClick={() => {
+                                  if (key === 'from') {
+                                    setFormData({ ...formData, years: { ...formData.years, from: null } })
+                                    setIsDeleteFilters(true)
+                                  } else {
+                                    setFormData({ ...formData, years: { ...formData.years, to: null } })
+                                    setIsDeleteFilters(true)
+                                  }
+                                }}
+                              >
+                                <CloseIcon width="24" height="24" />
+                              </Btn>
+                            </div>
+                          </div>
+                        )
+                      }
+                    })}
+                  </div>
+                </div>
+                : null
+            }
+            {
+              activeFilters.rating && activeFilters.rating.from || activeFilters.rating.to
+                ? <div className='active-filters-item'>
+                  <div className='active-filters-item__title subtitle subtitle_size_xs subtitle_weight_500'>
+                    Rating:
+                  </div>
+                  <div className='active-filters-item__wrapper'>
+                    {Object.entries(activeFilters.rating).map(([key, value], index) => {
+                      if (value) {
+                        return (
+                          <div className="active-filters-item active-filters-item_multi" key={index}>
+                            <div className='active-filters-item__title subtitle subtitle_size_xs subtitle_weight_500'> {key}: {value}
+                            </div>
+                            <div className='active-filters-item__btn'>
+                              <Btn
+                                type='button'
+                                className='btn_close'
+                                onClick={() => {
+                                  if (key === 'from') {
+                                    setFormData({ ...formData, rating: { ...formData.rating, from: null } })
+                                    setIsDeleteFilters(true)
+                                  } else {
+                                    setFormData({ ...formData, rating: { ...formData.rating, to: null } })
+                                    setIsDeleteFilters(true)
+                                  }
+                                }}
+                              >
+                                <CloseIcon width="24" height="24" />
+                              </Btn>
+                            </div>
+                          </div>
+                        )
+                      }
+                    })}
+                  </div>
+                </div>
+                : null
+            }
+          </>
+        )
+      }
     }
   }
+
+
   return (
     <div className="active-filters">
-      {activeFilters
-        ? (renderActiveFilters()
-        )
-        : (
-          null
-        )}
+      {renderActiveFilters()}
     </div>
   )
 }
+
+

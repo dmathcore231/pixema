@@ -9,7 +9,7 @@ import { GENRE } from '../../helpers'
 import { COUNTRY } from '../../helpers'
 import { FiltersModalProps } from '../../types/interfaces/FiltersModalProps'
 import { FormDataModalFilters } from '../../types/FormDataModalFilters'
-import { fetchGetMoviesByFilters } from '../../redux/movieSlice'
+import { fetchGetMoviesByFilters, setActiveFilters } from '../../redux/movieSlice'
 import { Btn } from '../Btn'
 import { Spinner } from '../Spinner'
 
@@ -20,10 +20,12 @@ export function FiltersModal({ setStateIsActive }: FiltersModalProps): JSX.Eleme
 
   const [isSubmit, setIsSubmit] = useState(false)
   const [isClear, setIsClear] = useState(false)
+
   const optionsTabs: OptionsSelect[] = [
     { label: 'Rating', value: 'rating' },
     { label: 'Year', value: 'year' },
   ]
+
   const [formData, setFormData] = useState<FormDataModalFilters>({
     sort: optionsTabs[0],
     title: null,
@@ -62,6 +64,7 @@ export function FiltersModal({ setStateIsActive }: FiltersModalProps): JSX.Eleme
   useEffect(() => {
     if (isSubmit) {
       dispatch(fetchGetMoviesByFilters(formData))
+      dispatch(setActiveFilters(formData))
       setIsSubmit(false)
     }
   }, [isSubmit, dispatch, formData])

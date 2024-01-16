@@ -58,6 +58,9 @@ export const moviesSlice = createSlice({
   } as Partial<MovieState>,
 
   reducers: {
+    setActiveFilters: (state, action: PayloadAction<FormDataModalFilters>) => {
+      state.activeFilters = action.payload
+    }
   },
 
   extraReducers: (builder) => {
@@ -133,7 +136,6 @@ export const moviesSlice = createSlice({
       state.status = action.payload.status
       state.message = action.payload.message
       state.moviesByFilters = action.payload.movies
-      state.activeFilters = action.payload.filters
     })
 
     builder.addCase(fetchGetMoviesByFilters.rejected, (state, action) => {
@@ -148,3 +150,4 @@ export const moviesSlice = createSlice({
 })
 
 export const moviesReducer = moviesSlice.reducer
+export const { setActiveFilters } = moviesSlice.actions
