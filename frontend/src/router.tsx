@@ -5,6 +5,7 @@ import { Main } from "./pages/Main"
 import { Movie } from "./pages/Movie"
 import { Settings } from "./pages/Settings"
 import { Authorization } from "./pages/Authorization"
+import { Search } from "./pages/Search"
 import { SignIn } from "./components/SignIn"
 import { SignUp } from "./components/SignUp"
 import { Favorites } from "./pages/Favorites"
@@ -47,6 +48,10 @@ export const router = createBrowserRouter([
       {
         path: "/trends",
         element: <Trends />
+      },
+      {
+        path: "/search/:query",
+        element: <Search />
       },
       {
         path: "/movies",

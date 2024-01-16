@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AxiosError } from "axios"
-import { requestMovies, requestCreateMovie, requestGetMovieById, requestGetMoviesByFilters } from "../services/movie"
-import { Movie, MovieState, ResponseMovie, ResponseMovieByFilters } from "../types/interfaces/Movie"
+import { requestMovies, requestCreateMovie, requestGetMovieById, requestGetMoviesByFilters, requestGetMoviesBySearch } from "../services/movie"
+import { Movie, MovieState, ResponseMovie, ResponseMovieByFilters, ResponseMovies } from "../types/interfaces/Movie"
 import { ResponseNoData } from "../types/interfaces/UserData"
 import { FormDataModalFilters } from "../types/FormDataModalFilters"
 
@@ -43,6 +43,17 @@ export const fetchGetMoviesByFilters = createAsyncThunk<ResponseMovieByFilters, 
     }
   })
 
+export const fetchGetMoviesBySearch = createAsyncThunk<ResponseMovies, string, { rejectValue: ResponseNoData }>('movies/fetchGetMoviesBySearch',
+  async (search, { rejectWithValue }) => {
+    try {
+      return await requestGetMoviesBySearch(search)
+    } catch (error) {
+      const err = error as AxiosError
+      const errResponse = err.response?.data as ResponseNoData
+      return rejectWithValue(errResponse)
+    }
+  })
+
 export const moviesSlice = createSlice({
   name: 'movies',
 
@@ -55,6 +66,8 @@ export const moviesSlice = createSlice({
     movie: {} as Movie,
     moviesByFilters: null,
     activeFilters: null,
+    moviesBySearch: null,
+    searchValue: null,
   } as Partial<MovieState>,
 
   reducers: {
@@ -145,6 +158,29 @@ export const moviesSlice = createSlice({
       state.error = true
       state.moviesByFilters = null
       state.activeFilters = null
+    })
+
+    //getMoviesBySearch
+    builder.addCase(fetchGetMoviesBySearch.pending, (state) => {
+      state.loading = true
+      state.error = false
+      state.status = 0
+    })
+
+    builder.addCase(fetchGetMoviesBySearch.fulfilled, (state, action: PayloadAction<ResponseMovies>) => {
+      state.loading = false
+      state.error = false
+      state.status = action.payload.status
+      state.message = action.payload.message
+      state.moviesBySearch = action.payload.movies
+    })
+
+    builder.addCase(fetchGetMoviesBySearch.rejected, (state, action) => {
+      state.status = action.payload?.status
+      state.message = action.payload?.message
+      state.loading = false
+      state.error = true
+      state.moviesBySearch = null
     })
   }
 })

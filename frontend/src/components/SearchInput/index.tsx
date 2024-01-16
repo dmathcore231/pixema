@@ -1,8 +1,9 @@
 import "../FormInput/styles.scss"
 import "./styles.scss"
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { useAppSelector } from "../../hooks"
 import { FormInput } from "../FormInput"
-import { useState } from "react"
 import { Btn } from "../Btn"
 import { Modal } from "../Modal"
 import { FiltersModal } from "../FiltersModal"
@@ -11,11 +12,19 @@ import { ActiveBurgerIcon } from "../../images/Icons/ActiveBurgerIcon"
 
 export function SearchInput(): JSX.Element {
   const { activeFilters } = useAppSelector(state => state.movies)
-
+  const navigate = useNavigate()
   const [isActive, setIsActive] = useState(false)
+  const [searchValue, setSearchValue] = useState('')
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setSearchValue('')
+    navigate(`/search/${searchValue}`)
+  }
+
   return (
     <>
-      <form className="search-form">
+      <form className="search-form" id="search-form" onSubmit={handleSubmit}>
         <FormInput
           label={false}
           type="text"
@@ -23,6 +32,8 @@ export function SearchInput(): JSX.Element {
           placeholder="Search"
           required={true}
           className="primary-input_padding-right_small"
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
         />
         <Btn
           type="button"

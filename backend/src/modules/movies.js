@@ -61,7 +61,23 @@ async function getMovieByFilters(req, res) {
   }
 }
 
+async function getMovieBySearch(req, res) {
+  const { value } = req.query
+
+  if (!value) {
+    return res.status(400).send({ status: 400, message: 'Search query is required' })
+  }
+
+  try {
+    const movies = await Movie.find({ title: { $regex: value, $options: 'i' } })
+    res.status(200).send({ status: 200, message: 'Success', movies })
+  } catch (error) {
+    res.status(500).send({ status: 500, message: 'Internal Server Error' })
+  }
+}
+
 router.get('/', getAllMovies)
 router.get('/filters', getMovieByFilters)
+router.get('/search', getMovieBySearch)
 
 module.exports = router

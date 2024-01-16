@@ -1,7 +1,7 @@
 import { AxiosError } from "axios"
 import { clientRest } from "../utils/client"
-import { moviesEndPoint, movieEmdPoint, moviesFiltersEndPoint } from "../api"
-import { Movie, ResponseMovie, ResponseMovieByFilters } from "../types/interfaces/Movie"
+import { moviesEndPoint, movieEmdPoint, moviesFiltersEndPoint, moviesSearchEndPoint } from "../api"
+import { Movie, ResponseMovie, ResponseMovieByFilters, ResponseMovies } from "../types/interfaces/Movie"
 import { FormDataModalFilters } from "../types/FormDataModalFilters"
 
 export const requestMovies = async (): Promise<Movie[]> => {
@@ -52,7 +52,7 @@ export const requestGetMoviesByFilters = async (filtersData: FormDataModalFilter
     const countryValues = filtersData.country.map((country) => country.value)
     const { data } = await clientRest.get(moviesFiltersEndPoint, {
       params: {
-        sort: filtersData.sort.value,
+        sort: filtersData.sort!.value,
         title: filtersData.title,
         genre: genreValues,
         'years[from]': filtersData.years.from,
@@ -60,6 +60,23 @@ export const requestGetMoviesByFilters = async (filtersData: FormDataModalFilter
         'rating[from]': filtersData.rating.from,
         'rating[to]': filtersData.rating.to,
         country: countryValues
+      },
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    return data
+  } catch (error) {
+    const err = error as AxiosError
+    throw err
+  }
+}
+
+export const requestGetMoviesBySearch = async (search: string): Promise<ResponseMovies> => {
+  try {
+    const { data } = await clientRest.get(moviesSearchEndPoint, {
+      params: {
+        value: search
       },
       headers: {
         'Content-Type': 'application/json'
