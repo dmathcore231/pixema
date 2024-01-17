@@ -108,7 +108,7 @@ async function deleteMovieById(req, res) {
   }
 }
 
-async function updateMovieByid(req, res) {
+async function updateMovieById(req, res) {
   const id = req.params.id
   const { title, year, rating, imdbId, genre, poster, description } = req.body
   const errMessages = []
@@ -156,6 +156,6 @@ async function updateMovieByid(req, res) {
 router.post('/', createMovie)
 router.get('/:id', getMovieById)
 router.delete('/:id', deleteMovieById)
-router.put('/:id', updateMovieByid)
+router.put('/:id', updateMovieById)
 
 module.exports = router

@@ -9,12 +9,21 @@
   &__title {
     display: flex;
   }
+
+  &__loader {
+    fill: var(--dark-color)
+  }
 }
 
-.movie-form {
+.movie-update-form {
   @include flex-column;
   gap: 1.5rem;
   padding: 2.5rem;
   border-radius: 0.625rem;
   min-width: 35.875rem;
+
+  &__btn {
+    display: flex;
+    gap: 5rem;
+  }
 }
