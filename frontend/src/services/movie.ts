@@ -88,3 +88,17 @@ export const requestGetMoviesBySearch = async (search: string): Promise<Response
     throw err
   }
 }
+
+export const requestUpdateMovieById = async (id: string, body: FormData): Promise<ResponseMovie> => {
+  try {
+    const { data } = await clientRest.put(`${movieEmdPoint}/${id}`, body, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    return data
+  } catch (error) {
+    const err = error as AxiosError
+    throw err
+  }
+}

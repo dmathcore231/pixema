@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AxiosError } from "axios"
-import { requestMovies, requestCreateMovie, requestGetMovieById, requestGetMoviesByFilters, requestGetMoviesBySearch } from "../services/movie"
+import { requestMovies, requestCreateMovie, requestGetMovieById, requestGetMoviesByFilters, requestGetMoviesBySearch, requestUpdateMovieById } from "../services/movie"
 import { Movie, MovieState, ResponseMovie, ResponseMovieByFilters, ResponseMovies } from "../types/interfaces/Movie"
 import { ResponseNoData } from "../types/interfaces/UserData"
 import { FormDataModalFilters } from "../types/FormDataModalFilters"
@@ -31,6 +31,19 @@ export const fetchGetMovieById = createAsyncThunk<ResponseMovie, string, { rejec
       return rejectWithValue(errResponse)
     }
   })
+
+export const fetchUpdateMovieById = createAsyncThunk<ResponseMovie, { id: string, body: FormData }, { rejectValue: ResponseNoData }>('movies/fetchUpdateMovieById',
+  async ({ id, body }, { rejectWithValue }) => {
+    try {
+      return await requestUpdateMovieById(id, body)
+    } catch (error) {
+      const err = error as AxiosError
+      const errResponse = err.response?.data as ResponseNoData
+      return rejectWithValue(errResponse)
+    }
+  })
+
+
 
 export const fetchGetMoviesByFilters = createAsyncThunk<ResponseMovieByFilters, FormDataModalFilters, { rejectValue: ResponseNoData }>('movies/fetchGetMoviesByFilters',
   async (filtersData, { rejectWithValue }) => {
@@ -181,6 +194,29 @@ export const moviesSlice = createSlice({
       state.loading = false
       state.error = true
       state.moviesBySearch = null
+    })
+
+    //updateMovie
+    builder.addCase(fetchUpdateMovieById.pending, (state) => {
+      state.loading = true
+      state.error = false
+      state.status = 0
+    })
+
+    builder.addCase(fetchUpdateMovieById.fulfilled,
+      (state, action: PayloadAction<ResponseMovie>) => {
+        state.loading = false
+        state.error = false
+        state.status = action.payload.status
+        state.message = action.payload.message
+        state.movie = action.payload.movie
+      })
+
+    builder.addCase(fetchUpdateMovieById.rejected, (state, action) => {
+      state.status = action.payload?.status
+      state.message = action.payload?.message
+      state.loading = false
+      state.error = true
     })
   }
 })

@@ -124,7 +124,7 @@ export function DashboardAddMovie(): JSX.Element {
   }
 
   function handleMultiSelectChange(activeOptions: OptionsSelect[]) {
-    const genreValues = activeOptions.map(item => item.value)
+    const genreValues = activeOptions.map(item => item.label)
     setFormMovie({ ...formMovie, genre: genreValues })
   }
 

@@ -11,7 +11,7 @@ import { GENRE } from '../../helpers'
 import { TextArea } from '../../components/TextArea'
 import { Card } from '../../components/Card'
 import { OptionsSelect } from '../../types/OptionsSelect'
-import { fetchGetMovieById } from '../../redux/movieSlice'
+import { fetchGetMovieById, fetchUpdateMovieById } from '../../redux/movieSlice'
 import { Spinner } from '../../components/Spinner'
 import { Error } from '../../components/Error'
 
@@ -44,7 +44,7 @@ export function DashboardMovie(): JSX.Element {
   const [isSubmit, setIsSubmit] = useState(false)
 
   function handleMultiSelectChange(activeOptions: OptionsSelect[]) {
-    const genreValues = activeOptions.map(item => item.value)
+    const genreValues = activeOptions.map(item => item.label)
     setFormMovie({ ...formMovie, genre: genreValues })
   }
 
@@ -100,12 +100,16 @@ export function DashboardMovie(): JSX.Element {
           formData.append(`genre[${index}]`, genre)
         }
       })
-      formData.append('poster', formMovie.poster as File)
+      formData.append('poster', formMovie.poster as File || movie?.poster)
       formData.append('duration', formMovie.duration ? formMovie.duration.toString() : 'N/A')
       formData.append('description', formMovie.description)
       formData.append('isRecommended', formMovie.isRecommended.toString())
+
+      if (movieId) {
+        dispatch(fetchUpdateMovieById({ id: movieId, body: formData }))
+      }
     }
-  }, [formMovie, isSubmit])
+  }, [formMovie, isSubmit, movieId, dispatch])
 
   useEffect(() => {
     if (movieId) {
@@ -327,7 +331,6 @@ export function DashboardMovie(): JSX.Element {
           children='Poster'
           type='file'
           id='poster'
-          required={true}
           onChange={handleFileChange}
           className={errorField === 'poster' ? 'primary-input_error' : ''}
         />
@@ -399,7 +402,7 @@ export function DashboardMovie(): JSX.Element {
             type="submit"
             className="btn_primary"
           >
-            Add
+            Update
           </Btn>
         </div>
       </form>

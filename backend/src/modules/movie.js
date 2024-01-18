@@ -39,11 +39,6 @@ async function createMovie(req, res) {
     }
 
     try {
-      const existingTitle = await Movie.findOne({ title })
-      if (existingTitle) {
-        return res.status(400).send({ status: 400, message: 'Title already exists' })
-      }
-
       const movie = new Movie({
         title,
         year,
@@ -109,48 +104,49 @@ async function deleteMovieById(req, res) {
 }
 
 async function updateMovieById(req, res) {
-  const id = req.params.id
-  const { title, year, rating, imdbId, genre, poster, description } = req.body
-  const errMessages = []
-  missingFields(title, 'Title', errMessages)
-  missingFields(year, 'Year', errMessages)
-  missingFields(rating, 'Rating', errMessages)
-  missingFields(imdbId, 'IMDb ID', errMessages)
-  missingFields(genre, 'Genre', errMessages)
-  missingFields(poster, 'Poster', errMessages)
-  missingFields(description, 'Description', errMessages)
+  upload.single('poster')(req, res, async function (err) {
+    const movieId = req.params.id
+    const { title, year, releaseDate, boxOffice, country, production, actors, directors, writers, rating, imdbRating, genre, poster, description, duration, isRecommended } = req.body
+    const posterPath = req.file
 
-  if (!id) {
-    return res.status(400).send({ status: 400, message: 'Movie ID is required' })
-  }
 
-  if (errMessages.length > 0) {
-    return res.status(400).send({
-      status: 400, message:
-        `Missing fields: ${errMessages.join(', ')}`
-    })
-  }
-
-  try {
-    const movie = await Movie.findByIdAndUpdate(id, {
-      title,
-      year,
-      rating,
-      imdbId,
-      genre,
-      poster,
-      description
-    })
-
-    if (movie) {
-      res.status(200).send({ status: 200, message: 'Movie updated successfully', movie })
-    } else {
-      res.status(404).send({ status: 404, message: 'Movie not found' })
+    if (err) {
+      return res.status(500).send({ status: 500, message: 'File upload failed' })
     }
-  } catch (error) {
-    console.error(error)
-    res.status(500).send({ status: 500, message: 'Internal Server Error' })
-  }
+
+    if (!movieId) {
+      return res.status(400).send({ status: 400, message: 'Movie ID is required' })
+    }
+
+    try {
+      const movie = await Movie.findById(movieId)
+      if (!movie) {
+        return res.status(404).send({ status: 404, message: 'Movie not found' })
+      }
+      movie.title = title || movie.title
+      movie.year = year || movie.year
+      movie.releaseDate = releaseDate || movie.releaseDate
+      movie.boxOffice = boxOffice || movie.boxOffice
+      movie.country = country || movie.country
+      movie.production = production || movie.production
+      movie.actors = actors || movie.actors
+      movie.directors = directors || movie.directors
+      movie.writers = writers || movie.writers
+      movie.rating = rating || movie.rating
+      movie.imdbRating = imdbRating || movie.imdbRating
+      movie.genre = genre || movie.genre
+      movie.poster = posterPath ? `http://localhost:3000/${req.file.path}` : movie.poster
+      movie.description = description || movie.description
+      movie.duration = duration || movie.duration
+      movie.isRecommended = isRecommended || movie.isRecommended
+
+      await movie.save()
+
+      res.status(200).send({ status: 200, message: 'Movie updated successfully', movie })
+    } catch (error) {
+      res.status(500).send({ status: 500, message: 'Internal Server Error' })
+    }
+  })
 }
 
 router.post('/', createMovie)
