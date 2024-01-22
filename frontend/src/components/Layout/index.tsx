@@ -6,7 +6,6 @@ import { Footer } from "../Footer"
 import { NavBar } from "../NavBar"
 
 export function Layout(): JSX.Element {
-
   return (
     <div className="layout">
       <Header />

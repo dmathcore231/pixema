@@ -1,8 +1,9 @@
 import "./styles.scss"
+import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import { fetchGetMovieById } from "../../redux/movieSlice"
-import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../../hooks"
+import { fetchGetMovieById } from "../../redux/movieSlice"
+import { fetchUpdateFavoriteMovie } from "../../redux/userSlice"
 import { Spinner } from "../../components/Spinner"
 import { Error } from "../../components/Error"
 import { GenresList } from "../../components/GenresList"
@@ -17,11 +18,30 @@ import { LinkBack } from "../../components/LinkBack"
 export function Movie(): JSX.Element {
   const dispatch = useAppDispatch()
   const { movie, loading, error } = useAppSelector(state => state.movies)
+  const { user } = useAppSelector(state => state.user)
   const { id } = useParams()
+
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [defaultCheck, setDefaultCheck] = useState(String)
 
   useEffect(() => {
     dispatch(fetchGetMovieById(id as string))
   }, [dispatch, id])
+
+  useEffect(() => {
+    if (id && isFavorite) {
+      dispatch(fetchUpdateFavoriteMovie({ movieId: id }))
+      setIsFavorite(false)
+    }
+  }, [dispatch, id, isFavorite])
+
+  useEffect(() => {
+    if (user && user.favoritesMovies.includes(id as string)) {
+      setDefaultCheck("favorites")
+    } else {
+      setDefaultCheck('')
+    }
+  }, [user, id])
 
   if (loading) {
     return (
@@ -53,7 +73,8 @@ export function Movie(): JSX.Element {
             <BtnGroup
               itemsName={["favorites", "share"]}
               itemsValue={[<FavoritesIcon width="24" height="24" />, <ShareIcon width="24" height="24" />]}
-              onClick={(e) => console.log(e)}
+              onChange={() => setIsFavorite(true)}
+              defaultCheck={defaultCheck}
             />
           </div>
           <div className="movie__content">

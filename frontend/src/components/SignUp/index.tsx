@@ -20,7 +20,7 @@ export function SignUp(): JSX.Element {
   const nameElement = document.querySelector('#name') as HTMLElement
   const emailElement = document.querySelector('#email') as HTMLElement
 
-  const { status, errorMessage } = useAppSelector(state => state.user)
+  const { status, message } = useAppSelector(state => state.user)
 
   useEffect(() => {
     if (isSubmit) {
@@ -29,20 +29,20 @@ export function SignUp(): JSX.Element {
   }, [isSubmit])
 
   useEffect(() => {
-    if (errorMessage === "User already exists") {
+    if (message === "User already exists") {
       setErrorField('name')
       setIsSubmit(false)
       setPassword('')
       setConfirmPassword('')
       nameElement?.focus()
-    } else if (errorMessage === "Email already exists") {
+    } else if (message === "Email already exists") {
       setErrorField('email')
       setIsSubmit(false)
       setPassword('')
       setConfirmPassword('')
       emailElement?.focus()
     }
-  }, [errorMessage, isSubmit])
+  }, [message, isSubmit])
 
   useEffect(() => {
     if (status === 201) {

@@ -184,6 +184,7 @@ export function DashboardUser(): JSX.Element {
         </div>
         <Modal
           isActive={isActiveModal}
+          modalSubmit={true}
           modalClass="modal_delete-user"
           title="Delete User"
           titleBtnSubmit="Delete"

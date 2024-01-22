@@ -74,8 +74,6 @@ export function DashboardAddMovie(): JSX.Element {
       setErrorField('genre')
     } else if (status === 400 && message === 'Missing fields: Poster') {
       setErrorField('poster')
-    } else if (status === 400 && message === 'Missing fields: Title' || status === 400 && message === 'Title already exists') {
-      setErrorField('title')
     } else if (status === 400 && message === 'Missing fields: Year') {
       setErrorField('year')
     } else if (status === 400 && message === 'Missing fields: Rating') {

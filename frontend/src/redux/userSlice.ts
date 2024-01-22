@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AxiosError } from "axios"
 import { RequestSignUp, RequestSignIn, UserState, RequestUserData, ResponseNoData, RequestUpdateUserData } from "../types/interfaces/UserData"
-import { requestSignUp, requestSignIn, requestRefreshTokenJWT, requestUserData, requestUpdateUserData } from "../services/auth"
+import { requestSignUp, requestSignIn, requestRefreshTokenJWT, requestUserData, requestUpdateUserData, requestUpdateFavoriteMovie } from "../services/auth"
 import { setDataLocalStorage } from "../helpers"
 
 export const fetchUserRegistration = createAsyncThunk<RequestUserData, RequestSignUp, { rejectValue: ResponseNoData }>('user/fetchUserRegistration',
@@ -59,6 +59,17 @@ export const fetchUpdateUserData = createAsyncThunk<RequestUserData, RequestUpda
     }
   })
 
+export const fetchUpdateFavoriteMovie = createAsyncThunk<RequestUserData, { movieId: string }, { rejectValue: ResponseNoData }>('user/fetchUpdateFavoriteMovie',
+  async (body: { movieId: string }, { rejectWithValue }) => {
+    try {
+      return await requestUpdateFavoriteMovie(body)
+    } catch (error) {
+      const err = error as AxiosError
+      const errResponse = err.response?.data as ResponseNoData
+      return rejectWithValue(errResponse)
+    }
+  })
+
 export const userSlice = createSlice({
   name: 'user',
 
@@ -68,7 +79,7 @@ export const userSlice = createSlice({
     status: 0,
     error: false,
     loading: false,
-    errorMessage: '',
+    message: '',
     def: false,
   } as Partial<UserState>,
 
@@ -79,7 +90,7 @@ export const userSlice = createSlice({
       state.status = 0
       state.error = false
       state.loading = false
-      state.errorMessage = ''
+      state.message = ''
       setDataLocalStorage('accessToken', '')
     },
   },
@@ -95,14 +106,14 @@ export const userSlice = createSlice({
       state.status = action.payload.status
       state.loading = false
       state.error = false
-      state.errorMessage = ''
+      state.message = ''
     })
 
     builder.addCase(fetchUserRegistration.rejected, (state, action) => {
       state.status = action.payload?.status
       state.loading = false
       state.error = true
-      state.errorMessage = action.payload?.message
+      state.message = action.payload?.message
     })
 
     builder.addCase(fetchUserAuthorization.pending, (state) => {
@@ -116,7 +127,7 @@ export const userSlice = createSlice({
       state.error = false
       state.accessToken = action.payload.accessToken
       state.user = action.payload.user
-      state.errorMessage = ''
+      state.message = ''
       setDataLocalStorage('accessToken', action.payload.accessToken)
       if (action.payload.user?._role === 'admin') {
         state.def = true
@@ -129,7 +140,7 @@ export const userSlice = createSlice({
       state.status = action.payload?.status
       state.loading = false
       state.error = true
-      state.errorMessage = action.payload?.message
+      state.message = action.payload?.message
     })
 
     builder.addCase(fetchRefreshTokenJWT.pending, (state) => {
@@ -143,7 +154,7 @@ export const userSlice = createSlice({
       state.error = false
       state.accessToken = action.payload.accessToken
       state.user = action.payload.user
-      state.errorMessage = ''
+      state.message = ''
       setDataLocalStorage('accessToken', action.payload.accessToken)
       if (action.payload.user?._role === 'admin') {
         state.def = true
@@ -156,7 +167,7 @@ export const userSlice = createSlice({
       state.status = action.payload?.status
       state.loading = false
       state.error = true
-      state.errorMessage = action.payload?.message
+      state.message = action.payload?.message
       state.accessToken = ''
       setDataLocalStorage('accessToken', '')
     })
@@ -171,14 +182,14 @@ export const userSlice = createSlice({
       state.loading = false
       state.error = false
       state.user = action.payload.user
-      state.errorMessage = ''
+      state.message = ''
     })
 
     builder.addCase(fetchUserData.rejected, (state, action) => {
       state.status = action.payload?.status
       state.loading = false
       state.error = true
-      state.errorMessage = action.payload?.message
+      state.message = action.payload?.message
     })
 
     builder.addCase(fetchUpdateUserData.pending, (state) => {
@@ -191,17 +202,37 @@ export const userSlice = createSlice({
       state.loading = false
       state.error = false
       state.user = action.payload.user
-      state.errorMessage = ''
+      state.message = ''
     })
 
     builder.addCase(fetchUpdateUserData.rejected, (state, action) => {
       state.status = action.payload?.status
       state.loading = false
       state.error = true
-      state.errorMessage = action.payload?.message
+      state.message = action.payload?.message
+    })
+
+    builder.addCase(fetchUpdateFavoriteMovie.pending, (state) => {
+      state.loading = true
+      state.error = false
+      state.status = 0
+    })
+
+    builder.addCase(fetchUpdateFavoriteMovie.fulfilled, (state, action: PayloadAction<RequestUserData>) => {
+      state.status = action.payload.status
+      state.loading = false
+      state.error = false
+      state.user = action.payload.user
+      state.message = action.payload.message
+    })
+
+    builder.addCase(fetchUpdateFavoriteMovie.rejected, (state, action) => {
+      state.status = action.payload?.status
+      state.loading = false
+      state.error = true
+      state.message = action.payload?.message
     })
   },
-
 })
 
 export const userReducer = userSlice.reducer

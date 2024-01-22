@@ -18,7 +18,7 @@ export function SignIn(): JSX.Element {
   const emailElement = document.querySelector('#email') as HTMLElement
   const passwordElement = document.querySelector('#password') as HTMLElement
 
-  const { status, errorMessage } = useAppSelector(state => state.user)
+  const { status, message } = useAppSelector(state => state.user)
 
   useEffect(() => {
     if (isSubmit) {
@@ -26,13 +26,13 @@ export function SignIn(): JSX.Element {
       setIsSubmit(false)
     }
 
-    if (errorMessage === "User not found") {
+    if (message === "User not found") {
       setErrorField('email')
       setIsSubmit(false)
       setEmail('')
       setPassword('')
       emailElement?.focus()
-    } else if (errorMessage === "Invalid password") {
+    } else if (message === "Invalid password") {
       setErrorField('password')
       setIsSubmit(false)
       setEmail('')
@@ -42,7 +42,7 @@ export function SignIn(): JSX.Element {
     if (status === 200) {
       navigate('/')
     }
-  }, [isSubmit, errorMessage, status])
+  }, [isSubmit, message, status])
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AxiosError } from "axios"
-import { requestMovies, requestCreateMovie, requestGetMovieById, requestGetMoviesByFilters, requestGetMoviesBySearch, requestUpdateMovieById } from "../services/movie"
+import { requestMovies, requestCreateMovie, requestGetMovieById, requestGetMoviesByFilters, requestGetMoviesBySearch, requestUpdateMovieById, requestFavoritesMovies } from "../services/movie"
 import { Movie, MovieState, ResponseMovie, ResponseMovieByFilters, ResponseMovies } from "../types/interfaces/Movie"
 import { ResponseNoData } from "../types/interfaces/UserData"
 import { FormDataModalFilters } from "../types/FormDataModalFilters"
@@ -43,8 +43,6 @@ export const fetchUpdateMovieById = createAsyncThunk<ResponseMovie, { id: string
     }
   })
 
-
-
 export const fetchGetMoviesByFilters = createAsyncThunk<ResponseMovieByFilters, FormDataModalFilters, { rejectValue: ResponseNoData }>('movies/fetchGetMoviesByFilters',
   async (filtersData, { rejectWithValue }) => {
     try {
@@ -67,6 +65,17 @@ export const fetchGetMoviesBySearch = createAsyncThunk<ResponseMovies, string, {
     }
   })
 
+export const fetchGetFavoritesMovies = createAsyncThunk<ResponseMovies, void, { rejectValue: ResponseNoData }>('user/fetchFavoritesMovies',
+  async (_, { rejectWithValue }) => {
+    try {
+      return await requestFavoritesMovies()
+    } catch (error) {
+      const err = error as AxiosError
+      const errResponse = err.response?.data as ResponseNoData
+      return rejectWithValue(errResponse)
+    }
+  })
+
 export const moviesSlice = createSlice({
   name: 'movies',
 
@@ -81,6 +90,7 @@ export const moviesSlice = createSlice({
     activeFilters: null,
     moviesBySearch: null,
     searchValue: null,
+    favoritesMovies: null,
   } as Partial<MovieState>,
 
   reducers: {
@@ -218,7 +228,31 @@ export const moviesSlice = createSlice({
       state.loading = false
       state.error = true
     })
+
+    //getFavoriteMovies
+    builder.addCase(fetchGetFavoritesMovies.pending, (state) => {
+      state.loading = true
+      state.error = false
+      state.status = 0
+    })
+
+    builder.addCase(fetchGetFavoritesMovies.fulfilled, (state, action: PayloadAction<ResponseMovies>) => {
+      state.loading = false
+      state.error = false
+      state.status = action.payload.status
+      state.message = action.payload.message
+      state.favoritesMovies = action.payload.movies
+    })
+
+    builder.addCase(fetchGetFavoritesMovies.rejected, (state, action) => {
+      state.status = action.payload?.status
+      state.message = action.payload?.message
+      state.loading = false
+      state.error = true
+      state.favoritesMovies = null
+    })
   }
+
 })
 
 export const moviesReducer = moviesSlice.reducer

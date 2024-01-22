@@ -1,6 +1,6 @@
 import { AxiosError } from "axios"
 import { clientRest } from "../utils/client"
-import { moviesEndPoint, movieEmdPoint, moviesFiltersEndPoint, moviesSearchEndPoint } from "../api"
+import { moviesEndPoint, movieEmdPoint, moviesFiltersEndPoint, moviesSearchEndPoint, favoriteMovieEndPoint } from "../api"
 import { Movie, ResponseMovie, ResponseMovieByFilters, ResponseMovies } from "../types/interfaces/Movie"
 import { FormDataModalFilters } from "../types/FormDataModalFilters"
 
@@ -94,6 +94,20 @@ export const requestUpdateMovieById = async (id: string, body: FormData): Promis
     const { data } = await clientRest.put(`${movieEmdPoint}/${id}`, body, {
       headers: {
         'Content-Type': 'multipart/form-data'
+      }
+    })
+    return data
+  } catch (error) {
+    const err = error as AxiosError
+    throw err
+  }
+}
+
+export const requestFavoritesMovies = async (): Promise<ResponseMovies> => {
+  try {
+    const { data } = await clientRest.get(favoriteMovieEndPoint, {
+      headers: {
+        'Content-Type': 'application/json'
       }
     })
     return data

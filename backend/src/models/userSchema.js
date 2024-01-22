@@ -4,6 +4,7 @@ const userSchema = new mongoose.Schema({
   userName: String,
   email: String,
   password: String,
+  favoritesMovies: Array,
   _role: {
     type: String,
     enum: ['user', 'admin', 'moderator'],

@@ -10,7 +10,7 @@ import { Btn } from "../../components/Btn"
 export function Settings() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { user, status, errorMessage } = useAppSelector(state => state.user)
+  const { user, status, message } = useAppSelector(state => state.user)
 
   const [valueName, setValueName] = useState('')
   const [valueEmail, setValueEmail] = useState('')
@@ -45,7 +45,7 @@ export function Settings() {
 
   useEffect(() => {
 
-    if (errorMessage === 'Invalid password') {
+    if (message === 'Invalid password') {
       setIsSubmit(false)
       setErrorField('password')
       passwordElement?.focus()
@@ -58,7 +58,7 @@ export function Settings() {
       setInitialValueName(valueName)
       setInitialValueEmail(valueEmail)
     }
-  }, [errorMessage, status, user])
+  }, [message, status, user])
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()

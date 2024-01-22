@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 const User = require('../models/userSchema')
+const Movie = require('../models/moviesSchema')
 const Token = require('../models/tokenSchema')
 const missingFields = require('../helpers/missingFields')
 const expiresInAccessToken = '10m'
@@ -216,11 +217,64 @@ async function updateUserById(req, res) {
   }
 }
 
+async function updateFavoritesMovies(req, res) {
+  const { movieId } = req.body
+  const token = req.headers['authorization'].split(' ')[1]
+
+  if (!token) {
+    return res.status(401).send({ status: 401, message: 'Access token is required', accessToken: null })
+  }
+
+  if (!movieId) {
+    return res.status(400).send({ status: 400, message: 'Favorites movies is required' })
+  }
+
+  try {
+    const decoded = jwt.verify(token, secretKey)
+    const user = await User.findById(decoded.id)
+    if (!user) {
+      return res.status(404).send({ status: 404, message: 'User not found', accessToken: null })
+    }
+    if (!user.favoritesMovies.includes(movieId)) {
+      user.favoritesMovies.push(movieId)
+    } else {
+      const index = user.favoritesMovies.indexOf(movieId)
+      user.favoritesMovies.splice(index, 1)
+    }
+    await user.save()
+    return res.status(200).send({ status: 200, message: 'Favorites movies updated successfully', user })
+  } catch (error) {
+    res.status(500).send({ status: 500, message: 'Internal Server Error' })
+  }
+}
+
+async function getFavoritesMovies(req, res) {
+  const token = req.headers['authorization'].split(' ')[1]
+
+  if (!token) {
+    return res.status(401).send({ status: 401, message: 'Access token is required', accessToken: null })
+  }
+  const decoded = jwt.verify(token, secretKey)
+  const user = await User.findById(decoded.id)
+  if (!user) {
+    return res.status(404).send({ status: 404, message: 'User not found', accessToken: null })
+  }
+
+  try {
+    const movies = await Movie.find({ _id: { $in: user.favoritesMovies } })
+    res.status(200).send({ status: 200, message: 'Success', movies })
+  } catch (error) {
+    res.status(500).send({ status: 500, message: 'Internal Server Error' })
+  }
+}
+
 //user
 router.post('/user', createUser)
-router.post('/user/authenticate', authenticateUser)
 router.get('/user', getUserByJwt)
 router.put('/user', updateUserById)
+router.post('/user/authenticate', authenticateUser)
+router.post('/user/favorites', updateFavoritesMovies)
+router.get('/user/favorites', getFavoritesMovies)
 //all user
 router.get('/users', getAllUser)
 //token

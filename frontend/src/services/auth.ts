@@ -1,6 +1,6 @@
 import { AxiosError } from "axios"
 import { clientRest } from "../utils/client"
-import { authEndPoint, refreshTokenJtwEndPoint, authenticateUserEndPoint } from "../api"
+import { authEndPoint, refreshTokenJtwEndPoint, authenticateUserEndPoint, favoriteMovieEndPoint } from "../api"
 import { RequestSignIn, RequestSignUp, RequestUserData, RequestUpdateUserData } from "../types/interfaces/UserData"
 import { setDataLocalStorage } from "../helpers"
 
@@ -76,3 +76,18 @@ export const requestUpdateUserData = async (body: RequestUpdateUserData): Promis
     throw err
   }
 }
+
+export const requestUpdateFavoriteMovie = async (body: { movieId: string }): Promise<RequestUserData> => {
+  try {
+    const { data } = await clientRest.post(favoriteMovieEndPoint, body, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    return data
+  } catch (error) {
+    const err = error as AxiosError
+    throw err
+  }
+}
+

@@ -21,6 +21,7 @@ export interface UserData {
   _role: string
   _id: string
   __v: number
+  favoritesMovies: string[]
 }
 
 export interface RequestUserData {
@@ -28,12 +29,12 @@ export interface RequestUserData {
   user: UserData | null
   status: number
   message: string
+  favoritesMovies: string[]
 }
 
 export interface UserState extends RequestUserData {
   error: boolean
   loading: boolean
-  errorMessage: string
   def: boolean
 }
 

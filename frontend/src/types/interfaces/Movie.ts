@@ -46,4 +46,5 @@ export interface MovieState {
   activeFilters: FormDataModalFilters | null
   moviesBySearch: Movie[] | null
   searchValue: string | null
+  favoritesMovies: Movie[] | null
 }
