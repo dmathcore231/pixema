@@ -74,7 +74,7 @@ export const userSlice = createSlice({
   name: 'user',
 
   initialState: {
-    accessToken: '',
+    accessToken: null,
     user: null,
     status: 0,
     error: false,
@@ -85,13 +85,13 @@ export const userSlice = createSlice({
 
   reducers: {
     logout: (state) => {
-      state.accessToken = ''
+      state.accessToken = null
       state.user = null
       state.status = 0
       state.error = false
       state.loading = false
       state.message = ''
-      setDataLocalStorage('accessToken', '')
+      setDataLocalStorage('accessToken', null)
     },
   },
 
@@ -116,23 +116,34 @@ export const userSlice = createSlice({
       state.message = action.payload?.message
     })
 
+    // Authorization
     builder.addCase(fetchUserAuthorization.pending, (state) => {
       state.loading = true
       state.error = false
     })
 
     builder.addCase(fetchUserAuthorization.fulfilled, (state, action: PayloadAction<RequestUserData>) => {
-      state.status = 200
+      state.status = action.payload.status
       state.loading = false
       state.error = false
       state.accessToken = action.payload.accessToken
       state.user = action.payload.user
-      state.message = ''
-      setDataLocalStorage('accessToken', action.payload.accessToken)
-      if (action.payload.user?._role === 'admin') {
+      state.message = action.payload.message
+
+      if (action.payload.accessToken) {
+        setDataLocalStorage('accessToken', action.payload.accessToken)
+      } else {
+        setDataLocalStorage('accessToken', null)
+      }
+
+      if (action.payload.user && action.payload.user._role === 'admin') {
         state.def = true
       } else {
         state.def = false
+      }
+
+      if (action.payload.refreshToken) {
+        document.cookie = `refreshToken=${action.payload.refreshToken}; max-age=604800; samesite=strict; domain=.localhost; secure;`
       }
     })
 
@@ -141,6 +152,8 @@ export const userSlice = createSlice({
       state.loading = false
       state.error = true
       state.message = action.payload?.message
+      state.accessToken = null
+      setDataLocalStorage('accessToken', null)
     })
 
     builder.addCase(fetchRefreshTokenJWT.pending, (state) => {
@@ -155,7 +168,11 @@ export const userSlice = createSlice({
       state.accessToken = action.payload.accessToken
       state.user = action.payload.user
       state.message = ''
-      setDataLocalStorage('accessToken', action.payload.accessToken)
+
+      if (action.payload.accessToken) {
+        setDataLocalStorage('accessToken', action.payload.accessToken)
+      }
+
       if (action.payload.user?._role === 'admin') {
         state.def = true
       } else {
@@ -168,8 +185,9 @@ export const userSlice = createSlice({
       state.loading = false
       state.error = true
       state.message = action.payload?.message
-      state.accessToken = ''
-      setDataLocalStorage('accessToken', '')
+      state.accessToken = null
+      setDataLocalStorage('accessToken', null)
+      setDataLocalStorage('refreshToken', null)
     })
 
     builder.addCase(fetchUserData.pending, (state) => {

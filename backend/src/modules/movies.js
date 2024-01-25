@@ -3,7 +3,7 @@ const Movie = require('../models/moviesSchema')
 
 const router = express.Router()
 
-async function getAllMovies(_, res) {
+async function getAllMovies(req, res) {
   try {
     const movies = await Movie.find({})
     res.status(200).send({ status: 200, message: 'Success', movies })

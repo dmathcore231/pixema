@@ -8,8 +8,9 @@ export const requestMovies = async (): Promise<Movie[]> => {
   try {
     const { data } = await clientRest.get(moviesEndPoint, {
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true
     })
     return data.movies
   } catch (error) {

@@ -5,8 +5,9 @@ import { CardProps } from "../../types/interfaces/CardProps"
 import noPoster from "../../images/no-poster.png"
 import { Link } from "react-router-dom"
 import { PixemaRecommended } from "../pixemaRecommended"
+import { FavoritesIcon } from "../../images/Icons/FavoritesIcon"
 
-export function Card({ poster, title, genres, rating, id, isRecommended }: CardProps): JSX.Element {
+export function Card({ poster, title, genres, rating, id, isRecommended, isFavorite }: CardProps): JSX.Element {
   return (
     <div className="card">
       <Link to={id ? `/movie/${id}` : "#"} className="card__link">
@@ -19,6 +20,11 @@ export function Card({ poster, title, genres, rating, id, isRecommended }: CardP
           {isRecommended
             ? <div className="card__recommendation ">
               <PixemaRecommended />
+            </div>
+            : null}
+          {isFavorite
+            ? <div className="card__favorite">
+              <FavoritesIcon width="24" height="24" />
             </div>
             : null}
         </div>

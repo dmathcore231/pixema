@@ -6,13 +6,13 @@ export const clientRest: AxiosInstance = axios.create({
   timeout: 5000
 })
 
-export const client: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:5173',
-  timeout: 5000
-})
-
-const accessToken = getDataLocalStorage('accessToken')
-
-if (accessToken) {
-  clientRest.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
-}
+clientRest.interceptors.request.use(
+  (config) => {
+    const token = getDataLocalStorage('accessToken')
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+  },
+  (error) => Promise.reject(error)
+)

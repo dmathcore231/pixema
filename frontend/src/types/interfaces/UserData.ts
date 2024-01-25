@@ -25,11 +25,11 @@ export interface UserData {
 }
 
 export interface RequestUserData {
-  accessToken: string
+  accessToken: string | null
+  refreshToken: string | null
   user: UserData | null
   status: number
   message: string
-  favoritesMovies: string[]
 }
 
 export interface UserState extends RequestUserData {

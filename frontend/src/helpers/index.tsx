@@ -7,8 +7,12 @@ export function truncateTitle(title: string, maxLength: number): string {
   return title
 }
 
-export function setDataLocalStorage<T extends string>(name: string, data: T,): void {
-  localStorage.setItem(name, JSON.stringify(data))
+export function setDataLocalStorage<T extends string | null>(name: string, data: T,): void {
+  if (data) {
+    localStorage.setItem(name, JSON.stringify(data))
+  } else {
+    localStorage.removeItem(name)
+  }
 }
 
 export function getDataLocalStorage<T extends string>(name: string): T | null {

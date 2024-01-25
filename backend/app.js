@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const express = require('express')
+const cookieParser = require('cookie-parser');
 const authRouter = require('./src/modules/auth')
 const moviesRouter = require('./src/modules/movies')
 const movieRouter = require('./src/modules/movie')
@@ -7,12 +8,17 @@ const dashboardRouter = require('./src/modules/dashboard')
 const path = require('path');
 const { deleteExpiredTokens } = require('./src/modules/deleteExpiredTokens')
 
+const checkAuth = require('./src/middlewares/checkAuth')
+const checkValidToken = require('./src/middlewares/checkValidToken')
+const refreshToken = require('./src/middlewares/refreshToken')
+
 const app = express()
 
 app.use((_, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173')
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  res.setHeader('Access-Control-Allow-Credentials', 'true')
   next()
 })
 
@@ -24,6 +30,12 @@ app.get('/public/posters/:filename', (req, res) => {
 })
 
 app.use(express.json())
+app.use(cookieParser())
+
+app.use(checkAuth)
+app.use(checkValidToken)
+app.use(refreshToken)
+
 app.use('/auth', authRouter)
 app.use('/movies', moviesRouter)
 app.use('/movie', movieRouter)

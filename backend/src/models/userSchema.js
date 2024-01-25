@@ -4,11 +4,20 @@ const userSchema = new mongoose.Schema({
   userName: String,
   email: String,
   password: String,
-  favoritesMovies: Array,
   _role: {
     type: String,
     enum: ['user', 'admin', 'moderator'],
-    default: 'user'
+    default: 'admin'
+  },
+  moviesData: {
+    favorites: {
+      type: [String],
+      default: null
+    },
+    moviesRating: {
+      type: [{ idMovie: String, rating: Number }],
+      default: null
+    }
   }
 })
 

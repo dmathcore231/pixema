@@ -1,15 +1,15 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const crypto = require('crypto')
 const User = require('../models/userSchema')
 const Movie = require('../models/moviesSchema')
 const Token = require('../models/tokenSchema')
+const ResponseUserData = require('../classes/responseUserData')
 const missingFields = require('../helpers/missingFields')
-const expiresInAccessToken = '10m'
+const expiresInAccessToken = '30m'
 const expiresInRefreshToken = '7d'
 
-const secretKey = crypto.randomBytes(32).toString('hex')
+const secretKey = require('../modules/secretKey')
 
 const router = express.Router()
 
@@ -96,24 +96,12 @@ async function authenticateUser(req, res) {
       expiresIn: expiresInAccessToken,
     })
 
-    const checkRefreshToken = await Token.findOne({ userID: user._id })
+    const refreshToken = jwt.sign({ id: user._id, userName: user.userName }, secretKey, {
+      expiresIn: expiresInRefreshToken,
+    })
 
-    if (checkRefreshToken) {
-      res.send({ status: 200, user, accessToken })
-    } else {
-      const refreshToken = jwt.sign({ id: user._id }, secretKey, {
-        expiresIn: expiresInRefreshToken,
-      })
-
-      const refreshTokenData = new Token({
-        tokenData: refreshToken,
-        userID: user._id,
-        expiresAt: jwt.decode(refreshToken).exp
-      })
-
-      await refreshTokenData.save()
-      res.send({ status: 200, user, accessToken })
-    }
+    const response = new ResponseUserData(accessToken, refreshToken, user, 200, 'Success')
+    res.send(response)
   } catch (error) {
     res.status(500).send({ status: 500, message: 'Internal Server Error' })
   }
