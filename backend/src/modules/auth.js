@@ -6,8 +6,8 @@ const Movie = require('../models/moviesSchema')
 const Token = require('../models/tokenSchema')
 const ResponseUserData = require('../classes/responseUserData')
 const missingFields = require('../helpers/missingFields')
-const expiresInAccessToken = '30m'
-const expiresInRefreshToken = '7d'
+const expiresInAccessToken = require('../helpers/tokenExpires').expiresInAccessToken
+const expiresInRefreshToken = require('../helpers/tokenExpires').expiresInRefreshToken
 
 const secretKey = require('../modules/secretKey')
 
