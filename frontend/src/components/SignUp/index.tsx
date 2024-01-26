@@ -24,7 +24,7 @@ export function SignUp(): JSX.Element {
 
   useEffect(() => {
     if (isSubmit) {
-      dispatch(fetchUserRegistration({ userName: userName, email, password }))
+      dispatch(fetchUserRegistration({ formSignUp: { userName, email, password } }))
     }
   }, [isSubmit])
 

@@ -5,6 +5,7 @@ const expiresInAccessToken = require('../helpers/tokenExpires').expiresInAccessT
 async function refreshToken(req, res, next) {
   const { tokenExpired, tokenExpiredSoon, tokenValid } = req.userData.token
   const { user } = req.userData
+
   if (tokenValid && tokenExpired || tokenValid && tokenExpiredSoon) {
     const newAccessToken = jwt.sign({ id: user._id }, secretKey, {
       expiresIn: expiresInAccessToken

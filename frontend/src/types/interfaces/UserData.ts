@@ -5,9 +5,11 @@ export interface RequestSignIn {
 }
 
 export interface RequestSignUp {
-  userName: string
-  email: string
-  password: string
+  formSignUp: {
+    userName: string
+    email: string
+    password: string
+  }
 }
 
 export interface RequestUpdateUserData extends RequestSignUp {

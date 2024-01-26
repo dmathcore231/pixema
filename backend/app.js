@@ -11,6 +11,7 @@ const { deleteExpiredTokens } = require('./src/modules/deleteExpiredTokens')
 const checkAuth = require('./src/middlewares/checkAuth')
 const checkValidToken = require('./src/middlewares/checkValidToken')
 const refreshToken = require('./src/middlewares/refreshToken')
+const checkValidFormSignUp = require('./src/middlewares/checkValidFormSignUp')
 
 const app = express()
 
@@ -35,6 +36,7 @@ app.use(cookieParser())
 app.use(checkAuth)
 app.use(checkValidToken)
 app.use(refreshToken)
+app.use(checkValidFormSignUp)
 
 app.use('/auth', authRouter)
 app.use('/movies', moviesRouter)
