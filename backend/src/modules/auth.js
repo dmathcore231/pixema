@@ -26,69 +26,61 @@ async function getAllUser(_, res) {
 
 async function createUser(req, res) {
   try {
-    if (req.clientResponseError) {
-      console.log(req.clientResponseError)
-      return res.status(req.clientResponseError.status).send(req.clientResponseError)
-    } else {
-      const { userName, email, password } = req.body.formSignUp
-      const hashedPassword = await bcrypt.hash(password, 10)
-      const user = new User({
-        userName,
-        email,
-        password: hashedPassword,
-      })
-      await user.save()
-      res.send(new ResponseUserData(null, null, user, 201, 'User created successfully'))
+    if (!req.body.formSignUp) {
+      return res.status(400).send(new ResponseWithoutPayload(400, 'Bad request'))
     }
+
+    if (req.clientResponseError) {
+      return res.status(req.clientResponseError.status).send(req.clientResponseError)
+    }
+
+    const { userName, email, password } = req.body.formSignUp
+    const hashedPassword = await bcrypt.hash(password, 10)
+    const user = new User({
+      userName,
+      email,
+      password: hashedPassword,
+    })
+    await user.save()
+    res.status(201).send(new ResponseUserData(null, null, user, 201, 'User created successfully'))
   } catch (error) {
     res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }
 }
 
 async function authenticateUser(req, res) {
-  const { email, password } = req.body
-  const errMessages = []
-  missingFields(email, 'Email', errMessages)
-  missingFields(password, 'Password', errMessages)
-  if (errMessages.length > 0) {
-    return res.status(400).send({
-      status: 400, message:
-        `Missing fields: ${errMessages.join(', ')}`
-    })
-  }
-
-  if (errMessages.length > 0) {
-    return res.status(400).send({
-      status: 400, message:
-        `Missing fields: ${errMessages.join(', ')}`
-    })
-  }
-
   try {
+    if (!req.body.formSignIn) {
+      return res.status(400).send(new ResponseWithoutPayload(400, 'Bad request'))
+    }
+
+    if (req.clientResponseError) {
+      return res.status(req.clientResponseError.status).send(req.clientResponseError)
+    }
+
+    const { email, password } = req.body.formSignIn
     const user = await User.findOne({ email })
 
     if (!user) {
-      return res.status(401).send({ status: 401, message: 'User not found' })
+      return res.status(401).send(new ResponseWithoutPayload(401, 'User not found'))
     }
 
     const isMatch = await bcrypt.compare(password, user.password)
 
     if (!isMatch) {
-      return res.status(401).send({ status: 401, message: 'Invalid password' })
+      return res.status(401).send(new ResponseWithoutPayload(401, 'Invalid password'))
     }
 
     const accessToken = jwt.sign({ id: user._id }, secretKey, {
       expiresIn: expiresInAccessToken,
     })
-
     const refreshToken = jwt.sign({ id: user._id, userName: user.userName }, secretKey, {
       expiresIn: expiresInRefreshToken,
     })
 
-    const response = new ResponseUserData(accessToken, refreshToken, user, 200, 'Success')
-    res.send(response)
+    res.status(200).send(new ResponseUserData(accessToken, refreshToken, user, 200, 'User authenticated successfully'))
   } catch (error) {
-    res.status(500).send({ status: 500, message: 'Internal Server Error' })
+    res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }
 }
 

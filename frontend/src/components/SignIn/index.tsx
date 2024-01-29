@@ -22,7 +22,7 @@ export function SignIn(): JSX.Element {
 
   useEffect(() => {
     if (isSubmit) {
-      dispatch(fetchUserAuthorization({ email, password }))
+      dispatch(fetchUserAuthorization({ formSignIn: { email, password } }))
       setIsSubmit(false)
     }
 

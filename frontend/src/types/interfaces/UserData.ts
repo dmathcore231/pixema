@@ -1,7 +1,9 @@
 
 export interface RequestSignIn {
-  email: string
-  password: string
+  formSignIn: {
+    email: string
+    password: string
+  }
 }
 
 export interface RequestSignUp {
