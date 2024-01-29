@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken')
 const secretKey = require('../modules/secretKey')
-const RequestUserData = require('../classes/requestUserData')
 const User = require('../models/userSchema')
 
 async function checkValidToken(req, res, next) {
@@ -24,18 +23,16 @@ async function checkValidToken(req, res, next) {
       }
       next()
     } catch (error) {
-      if (error instanceof jwt.JsonWebTokenError) {
-        console.log(error)
-        req.userData.token.tokenValid = false
-        next()
-      } else if (error instanceof jwt.TokenExpiredError) {
+      if (error instanceof jwt.JsonWebTokenError && error.name === 'TokenExpiredError') {
         const payloadAccessTokenDecoded = jwt.decode(accessToken)
         const user = await User.findById(payloadAccessTokenDecoded.id)
         req.userData.token.tokenExpired = true
         req.userData.token.tokenValid = true
         req.userData.user = user
-        next()
+      } else {
+        req.userData.token.tokenValid = false
       }
+      next()
     }
   } else {
     next()

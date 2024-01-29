@@ -4,12 +4,19 @@ import { requestMovies, requestCreateMovie, requestGetMovieById, requestGetMovie
 import { Movie, MovieState, ResponseMovie, ResponseMovieByFilters, ResponseMovies } from "../types/interfaces/Movie"
 import { ResponseNoData } from "../types/interfaces/UserData"
 import { FormDataModalFilters } from "../types/FormDataModalFilters"
+import { setDataLocalStorage } from "../helpers"
 
-export const fetchMovies = createAsyncThunk('movies/fetchMovies',
-  async () => {
-    return await requestMovies()
-  }
-)
+export const fetchMovies = createAsyncThunk<ResponseMovies, void, { rejectValue: ResponseNoData }>('movies/fetchMovies',
+  async (_, { rejectWithValue }) => {
+    try {
+      return await requestMovies()
+    } catch (error) {
+      const err = error as AxiosError
+      const errResponse = err.response?.data as ResponseNoData
+      return rejectWithValue(errResponse)
+    }
+  })
+
 export const fetchCreateMovie = createAsyncThunk<ResponseNoData, FormData, { rejectValue: ResponseNoData }>('movies/fetchCreateMovie',
   async (body: FormData, { rejectWithValue }) => {
     try {
@@ -105,10 +112,17 @@ export const moviesSlice = createSlice({
       state.error = false
     })
 
-    builder.addCase(fetchMovies.fulfilled, (state, action: PayloadAction<Movie[]>) => {
+    builder.addCase(fetchMovies.fulfilled, (state, action: PayloadAction<ResponseMovies>) => {
       state.loading = false
       state.error = false
-      state.movies = action.payload
+      state.movies = action.payload.data
+      state.status = action.payload.status
+      state.message = action.payload.message
+      if (action.payload.isAuth) {
+        setDataLocalStorage('accessToken', action.payload.isAuth)
+      } else {
+        setDataLocalStorage('accessToken', null)
+      }
     })
 
     builder.addCase(fetchMovies.rejected, (state) => {
@@ -171,7 +185,7 @@ export const moviesSlice = createSlice({
       state.error = false
       state.status = action.payload.status
       state.message = action.payload.message
-      state.moviesByFilters = action.payload.movies
+      state.moviesByFilters = action.payload.data
     })
 
     builder.addCase(fetchGetMoviesByFilters.rejected, (state, action) => {
@@ -195,7 +209,7 @@ export const moviesSlice = createSlice({
       state.error = false
       state.status = action.payload.status
       state.message = action.payload.message
-      state.moviesBySearch = action.payload.movies
+      state.moviesBySearch = action.payload.data
     })
 
     builder.addCase(fetchGetMoviesBySearch.rejected, (state, action) => {
@@ -241,7 +255,7 @@ export const moviesSlice = createSlice({
       state.error = false
       state.status = action.payload.status
       state.message = action.payload.message
-      state.favoritesMovies = action.payload.movies
+      state.favoritesMovies = action.payload.data
     })
 
     builder.addCase(fetchGetFavoritesMovies.rejected, (state, action) => {

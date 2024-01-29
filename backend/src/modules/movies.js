@@ -1,14 +1,22 @@
 const express = require('express')
 const Movie = require('../models/moviesSchema')
+const ResponseData = require('../classes/responseData')
+const ResponseWithoutPayload = require('../classes/responseWithoutPayload')
 
 const router = express.Router()
 
 async function getAllMovies(req, res) {
+  const { accessToken } = req.userData.token
+  const movies = await Movie.find({})
+
   try {
-    const movies = await Movie.find({})
-    res.status(200).send({ status: 200, message: 'Success', movies })
+    if (accessToken) {
+      res.status(200).send(new ResponseData(200, 'Success', movies, accessToken))
+    } else {
+      res.status(200).send(new ResponseData(200, 'Success', movies))
+    }
   } catch (error) {
-    res.status(500).send({ status: 500, message: 'Internal Server Error' })
+    res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }
 }
 

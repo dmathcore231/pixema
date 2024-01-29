@@ -93,6 +93,10 @@ export const userSlice = createSlice({
       state.message = ''
       setDataLocalStorage('accessToken', null)
     },
+
+    setAccessToken: (state, action: PayloadAction<string | null>) => {
+      state.accessToken = action.payload
+    }
   },
 
 
@@ -254,4 +258,4 @@ export const userSlice = createSlice({
 })
 
 export const userReducer = userSlice.reducer
-export const { logout } = userSlice.actions
+export const { logout, setAccessToken } = userSlice.actions

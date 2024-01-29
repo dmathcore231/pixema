@@ -1,10 +1,10 @@
 import { AxiosError } from "axios"
 import { clientRest } from "../utils/client"
 import { moviesEndPoint, movieEmdPoint, moviesFiltersEndPoint, moviesSearchEndPoint, favoriteMovieEndPoint } from "../api"
-import { Movie, ResponseMovie, ResponseMovieByFilters, ResponseMovies } from "../types/interfaces/Movie"
+import { ResponseMovie, ResponseMovieByFilters, ResponseMovies } from "../types/interfaces/Movie"
 import { FormDataModalFilters } from "../types/FormDataModalFilters"
 
-export const requestMovies = async (): Promise<Movie[]> => {
+export const requestMovies = async (): Promise<ResponseMovies> => {
   try {
     const { data } = await clientRest.get(moviesEndPoint, {
       headers: {
@@ -12,7 +12,7 @@ export const requestMovies = async (): Promise<Movie[]> => {
       },
       withCredentials: true
     })
-    return data.movies
+    return data
   } catch (error) {
     const err = error as AxiosError
     throw err

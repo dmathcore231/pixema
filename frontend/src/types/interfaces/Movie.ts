@@ -26,9 +26,10 @@ export interface ResponseMovie {
 }
 
 export interface ResponseMovies {
-  movies: Movie[],
+  data: Movie[],
   message: string,
-  status: number
+  status: number,
+  isAuth: string | null
 }
 
 export interface ResponseMovieByFilters extends ResponseMovies {
