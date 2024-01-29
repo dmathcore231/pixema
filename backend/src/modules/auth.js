@@ -5,6 +5,7 @@ const User = require('../models/userSchema')
 const Movie = require('../models/moviesSchema')
 const Token = require('../models/tokenSchema')
 const ResponseUserData = require('../classes/responseUserData')
+const ResponseWithoutPayload = require('../classes/responseWithoutPayload')
 const missingFields = require('../helpers/missingFields')
 const expiresInAccessToken = require('../helpers/tokenExpires').expiresInAccessToken
 const expiresInRefreshToken = require('../helpers/tokenExpires').expiresInRefreshToken
@@ -24,39 +25,23 @@ async function getAllUser(_, res) {
 }
 
 async function createUser(req, res) {
-  const { userName, email, password } = req.body
-  const errMessages = []
-  missingFields(userName, 'Username', errMessages)
-  missingFields(email, 'Email', errMessages)
-  missingFields(password, 'Password', errMessages)
-  if (errMessages.length > 0) {
-    return res.status(400).send({
-      status: 400, message:
-        `Missing fields: ${errMessages.join(', ')}`
-    })
-  }
-
   try {
-    const existingEmail = await User.findOne({ email })
-    if (existingEmail) {
-      return res.status(400).send({ status: 400, message: 'Email already exists' })
+    if (req.clientResponseError) {
+      console.log(req.clientResponseError)
+      return res.status(req.clientResponseError.status).send(req.clientResponseError)
+    } else {
+      const { userName, email, password } = req.body.formSignUp
+      const hashedPassword = await bcrypt.hash(password, 10)
+      const user = new User({
+        userName,
+        email,
+        password: hashedPassword,
+      })
+      await user.save()
+      res.send(new ResponseUserData(null, null, user, 201, 'User created successfully'))
     }
-
-    const existingUserName = await User.findOne({ userName })
-    if (existingUserName) {
-      return res.status(400).send({ status: 400, message: 'User already exists' })
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10)
-    const user = new User({
-      userName,
-      email,
-      password: hashedPassword,
-    })
-    await user.save()
-    res.send({ status: 201, message: 'User created successfully', user })
   } catch (error) {
-    res.status(500).send({ status: 500, message: 'Internal Server Error' })
+    res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }
 }
 
