@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AxiosError } from "axios"
-import { RequestSignUp, RequestSignIn, UserState, RequestUserData, ResponseNoData, RequestUpdateUserData } from "../types/interfaces/UserData"
-import { requestSignUp, requestSignIn, requestRefreshTokenJWT, requestUserData, requestUpdateUserData, requestUpdateFavoriteMovie } from "../services/auth"
+import { RequestSignUp, RequestSignIn, UserState, RequestUserData, ResponseNoData, RequestUpdateUserData, RequestUserDataAuthorization } from "../types/interfaces/UserData"
+import { requestSignUp, requestSignIn, requestUserData, requestUpdateUserData, requestUpdateFavoriteMovie } from "../services/auth"
 import { setDataLocalStorage } from "../helpers"
 
-export const fetchUserRegistration = createAsyncThunk<RequestUserData, RequestSignUp, { rejectValue: ResponseNoData }>('user/fetchUserRegistration',
+export const fetchUserRegistration = createAsyncThunk<RequestUserDataAuthorization, RequestSignUp, { rejectValue: ResponseNoData }>('user/fetchUserRegistration',
   async (body: RequestSignUp, { rejectWithValue }) => {
     try {
       return await requestSignUp(body)
@@ -15,21 +15,10 @@ export const fetchUserRegistration = createAsyncThunk<RequestUserData, RequestSi
     }
   })
 
-export const fetchUserAuthorization = createAsyncThunk<RequestUserData, RequestSignIn, { rejectValue: ResponseNoData }>('user/fetchUserAuthorization',
+export const fetchUserAuthorization = createAsyncThunk<RequestUserDataAuthorization, RequestSignIn, { rejectValue: ResponseNoData }>('user/fetchUserAuthorization',
   async (body: RequestSignIn, { rejectWithValue }) => {
     try {
       return await requestSignIn(body)
-    } catch (error) {
-      const err = error as AxiosError
-      const errResponse = err.response?.data as ResponseNoData
-      return rejectWithValue(errResponse)
-    }
-  })
-
-export const fetchRefreshTokenJWT = createAsyncThunk<RequestUserData, { accessToken: string }, { rejectValue: ResponseNoData }>('user/fetchRefreshTokenJWT',
-  async (body: { accessToken: string }, { rejectWithValue }) => {
-    try {
-      return await requestRefreshTokenJWT(body)
     } catch (error) {
       const err = error as AxiosError
       const errResponse = err.response?.data as ResponseNoData
@@ -96,9 +85,8 @@ export const userSlice = createSlice({
 
     setAccessToken: (state, action: PayloadAction<string | null>) => {
       state.accessToken = action.payload
-    }
+    },
   },
-
 
   extraReducers: (builder) => {
     builder.addCase(fetchUserRegistration.pending, (state) => {
@@ -106,7 +94,7 @@ export const userSlice = createSlice({
       state.error = false
     })
 
-    builder.addCase(fetchUserRegistration.fulfilled, (state, action: PayloadAction<RequestUserData>) => {
+    builder.addCase(fetchUserRegistration.fulfilled, (state, action: PayloadAction<RequestUserDataAuthorization>) => {
       state.status = action.payload.status
       state.loading = false
       state.error = false
@@ -126,7 +114,7 @@ export const userSlice = createSlice({
       state.error = false
     })
 
-    builder.addCase(fetchUserAuthorization.fulfilled, (state, action: PayloadAction<RequestUserData>) => {
+    builder.addCase(fetchUserAuthorization.fulfilled, (state, action: PayloadAction<RequestUserDataAuthorization>) => {
       state.status = action.payload.status
       state.loading = false
       state.error = false
@@ -160,40 +148,6 @@ export const userSlice = createSlice({
       setDataLocalStorage('accessToken', null)
     })
 
-    builder.addCase(fetchRefreshTokenJWT.pending, (state) => {
-      state.loading = true
-      state.error = false
-    })
-
-    builder.addCase(fetchRefreshTokenJWT.fulfilled, (state, action: PayloadAction<RequestUserData>) => {
-      state.status = action.payload.status
-      state.loading = false
-      state.error = false
-      state.accessToken = action.payload.accessToken
-      state.user = action.payload.user
-      state.message = ''
-
-      if (action.payload.accessToken) {
-        setDataLocalStorage('accessToken', action.payload.accessToken)
-      }
-
-      if (action.payload.user?._role === 'admin') {
-        state.def = true
-      } else {
-        state.def = false
-      }
-    })
-
-    builder.addCase(fetchRefreshTokenJWT.rejected, (state, action) => {
-      state.status = action.payload?.status
-      state.loading = false
-      state.error = true
-      state.message = action.payload?.message
-      state.accessToken = null
-      setDataLocalStorage('accessToken', null)
-      setDataLocalStorage('refreshToken', null)
-    })
-
     builder.addCase(fetchUserData.pending, (state) => {
       state.loading = true
       state.error = false
@@ -203,7 +157,7 @@ export const userSlice = createSlice({
       state.status = action.payload.status
       state.loading = false
       state.error = false
-      state.user = action.payload.user
+      state.user = action.payload.data
       state.message = ''
     })
 
@@ -223,7 +177,7 @@ export const userSlice = createSlice({
       state.status = action.payload.status
       state.loading = false
       state.error = false
-      state.user = action.payload.user
+      state.user = action.payload.data
       state.message = ''
     })
 
@@ -244,7 +198,7 @@ export const userSlice = createSlice({
       state.status = action.payload.status
       state.loading = false
       state.error = false
-      state.user = action.payload.user
+      state.user = action.payload.data
       state.message = action.payload.message
     })
 

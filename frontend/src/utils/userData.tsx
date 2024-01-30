@@ -7,7 +7,6 @@ export function UserData(): JSX.Element | null {
   const dispatch = useAppDispatch()
   const location = useLocation()
   const { accessToken } = useAppSelector((state) => state.user)
-  console.log(accessToken)
 
   useEffect(() => {
     if (accessToken) {

@@ -3,14 +3,13 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const User = require('../models/userSchema')
 const Movie = require('../models/moviesSchema')
-const Token = require('../models/tokenSchema')
 const ResponseUserData = require('../classes/responseUserData')
 const ResponseWithoutPayload = require('../classes/responseWithoutPayload')
-const missingFields = require('../helpers/missingFields')
 const expiresInAccessToken = require('../helpers/tokenExpires').expiresInAccessToken
 const expiresInRefreshToken = require('../helpers/tokenExpires').expiresInRefreshToken
 
 const secretKey = require('../modules/secretKey')
+const ResponseData = require('../classes/responseData')
 
 const router = express.Router()
 
@@ -41,6 +40,7 @@ async function createUser(req, res) {
       email,
       password: hashedPassword,
     })
+
     await user.save()
     res.status(201).send(new ResponseUserData(null, null, user, 201, 'User created successfully'))
   } catch (error) {
@@ -75,62 +75,28 @@ async function authenticateUser(req, res) {
   }
 }
 
-async function refreshToken(req, res) {
-  const accessTokenReq = req.body.accessToken
-
-  if (!accessTokenReq) {
-    return res.status(400).send({ status: 400, message: 'Access token is required' })
-  }
-
-  const decodeAccessToken = jwt.decode(accessTokenReq)
-
-  if (!decodeAccessToken) {
-    return res.status(400).send({ status: 400, message: 'Invalid access token', accessToken: null })
-  }
-  const findRefreshToken = await Token.findOne({ userID: decodeAccessToken.id })
-
-  if (!findRefreshToken) {
-    res.status(401).send({ status: 401, message: 'Invalid access token', accessToken: null })
-  }
-
-  try {
-    const checkAccessTokenReq = jwt.verify(accessTokenReq, secretKey)
-
-    res.status(200).send({ status: 200, message: 'Access token verified', accessToken: accessTokenReq })
-  } catch (error) {
-    if (error instanceof jwt.JsonWebTokenError) {
-      const newAccessToken = jwt.sign({ id: decodeAccessToken.id }, secretKey, {
-        expiresIn: expiresInAccessToken
-      })
-      res.status(200).send({ status: 200, message: 'New access token', accessToken: newAccessToken })
-    } else {
-      res.status(500).send({ status: 500, message: 'Internal Server Error' })
-    }
-  }
-}
-
 async function getUserByJwt(req, res) {
-  const token = req.headers['authorization'].split(' ')[1]
+  const { accessToken, tokenValid } = req.userData.token
 
-  if (!token) {
-    return res.status(401).send({ status: 401, message: 'Access token is required', accessToken: null })
+  if (!accessToken) {
+    return res.status(401).send(new ResponseData(401, 'Access token is required', null))
+  }
+
+  if (!tokenValid) {
+    return res.status(401).send(new ResponseData(401, 'Invalid access token', null))
   }
   try {
-    const decoded = jwt.verify(token, secretKey)
+    const decoded = jwt.verify(accessToken, secretKey)
 
     const user = await User.findById(decoded.id)
     if (user) {
-      res.status(200).send({ status: 200, message: 'Success', user, accessToken: token })
+      res.status(200).send(new ResponseData(200, 'Success', user, accessToken))
     } else {
-      res.status(404).send({ status: 404, message: 'User not found' })
+      res.status(404).send(new ResponseData(404, 'User not found', null))
     }
 
   } catch (error) {
-    if (error instanceof jwt.JsonWebTokenError) {
-      res.status(401).send({ status: 401, message: '!Invalid access token' })
-    } else {
-      res.status(500).send({ status: 500, message: 'Internal Server Error' })
-    }
+    res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }
 }
 
@@ -233,7 +199,5 @@ router.post('/user/favorites', updateFavoritesMovies)
 router.get('/user/favorites', getFavoritesMovies)
 //all user
 router.get('/users', getAllUser)
-//token
-router.post('/refreshTokenJwt', refreshToken)
 
 module.exports = router

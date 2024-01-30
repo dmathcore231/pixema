@@ -1,10 +1,9 @@
 import { AxiosError } from "axios"
 import { clientRest } from "../utils/client"
-import { authEndPoint, refreshTokenJtwEndPoint, authenticateUserEndPoint, favoriteMovieEndPoint } from "../api"
-import { RequestSignIn, RequestSignUp, RequestUserData, RequestUpdateUserData } from "../types/interfaces/UserData"
-import { setDataLocalStorage } from "../helpers"
+import { authEndPoint, authenticateUserEndPoint, favoriteMovieEndPoint } from "../api"
+import { RequestSignIn, RequestSignUp, RequestUserData, RequestUpdateUserData, RequestUserDataAuthorization } from "../types/interfaces/UserData"
 
-export const requestSignUp = async (body: RequestSignUp): Promise<RequestUserData> => {
+export const requestSignUp = async (body: RequestSignUp): Promise<RequestUserDataAuthorization> => {
   try {
     const { data } = await clientRest.post(authEndPoint, body, {
       headers: {
@@ -18,29 +17,13 @@ export const requestSignUp = async (body: RequestSignUp): Promise<RequestUserDat
   }
 }
 
-export const requestSignIn = async (body: RequestSignIn): Promise<RequestUserData> => {
+export const requestSignIn = async (body: RequestSignIn): Promise<RequestUserDataAuthorization> => {
   try {
     const { data } = await clientRest.post(authenticateUserEndPoint, body, {
       headers: {
         'Content-Type': 'application/json'
       }
     })
-    return data
-  } catch (error) {
-    const err = error as AxiosError
-    throw err
-  }
-}
-
-export const requestRefreshTokenJWT = async (body: { accessToken: string }): Promise<RequestUserData> => {
-  try {
-    const { data } = await clientRest.post(refreshTokenJtwEndPoint, body, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${body.accessToken}`
-      }
-    })
-    setDataLocalStorage('accessToken', data.accessToken)
     return data
   } catch (error) {
     const err = error as AxiosError

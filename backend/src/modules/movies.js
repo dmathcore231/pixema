@@ -7,10 +7,12 @@ const ResponseFiltersData = require('../classes/responseFiltersData')
 const router = express.Router()
 
 async function getAllMovies(req, res) {
-  const { accessToken } = req.userData.token
+  const { accessToken, tokenValid } = req.userData.token
   const movies = await Movie.find({})
+
   try {
-    res.status(200).send(new ResponseData(200, 'Success', movies, accessToken || null))
+    res.status(200).send(new ResponseData(200, 'Success', movies,
+      accessToken && tokenValid ? accessToken : null))
   } catch (error) {
     res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }
@@ -18,7 +20,8 @@ async function getAllMovies(req, res) {
 
 async function getMovieByFilters(req, res) {
   const { sort, title, genre, years, rating, country } = req.query
-  const { accessToken } = req.userData.token
+  const { accessToken, tokenValid } = req.userData.token
+
   const filters = {}
   const sortOptions = {}
 
@@ -60,7 +63,8 @@ async function getMovieByFilters(req, res) {
 
   try {
     const movies = await Movie.find(filters).sort(sortOptions)
-    res.status(200).send(new ResponseFiltersData(200, 'Success', movies, accessToken || null, req.query))
+    res.status(200).send(new ResponseFiltersData(200, 'Success', movies,
+      accessToken && tokenValid ? accessToken : null, req.query))
   } catch (error) {
     console.log(error)
     res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
@@ -69,7 +73,7 @@ async function getMovieByFilters(req, res) {
 
 async function getMovieBySearch(req, res) {
   const { value } = req.query
-  const { accessToken } = req.userData.token
+  const { accessToken, tokenValid } = req.userData.token
 
   if (!value) {
     return res.status(400).send(new ResponseWithoutPayload(400, 'Missing fields: value'))
@@ -77,7 +81,8 @@ async function getMovieBySearch(req, res) {
 
   try {
     const movies = await Movie.find({ title: { $regex: value, $options: 'i' } })
-    res.status(200).send(new ResponseData(200, 'Success', movies, accessToken || null))
+    res.status(200).send(new ResponseData(200, 'Success', movies,
+      accessToken && tokenValid ? accessToken : null))
   } catch (error) {
     res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }

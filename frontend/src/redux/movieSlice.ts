@@ -118,6 +118,7 @@ export const moviesSlice = createSlice({
       state.movies = action.payload.data
       state.status = action.payload.status
       state.message = action.payload.message
+
       if (action.payload.isAuth) {
         setDataLocalStorage('accessToken', action.payload.isAuth)
       } else {
