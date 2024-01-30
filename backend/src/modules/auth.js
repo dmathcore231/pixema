@@ -58,18 +58,8 @@ async function authenticateUser(req, res) {
       return res.status(req.clientResponseError.status).send(req.clientResponseError)
     }
 
-    const { email, password } = req.body.formSignIn
+    const { email } = req.body.formSignIn
     const user = await User.findOne({ email })
-
-    if (!user) {
-      return res.status(401).send(new ResponseWithoutPayload(401, 'User not found'))
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password)
-
-    if (!isMatch) {
-      return res.status(401).send(new ResponseWithoutPayload(401, 'Invalid password'))
-    }
 
     const accessToken = jwt.sign({ id: user._id }, secretKey, {
       expiresIn: expiresInAccessToken,
@@ -80,6 +70,7 @@ async function authenticateUser(req, res) {
 
     res.status(200).send(new ResponseUserData(accessToken, refreshToken, user, 200, 'User authenticated successfully'))
   } catch (error) {
+    console.log(error)
     res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }
 }

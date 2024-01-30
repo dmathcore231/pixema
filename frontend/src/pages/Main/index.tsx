@@ -6,14 +6,10 @@ import { ShowMoreBox } from "../../components/ShowMoreBox"
 import { Error } from "../../components/Error"
 import { fetchMovies } from "../../redux/movieSlice"
 import { ActiveFilters } from "../../components/activeFilters"
-import { setAccessToken } from "../../redux/userSlice"
-import { getDataLocalStorage } from "../../helpers"
 
 export function Main(): JSX.Element {
   const dispatch = useAppDispatch()
   const { movies, loading, error, moviesByFilters, activeFilters, favoritesMovies } = useAppSelector(state => state.movies)
-
-  const accessToken = getDataLocalStorage('accessToken')
 
   useEffect(() => {
     if (!activeFilters) {
@@ -21,12 +17,6 @@ export function Main(): JSX.Element {
     }
   }, [dispatch, activeFilters])
 
-  useEffect(() => {
-
-    if (accessToken) {
-      dispatch(setAccessToken(accessToken))
-    }
-  }, [dispatch, accessToken])
 
   function renderCardsMovies(): JSX.Element {
     if (loading) {
