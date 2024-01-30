@@ -2,19 +2,15 @@ const express = require('express')
 const Movie = require('../models/moviesSchema')
 const ResponseData = require('../classes/responseData')
 const ResponseWithoutPayload = require('../classes/responseWithoutPayload')
+const ResponseFiltersData = require('../classes/responseFiltersData')
 
 const router = express.Router()
 
 async function getAllMovies(req, res) {
   const { accessToken } = req.userData.token
   const movies = await Movie.find({})
-
   try {
-    if (accessToken) {
-      res.status(200).send(new ResponseData(200, 'Success', movies, accessToken))
-    } else {
-      res.status(200).send(new ResponseData(200, 'Success', movies))
-    }
+    res.status(200).send(new ResponseData(200, 'Success', movies, accessToken || null))
   } catch (error) {
     res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }
@@ -22,6 +18,7 @@ async function getAllMovies(req, res) {
 
 async function getMovieByFilters(req, res) {
   const { sort, title, genre, years, rating, country } = req.query
+  const { accessToken } = req.userData.token
   const filters = {}
   const sortOptions = {}
 
@@ -63,24 +60,26 @@ async function getMovieByFilters(req, res) {
 
   try {
     const movies = await Movie.find(filters).sort(sortOptions)
-    res.status(200).send({ status: 200, message: 'Success', movies, filters: req.query })
+    res.status(200).send(new ResponseFiltersData(200, 'Success', movies, accessToken || null, req.query))
   } catch (error) {
-    res.status(500).send({ status: 500, message: 'Internal Server Error' })
+    console.log(error)
+    res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }
 }
 
 async function getMovieBySearch(req, res) {
   const { value } = req.query
+  const { accessToken } = req.userData.token
 
   if (!value) {
-    return res.status(400).send({ status: 400, message: 'Search query is required' })
+    return res.status(400).send(new ResponseWithoutPayload(400, 'Missing fields: value'))
   }
 
   try {
     const movies = await Movie.find({ title: { $regex: value, $options: 'i' } })
-    res.status(200).send({ status: 200, message: 'Success', movies })
+    res.status(200).send(new ResponseData(200, 'Success', movies, accessToken || null))
   } catch (error) {
-    res.status(500).send({ status: 500, message: 'Internal Server Error' })
+    res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }
 }
 

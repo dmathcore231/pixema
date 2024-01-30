@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt')
 async function checkValidFormSignIn(req, res, next) {
 
   if (req.body.formSignIn) {
-    console.log(req.body.formSignIn)
     const { email, password } = req.body.formSignIn
     const errMessages = []
     const user = await User.findOne({ email })
