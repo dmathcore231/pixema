@@ -101,41 +101,38 @@ async function getUserByJwt(req, res) {
 }
 
 async function updateUserById(req, res) {
-  const { userName, email, password, newPassword } = req.body
-  const token = req.headers['authorization'].split(' ')[1]
+  const { accessToken, tokenValid } = req.userData.token
+  const { userName, email, newPassword } = req.body.formUpdateUserById
 
-  if (!token) {
-    return res.status(401).send({ status: 401, message: 'Access token is required', accessToken: null })
+  if (!accessToken) {
+    return res.status(401).send(new ResponseData(401, 'Access token is required', null))
   }
 
-  try {
-    const decoded = jwt.verify(token, secretKey)
-    const user = await User.findById(decoded.id)
-    const isMatchPassword = await bcrypt.compare(password, user.password)
-    if (!user) {
-      return res.status(404).send({ status: 404, message: 'User not found', accessToken: null })
-    }
+  if (!tokenValid) {
+    return res.status(401).send(new ResponseData(401, 'Invalid access token', null))
+  }
 
-    if (!isMatchPassword) {
-      return res.status(401).send({ status: 401, message: 'Invalid password' })
-    } else {
-      if (newPassword) {
-        const hashedPassword = await bcrypt.hash(newPassword, 10)
-        user.password = hashedPassword
-        user.userName = userName
-        user.email = email
-        await user.save()
-        return res.status(200).send({ status: 200, message: 'User updated successfully', user })
-      } else {
-        user.userName = userName
-        user.email = email
-        await user.save()
-        return res.status(200).send({ status: 200, message: 'User updated successfully', user })
-      }
-    }
-  } catch (error) {
-    console.log(error)
-    res.status(500).send({ status: 500, message: 'Internal Server Error' })
+  if (req.clientResponseError) {
+    return res.status(req.clientResponseError.status).send(req.clientResponseError)
+  }
+
+  const decoded = jwt.verify(accessToken, secretKey)
+  const user = await User.findById(decoded.id)
+
+  if (newPassword) {
+    const hashedPassword = await bcrypt.hash(newPassword, 10)
+    user.password = hashedPassword
+    user.userName = userName
+    user.email = email
+
+    await user.save()
+    return res.status(200).send(new ResponseData(200, 'User updated successfully', user, accessToken))
+  } else {
+    user.userName = userName
+    user.email = email
+
+    await user.save()
+    return res.status(200).send(new ResponseData(200, 'User updated successfully', user, accessToken))
   }
 }
 

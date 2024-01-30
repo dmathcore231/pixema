@@ -14,8 +14,13 @@ export interface RequestSignUp {
   }
 }
 
-export interface RequestUpdateUserData extends RequestSignUp {
-  newPassword: string
+export interface RequestUpdateUserData {
+  formUpdateUserById: {
+    userName: string
+    email: string
+    password: string
+    newPassword: string
+  }
 }
 
 export interface UserData {

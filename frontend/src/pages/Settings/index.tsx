@@ -36,7 +36,7 @@ export function Settings() {
 
   useEffect(() => {
     if (isSubmit) {
-      dispatch(fetchUpdateUserData({ userName: valueName, email: valueEmail, password: valuePassword, newPassword: valueNewPassword }))
+      dispatch(fetchUpdateUserData({ formUpdateUserById: { userName: valueName, email: valueEmail, password: valuePassword, newPassword: valueNewPassword } }))
     }
     setValuePassword('')
     setValueNewPassword('')
