@@ -10,7 +10,6 @@ export const requestMovies = async (): Promise<ResponseMovies> => {
       headers: {
         'Content-Type': 'application/json',
       },
-      withCredentials: true
     })
     return data
   } catch (error) {
@@ -24,8 +23,7 @@ export const requestCreateMovie = async (body: FormData) => {
     const { data } = await clientRest.post(movieEmdPoint, body, {
       headers: {
         'Content-Type': 'multipart/form-data'
-      },
-      withCredentials: true
+      }
     })
     return data
   } catch (error) {
@@ -39,8 +37,7 @@ export const requestGetMovieById = async (id: string): Promise<ResponseMovie> =>
     const { data } = await clientRest.get(`${movieEmdPoint}/${id}`, {
       headers: {
         'Content-Type': 'application/json'
-      },
-      withCredentials: true
+      }
     })
     return data
   } catch (error) {
@@ -66,8 +63,7 @@ export const requestGetMoviesByFilters = async (filtersData: FormDataModalFilter
       },
       headers: {
         'Content-Type': 'application/json'
-      },
-      withCredentials: true
+      }
     })
     return data
   } catch (error) {
@@ -84,8 +80,7 @@ export const requestGetMoviesBySearch = async (search: string): Promise<Response
       },
       headers: {
         'Content-Type': 'application/json'
-      },
-      withCredentials: true
+      }
     })
     return data
   } catch (error) {
@@ -99,8 +94,7 @@ export const requestUpdateMovieById = async (id: string, body: FormData): Promis
     const { data } = await clientRest.put(`${movieEmdPoint}/${id}`, body, {
       headers: {
         'Content-Type': 'multipart/form-data'
-      },
-      withCredentials: true
+      }
     })
     return data
   } catch (error) {
@@ -114,8 +108,7 @@ export const requestFavoritesMovies = async (): Promise<ResponseMovies> => {
     const { data } = await clientRest.get(favoriteMovieEndPoint, {
       headers: {
         'Content-Type': 'application/json'
-      },
-      withCredentials: true
+      }
     })
     return data
   } catch (error) {
