@@ -116,3 +116,17 @@ export const requestFavoritesMovies = async (): Promise<ResponseMovies> => {
     throw err
   }
 }
+
+export const requestDeleteMovieById = async (id: string): Promise<ResponseMovie> => {
+  try {
+    const { data } = await clientRest.delete(`${movieEmdPoint}/${id}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    return data
+  } catch (error) {
+    const err = error as AxiosError
+    throw err
+  }
+}

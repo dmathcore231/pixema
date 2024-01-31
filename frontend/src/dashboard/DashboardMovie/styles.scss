@@ -25,5 +25,10 @@
   &__btn {
     display: flex;
     gap: 5rem;
+
+    &-delete {
+      width: 9.375rem;
+    }
   }
+
 }

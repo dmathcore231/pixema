@@ -1,7 +1,8 @@
 import './styles.scss'
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../hooks'
+import { fetchGetMovieById, fetchUpdateMovieById, fetchDeleteMovieById } from '../../redux/movieSlice'
 import { LinkBack } from '../../components/LinkBack'
 import { FormInput } from '../../components/FormInput'
 import { Btn } from '../../components/Btn'
@@ -11,12 +12,13 @@ import { GENRE } from '../../helpers'
 import { TextArea } from '../../components/TextArea'
 import { Card } from '../../components/Card'
 import { OptionsSelect } from '../../types/OptionsSelect'
-import { fetchGetMovieById, fetchUpdateMovieById } from '../../redux/movieSlice'
 import { Spinner } from '../../components/Spinner'
 import { Error } from '../../components/Error'
+import { Modal } from '../../components/Modal'
 
 export function DashboardMovie(): JSX.Element {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const { movieId } = useParams()
 
   const { movie, loading, error } = useAppSelector(state => state.movies)
@@ -39,9 +41,11 @@ export function DashboardMovie(): JSX.Element {
     description: '',
     isRecommended: false
   })
-  const [errorField, setErrorField] = useState('')
+  const [errorField] = useState('')
   const [isCancel, setIsCancel] = useState(false)
   const [isSubmit, setIsSubmit] = useState(false)
+  const [isActiveModal, setIsActiveModal] = useState(false)
+  const [isSubmitModal, setIsSubmitModal] = useState(false)
 
   function handleMultiSelectChange(activeOptions: OptionsSelect[]) {
     const genreValues = activeOptions.map(item => item.value)
@@ -78,6 +82,15 @@ export function DashboardMovie(): JSX.Element {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setIsSubmit(prev => !prev)
+  }
+
+  function handelClickBtnDelete() {
+    setIsActiveModal(true)
+  }
+
+  function handelSubmitModalDeleteMovie() {
+    setIsSubmitModal(true)
+    setIsActiveModal(false)
   }
 
   useEffect(() => {
@@ -139,6 +152,14 @@ export function DashboardMovie(): JSX.Element {
       })
     }
   }, [movie])
+
+  useEffect(() => {
+    if (isSubmitModal && movieId) {
+      setIsSubmitModal(false)
+      dispatch(fetchDeleteMovieById(movieId))
+      navigate('/dashboard/movies')
+    }
+  }, [isSubmitModal, dispatch, navigate, movieId])
 
   if (loading) {
     return (
@@ -376,6 +397,15 @@ export function DashboardMovie(): JSX.Element {
           </div>
 
         </div>
+        <div className='movie-update-form__btn-delete'>
+          <Btn
+            type='button'
+            className='btn_danger'
+            onClick={handelClickBtnDelete}
+          >
+            Delete
+          </Btn>
+        </div>
         <div className='movie-form-preview'>
           <label htmlFor="movie-form-preview" className="movie-form-preview__label subtitle subtitle_size_xxs">Preview Card</label>
           <div className='movie-form-preview__item'>
@@ -405,6 +435,21 @@ export function DashboardMovie(): JSX.Element {
             Update
           </Btn>
         </div>
+        <Modal
+          isActive={isActiveModal}
+          modalSubmit={true}
+          modalClass="modal_delete-movie"
+          title="Delete Movie"
+          titleBtnSubmit="Delete"
+          titleBtnClose="Cancel"
+          onClose={() => setIsActiveModal(false)}
+          onSubmit={handelSubmitModalDeleteMovie}
+          children={
+            <div className="modal_delete-movie__text">
+              Are you sure you want to delete this movie?
+            </div>}
+          classBtnSubmit="btn_danger"
+        />
       </form>
     </div>
   )

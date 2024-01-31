@@ -20,7 +20,7 @@ export interface Movie {
 }
 
 export interface ResponseMovie {
-  movie: Movie,
+  data: Movie,
   message: string,
   status: number
 }
@@ -42,7 +42,7 @@ export interface MovieState {
   movies: Movie[],
   status: number,
   message: string,
-  movie: Movie
+  movie: Movie | null
   moviesByFilters: Movie[] | null
   activeFilters: FormDataModalFilters | null
   moviesBySearch: Movie[] | null

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AxiosError } from "axios"
-import { requestMovies, requestCreateMovie, requestGetMovieById, requestGetMoviesByFilters, requestGetMoviesBySearch, requestUpdateMovieById, requestFavoritesMovies } from "../services/movie"
+import { requestMovies, requestCreateMovie, requestGetMovieById, requestGetMoviesByFilters, requestGetMoviesBySearch, requestUpdateMovieById, requestFavoritesMovies, requestDeleteMovieById } from "../services/movie"
 import { Movie, MovieState, ResponseMovie, ResponseMovieByFilters, ResponseMovies } from "../types/interfaces/Movie"
 import { ResponseNoData } from "../types/interfaces/UserData"
 import { FormDataModalFilters } from "../types/FormDataModalFilters"
@@ -83,6 +83,17 @@ export const fetchGetFavoritesMovies = createAsyncThunk<ResponseMovies, void, { 
     }
   })
 
+export const fetchDeleteMovieById = createAsyncThunk<ResponseNoData, string, { rejectValue: ResponseNoData }>('movies/fetchDeleteMovieById',
+  async (id, { rejectWithValue }) => {
+    try {
+      return await requestDeleteMovieById(id)
+    } catch (error) {
+      const err = error as AxiosError
+      const errResponse = err.response?.data as ResponseNoData
+      return rejectWithValue(errResponse)
+    }
+  })
+
 export const moviesSlice = createSlice({
   name: 'movies',
 
@@ -92,7 +103,7 @@ export const moviesSlice = createSlice({
     movies: [] as Movie[],
     status: 0,
     message: '',
-    movie: {} as Movie,
+    movie: null,
     moviesByFilters: null,
     activeFilters: null,
     moviesBySearch: null,
@@ -164,7 +175,7 @@ export const moviesSlice = createSlice({
       state.error = false
       state.status = action.payload.status
       state.message = action.payload.message
-      state.movie = action.payload.movie
+      state.movie = action.payload.data
     })
 
     builder.addCase(fetchGetMovieById.rejected, (state, action) => {
@@ -234,7 +245,7 @@ export const moviesSlice = createSlice({
         state.error = false
         state.status = action.payload.status
         state.message = action.payload.message
-        state.movie = action.payload.movie
+        state.movie = action.payload.data
       })
 
     builder.addCase(fetchUpdateMovieById.rejected, (state, action) => {
@@ -265,6 +276,29 @@ export const moviesSlice = createSlice({
       state.loading = false
       state.error = true
       state.favoritesMovies = null
+    })
+
+    //deleteMovie
+    builder.addCase(fetchDeleteMovieById.pending, (state) => {
+      state.loading = true
+      state.error = false
+      state.status = 0
+    })
+
+    builder.addCase(fetchDeleteMovieById.fulfilled, (state, action: PayloadAction<ResponseNoData>) => {
+      state.loading = false
+      state.error = false
+      state.status = action.payload.status
+      state.message = action.payload.message
+      state.movie = null
+    })
+
+    builder.addCase(fetchDeleteMovieById.rejected, (state, action) => {
+      state.loading = false
+      state.error = true
+      state.status = action.payload?.status
+      state.message = action.payload?.message
+      state.movie = null
     })
   }
 
