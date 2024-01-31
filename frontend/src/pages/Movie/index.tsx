@@ -36,7 +36,7 @@ export function Movie(): JSX.Element {
   }, [dispatch, id, isFavorite])
 
   useEffect(() => {
-    if (user && user.favoritesMovies.includes(id as string)) {
+    if (user && user.moviesData.favorites.includes(id as string)) {
       setDefaultCheck("favorites")
     } else {
       setDefaultCheck('')

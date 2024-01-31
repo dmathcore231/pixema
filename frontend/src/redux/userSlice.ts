@@ -133,10 +133,6 @@ export const userSlice = createSlice({
       } else {
         state.def = false
       }
-
-      if (action.payload.refreshToken) {
-        document.cookie = `refreshToken=${action.payload.refreshToken}; max-age=604800; samesite=strict; domain=.localhost; secure;`
-      }
     })
 
     builder.addCase(fetchUserAuthorization.rejected, (state, action) => {

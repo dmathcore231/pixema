@@ -1,11 +1,11 @@
 const express = require('express')
 const Movie = require('../models/moviesSchema')
 const missingFields = require('../helpers/missingFields')
-const multer = require('multer');
+const multer = require('multer')
 
 const router = express.Router()
 
-const upload = multer({ dest: 'public/posters' });
+const upload = multer({ dest: 'public/posters' })
 async function createMovie(req, res) {
   upload.single('poster')(req, res, async function (err) {
     if (err) {

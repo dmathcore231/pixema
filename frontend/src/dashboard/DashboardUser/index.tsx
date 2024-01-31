@@ -52,7 +52,7 @@ export function DashboardUser(): JSX.Element {
   useEffect(() => {
     if (isSubmit) {
       setIsSubmit(false)
-      dispatch(fetchUpdateUserData(formUserData))
+      dispatch(fetchUpdateUserData({ formUpdateUserDashboard: formUserData }))
     }
   }, [dispatch, isSubmit, formUserData])
 

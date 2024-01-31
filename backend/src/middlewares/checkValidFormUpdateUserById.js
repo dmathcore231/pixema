@@ -6,7 +6,7 @@ const missingFields = require('../helpers/missingFields')
 async function checkValidFormUpdateById(req, res, next) {
 
   if (req.body.formUpdateUserById) {
-    const { userName, email, password, newPassword } = req.body.formUpdateUserById
+    const { userName, email, password } = req.body.formUpdateUserById
     const { _id } = req.userData.user
     const errMessages = []
     const user = await User.findById(_id)

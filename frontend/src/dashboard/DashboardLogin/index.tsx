@@ -26,7 +26,7 @@ export function DashboardLogin(): JSX.Element {
     if (isSubmit) {
       setIsSubmit(false)
       setPassword('')
-      dispatch(fetchDashboard({ name: 'DashboardMain', password: password }))
+      dispatch(fetchDashboard({ formLoginDashboard: { name: 'DashboardMain', password: password } }))
     }
 
     if (status === 401) {

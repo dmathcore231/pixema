@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { requestDashboard, requestGetAllUsers, requestGetUserById, requestUpdateUserData, requestDeleteUser } from "../services/dashboard"
 import { AxiosError } from "axios"
-import { ResponseNoData, UserData } from "../types/interfaces/UserData"
+import { ResponseNoData, UserData, RequestUserData } from "../types/interfaces/UserData"
 import { RequestDashboard, DashboardState, ResponseAllUsers, ResponseUserDataById, RequestUpdateUserData } from "../types/interfaces/Dashboard"
 
-export const fetchDashboard = createAsyncThunk<ResponseNoData, RequestDashboard, { rejectValue: ResponseNoData }>('dashboard/fetchDashboard',
+export const fetchDashboard = createAsyncThunk<RequestUserData, RequestDashboard, { rejectValue: ResponseNoData }>('dashboard/fetchDashboard',
   async (body: RequestDashboard, { rejectWithValue }) => {
     try {
       return await requestDashboard(body)
@@ -82,7 +82,7 @@ export const dashboardSlice = createSlice({
       state.error = false
     })
 
-    builder.addCase(fetchDashboard.fulfilled, (state, action: PayloadAction<ResponseNoData>) => {
+    builder.addCase(fetchDashboard.fulfilled, (state, action: PayloadAction<RequestUserData>) => {
       state.isAuth = true
       state.loading = false
       state.error = false
@@ -130,7 +130,7 @@ export const dashboardSlice = createSlice({
       state.loading = false
       state.error = false
       state.status = action.payload.status
-      state.userById = action.payload.user
+      state.userById = action.payload.data
       state.message = action.payload.message
     })
 
@@ -141,7 +141,7 @@ export const dashboardSlice = createSlice({
       state.message = action.payload?.message
     })
 
-    // fetchUpdateUserDataF
+    // fetchUpdateUserData
     builder.addCase(fetchUpdateUserData.pending, (state) => {
       state.loading = true
       state.error = false
@@ -151,7 +151,7 @@ export const dashboardSlice = createSlice({
       state.loading = false
       state.error = false
       state.status = action.payload.status
-      state.userById = action.payload.user
+      state.userById = action.payload.data
       state.message = action.payload.message
     })
 

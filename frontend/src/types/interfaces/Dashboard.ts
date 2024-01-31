@@ -1,8 +1,11 @@
 import { UserData } from "./UserData"
 
 export interface RequestDashboard {
-  name: string
-  password: string
+  formLoginDashboard: {
+    name: string
+    password: string
+  }
+
 }
 
 export interface DashboardState {
@@ -24,14 +27,17 @@ export interface ResponseAllUsers {
 }
 
 export interface ResponseUserDataById {
-  user: UserData
+  data: UserData
   status: number
   message: string
 }
 
 export interface RequestUpdateUserData {
-  userName: string
-  email: string
-  userRole: string
-  userId: string
+  formUpdateUserDashboard: {
+    userName: string
+    email: string
+    userRole: string
+    userId: string
+  }
+
 }

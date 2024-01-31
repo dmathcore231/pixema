@@ -19,7 +19,7 @@ async function getAllUser(_, res) {
     const totalUsers = users.length
     res.status(200).send({ status: 200, message: 'Success', users, totalUsers: totalUsers })
   } catch (error) {
-    res.status(500).send({ status: 500, message: 'Internal Server Error' })
+    res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }
 }
 
@@ -67,8 +67,9 @@ async function authenticateUser(req, res) {
     const refreshToken = jwt.sign({ id: user._id, userName: user.userName }, secretKey, {
       expiresIn: expiresInRefreshToken,
     })
-
+    res.cookie('refreshToken', refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, sameSite: 'strict', httpOnly: true, secure: true })
     res.status(200).send(new ResponseUserData(accessToken, refreshToken, user, 200, 'User authenticated successfully'))
+
   } catch (error) {
     console.log(error)
     res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))

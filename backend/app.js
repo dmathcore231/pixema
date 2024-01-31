@@ -14,6 +14,8 @@ const refreshToken = require('./src/middlewares/refreshToken')
 const checkValidFormSignUp = require('./src/middlewares/checkValidFormSignUp')
 const checkValidFormSignIn = require('./src/middlewares/checkValidFormSignIn')
 const checkValidFormUpdateById = require('./src/middlewares/checkValidFormUpdateUserById')
+const checkValidFormLoginDashboard = require('./src/middlewares/checkValidFormLoginDashboard')
+const checkValidFormUpdateUserDashboard = require('./src/middlewares/checkValidFormUpdateUserDashboard')
 
 const app = express()
 
@@ -41,6 +43,8 @@ app.use(refreshToken)
 app.use(checkValidFormSignUp)
 app.use(checkValidFormSignIn)
 app.use(checkValidFormUpdateById)
+app.use(checkValidFormLoginDashboard)
+app.use(checkValidFormUpdateUserDashboard)
 
 app.use('/auth', authRouter)
 app.use('/movies', moviesRouter)

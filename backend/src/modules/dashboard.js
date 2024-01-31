@@ -1,35 +1,32 @@
 const express = require('express')
-const bcrypt = require('bcrypt')
-const Dashboard = require('../models/dashboardSchema')
 const User = require('../models/userSchema')
 const { default: mongoose } = require('mongoose')
 const missingFields = require('../helpers/missingFields')
+const ResponseData = require('../classes/responseData')
+const ResponseWithoutPayload = require('../classes/responseWithoutPayload')
+const ResponseDashboardData = require('../classes/responseDashboardData')
 
 const router = express.Router()
 
 async function loginDashboardMain(req, res) {
-  const { name, password } = req.body
-
-  if (!name || !password) {
-    return res.status(400).send({ status: 400, message: 'All fields are required' })
-  }
+  const { accessToken, tokenValid } = req.userData.token
+  const { user } = req.userData
 
   try {
-    const dashboard = await Dashboard.findOne({ name })
-
-    if (!dashboard) {
-      return res.status(401).send({ status: 401, message: 'Invalid credentials' })
+    if (!accessToken) {
+      return res.status(401).send(new ResponseData(401, 'Access token is required', null))
     }
 
-    const isMatch = await bcrypt.compare(password, dashboard.password)
-
-    if (!isMatch) {
-      return res.status(401).send({ status: 401, message: 'Invalid password' })
+    if (!tokenValid) {
+      return res.status(401).send(new ResponseData(401, 'Invalid access token', null))
     }
-    res.send({ status: 200, message: 'Login successful' })
+
+    if (req.clientResponseError) {
+      return res.status(req.clientResponseError.status).send(req.clientResponseError)
+    }
+    res.status(200).send(new ResponseData(200, 'Login successful', user, accessToken))
   } catch (error) {
-    console.log(error)
-    res.status(500).send({ status: 500, message: 'Internal Server Error' })
+    res.status(500).send(new ResponseData(500, 'Internal Server Error', null))
   }
 }
 
@@ -37,69 +34,59 @@ async function getUserById(req, res) {
   const id = req.params.id
 
   if (!id) {
-    return res.status(400).send({ status: 400, message: 'User ID is required' })
+    return res.status(400).send(new ResponseWithoutPayload(400, 'User ID is required'))
   }
 
   try {
     const user = await User.findById(id)
     if (user) {
-      return res.status(200).send({ status: 200, message: 'Success', user })
+      return res.status(200).send(new ResponseDashboardData(200, 'Success', user))
     }
-    res.status(404).send({ status: 404, message: 'User not found' })
+    res.status(404).send(new ResponseWithoutPayload(404, 'User not found'))
   } catch (error) {
     if (error instanceof mongoose.CastError) {
-      return res.status(400).send({ status: 400, message: 'Invalid user ID' })
+      return res.status(400).send(new ResponseWithoutPayload(400, 'Invalid user ID'))
     }
-    res.status(500).send({ status: 500, message: 'Internal Server Error' })
+    res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }
 }
 
 async function updatedUser(req, res) {
-  const { userName, email, userRole, userId } = req.body
-  const errMessages = []
-  missingFields(userName, 'Username', errMessages)
-  missingFields(email, 'Email', errMessages)
-  missingFields(userRole, 'User Role', errMessages)
-  missingFields(userId, 'User ID', errMessages)
-
-  if (errMessages.length > 0) {
-    return res.status(400).send({
-      status: 400, message:
-        `Missing fields: ${errMessages.join(', ')}`
-    })
+  if (req.clientResponseError) {
+    return res.status(req.clientResponseError.status).send(req.clientResponseError)
   }
 
   try {
+    const { userName, email, userRole, userId } = req.body.formUpdateUserDashboard
     const user = await User.findById(userId)
-    if (!user) {
-      return res.status(404).send({ status: 404, message: 'User not found' })
-    }
     user.userName = userName
     user.email = email
     user._role = userRole
+
     await user.save()
-    res.send({ status: 200, message: 'User updated successfully', user })
+    res.send(new ResponseDashboardData(200, 'User updated successfully', user))
   } catch (error) {
-    res.status(500).send({ status: 500, message: 'Internal Server Error' })
+    console.log(error)
+    res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }
 }
 
 async function deleteUserById(req, res) {
-  const id = req.params.id
+  const { id } = req.params
 
   if (!id) {
-    return res.status(400).send({ status: 400, message: 'User ID is required' })
+    return res.status(400).send(new ResponseWithoutPayload(400, 'User ID is required'))
   }
 
   try {
     const user = await User.findByIdAndDelete(id)
     if (user) {
-      return res.status(200).send({ status: 200, message: 'User deleted successfully' })
+      return res.status(200).send(new ResponseWithoutPayload(200, 'User deleted successfully'))
     } else {
-      return res.status(404).send({ status: 404, message: 'User not found' })
+      return res.status(404).send(new ResponseWithoutPayload(404, 'User not found'))
     }
   } catch (error) {
-    res.status(500).send({ status: 500, message: 'Internal Server Error' })
+    res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }
 }
 
