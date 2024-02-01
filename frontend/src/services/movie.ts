@@ -89,7 +89,7 @@ export const requestGetMoviesBySearch = async (search: string): Promise<Response
   }
 }
 
-export const requestUpdateMovieById = async (id: string, body: FormData): Promise<ResponseMovie> => {
+export const requestUpdateMovieById = async ({ formUpdateMovie: { id, body } }: { formUpdateMovie: { id: string, body: FormData } }): Promise<ResponseMovie> => {
   try {
     const { data } = await clientRest.put(`${movieEmdPoint}/${id}`, body, {
       headers: {

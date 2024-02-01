@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const secretKey = require('../modules/secretKey')
 const User = require('../models/userSchema')
+const ResponseData = require('../classes/responseData')
 
 async function checkValidToken(req, res, next) {
   const { accessToken, refreshToken } = req.userData.token
@@ -31,6 +32,7 @@ async function checkValidToken(req, res, next) {
         req.userData.user = user
       } else {
         req.userData.token.tokenValid = false
+        req.clientResponseError = new ResponseData(401, 'Invalid access token', null, null)
       }
       next()
     }

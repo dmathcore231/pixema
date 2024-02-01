@@ -119,7 +119,7 @@ export function DashboardMovie(): JSX.Element {
       formData.append('isRecommended', formMovie.isRecommended.toString())
 
       if (movieId) {
-        dispatch(fetchUpdateMovieById({ id: movieId, body: formData }))
+        dispatch(fetchUpdateMovieById({formUpdateMovie: {body: formData, id: movieId}}))
       }
     }
   }, [formMovie, isSubmit, movieId, dispatch])

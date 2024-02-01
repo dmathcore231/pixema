@@ -39,10 +39,10 @@ export const fetchGetMovieById = createAsyncThunk<ResponseMovie, string, { rejec
     }
   })
 
-export const fetchUpdateMovieById = createAsyncThunk<ResponseMovie, { id: string, body: FormData }, { rejectValue: ResponseNoData }>('movies/fetchUpdateMovieById',
-  async ({ id, body }, { rejectWithValue }) => {
+export const fetchUpdateMovieById = createAsyncThunk<ResponseMovie, { formUpdateMovie: { id: string, body: FormData } }, { rejectValue: ResponseNoData }>('movies/fetchUpdateMovieById',
+  async ({ formUpdateMovie: { id, body } }, { rejectWithValue }) => {
     try {
-      return await requestUpdateMovieById(id, body)
+      return await requestUpdateMovieById({ formUpdateMovie: { id, body } })
     } catch (error) {
       const err = error as AxiosError
       const errResponse = err.response?.data as ResponseNoData

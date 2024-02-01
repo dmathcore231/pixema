@@ -3,54 +3,78 @@ const multer = require('multer')
 const Movie = require('../models/moviesSchema')
 const ResponseWithoutPayload = require('../classes/responseWithoutPayload')
 const ResponseDashboardData = require('../classes/responseDashboardData')
-const ResponseUserData = require('../classes/responseUserData')
+const ResponseData = require('../classes/responseData')
+const missingFields = require('../helpers/missingFields')
 
 const router = express.Router()
 
 const upload = multer({ dest: 'public/posters' })
 async function createMovie(req, res) {
-  upload.single('poster')(req, res, async function () {
-    if (req.clientResponseError) {
-      return res.status(req.clientResponseError.status).send(req.clientResponseError)
+  upload.single('poster')(req, res, async function (err) {
+    if (err) {
+      return req.clientResponseError = new ResponseWithoutPayload(500, 'File upload failed')
     }
 
-    const posterPath = req.file.path
+    if (req.body.formName === 'createMovie') {
+      const posterPath = req.file.path
+      const { title, year, releaseDate, boxOffice, country, production, actors, directors, writers, rating, imdbRating, genre, description, duration, isRecommended } = req.body
 
-    const { title, year, releaseDate, boxOffice, country, production, actors, directors, writers, rating, imdbRating, genre, description, duration, isRecommended } = req.body
-
-    try {
-      const { accessToken, tokenValid } = req.userData.token
-
-      if (!accessToken) {
-        return res.status(401).send(new ResponseWithoutPayload(401, 'Access token is required'))
+      try {
+        missingFields([
+          { field: title, fieldName: 'Title' },
+          { field: year, fieldName: 'Year' },
+          { field: releaseDate, fieldName: 'Release Date' },
+          { field: boxOffice, fieldName: 'Box Office' },
+          { field: country, fieldName: 'Country' },
+          { field: production, fieldName: 'Production' },
+          { field: actors, fieldName: 'Actors' },
+          { field: directors, fieldName: 'Directors' },
+          { field: writers, fieldName: 'Writers' },
+          { field: rating, fieldName: 'Rating' },
+          { field: imdbRating, fieldName: 'IMDb Rating' },
+          { field: genre, fieldName: 'Genre' },
+          { field: description, fieldName: 'Description' },
+          { field: duration, fieldName: 'Duration' },
+          { field: isRecommended, fieldName: 'Recommended' },
+        ])
+      } catch (error) {
+        return res.status(400).send(error.message)
       }
 
-      if (!tokenValid) {
-        return res.status(401).send(new ResponseWithoutPayload(401, 'Invalid access token'))
-      }
-      const movie = new Movie({
-        title,
-        year,
-        releaseDate,
-        boxOffice,
-        country,
-        production,
-        actors,
-        directors,
-        writers,
-        rating,
-        imdbRating,
-        genre,
-        poster: `http://localhost:3000/${posterPath}`,
-        duration,
-        description,
-        isRecommended
-      })
+      try {
+        const { accessToken, tokenValid } = req.userData.token
 
-      await movie.save()
-      res.status(201).send(new ResponseDashboardData(201, 'Movie created successfully', movie))
-    } catch (error) {
-      res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
+        if (!accessToken) {
+          return res.status(401).send(new ResponseData(401, 'Access token is required', null))
+        }
+
+        if (!tokenValid) {
+          return res.status(401).send(new ResponseData(401, 'Invalid access token', null))
+        }
+        const movie = new Movie({
+          title,
+          year,
+          releaseDate,
+          boxOffice,
+          country,
+          production,
+          actors,
+          directors,
+          writers,
+          rating,
+          imdbRating,
+          genre,
+          poster: `http://localhost:3000/${posterPath}`,
+          duration,
+          description,
+          isRecommended
+        })
+
+        await movie.save()
+        res.status(201).send(new ResponseDashboardData(201, 'Movie created successfully', movie))
+      } catch (error) {
+        res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
+      }
     }
   })
 }
@@ -103,25 +127,17 @@ async function deleteMovieById(req, res) {
 }
 
 async function updateMovieById(req, res) {
-  upload.single('poster')(req, res, async function (err) {
-    const movieId = req.params.id
-    const { title, year, releaseDate, boxOffice, country, production, actors, directors, writers, rating, imdbRating, genre, poster, description, duration, isRecommended } = req.body
-    const posterPath = req.file
-
-
-    if (err) {
-      return res.status(500).send({ status: 500, message: 'File upload failed' })
+  upload.single('poster')(req, res, async function () {
+    if (req.clientResponseError) {
+      return res.status(req.clientResponseError.status).send(req.clientResponseError)
     }
-
-    if (!movieId) {
-      return res.status(400).send({ status: 400, message: 'Movie ID is required' })
-    }
-
     try {
+      const movieId = req.params.id
+      const { title, year, releaseDate, boxOffice, country, production, actors, directors, writers, rating, imdbRating, genre, description, duration, isRecommended } = req.body.formUpdateMovie
+      const posterPath = req.file
+      console.log(posterPath)
       const movie = await Movie.findById(movieId)
-      if (!movie) {
-        return res.status(404).send({ status: 404, message: 'Movie not found' })
-      }
+
       movie.title = title || movie.title
       movie.year = year || movie.year
       movie.releaseDate = releaseDate || movie.releaseDate
@@ -141,9 +157,10 @@ async function updateMovieById(req, res) {
 
       await movie.save()
 
-      res.status(200).send({ status: 200, message: 'Movie updated successfully', movie })
+      res.status(200).send(new ResponseDashboardData(200, 'Movie updated successfully', movie))
     } catch (error) {
-      res.status(500).send({ status: 500, message: 'Internal Server Error' })
+      console.log(error)
+      res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
     }
   })
 }

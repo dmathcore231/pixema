@@ -44,7 +44,6 @@ export function Settings() {
   }, [isSubmit])
 
   useEffect(() => {
-
     if (message === 'Invalid password') {
       setIsSubmit(false)
       setErrorField('password')

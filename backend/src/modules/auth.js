@@ -105,14 +105,6 @@ async function updateUserById(req, res) {
   const { accessToken, tokenValid } = req.userData.token
   const { userName, email, newPassword } = req.body.formUpdateUserById
 
-  if (!accessToken) {
-    return res.status(401).send(new ResponseData(401, 'Access token is required', null))
-  }
-
-  if (!tokenValid) {
-    return res.status(401).send(new ResponseData(401, 'Invalid access token', null))
-  }
-
   if (req.clientResponseError) {
     return res.status(req.clientResponseError.status).send(req.clientResponseError)
   }

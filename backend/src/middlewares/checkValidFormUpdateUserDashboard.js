@@ -6,30 +6,30 @@ async function checkValidFormUpdateUserDashboard(req, res, next) {
   if (req.body.formUpdateUserDashboard) {
     const { userName, email, userRole, userId } = req.body.formUpdateUserDashboard
 
-    const errMessages = []
-    missingFields(userName, 'Username', errMessages)
-    missingFields(email, 'Email', errMessages)
-    missingFields(userRole, 'User Role', errMessages)
-    missingFields(userId, 'User ID', errMessages)
-
-    if (errMessages.length > 0) {
-      req.clientResponseError = new ResponseWithoutPayload(400, `Missing fields: ${errMessages.join(', ')}`)
+    try {
+      missingFields([
+        { field: userName, fieldName: 'Username' },
+        { field: email, fieldName: 'Email' },
+        { field: userRole, fieldName: 'User Role' },
+        { field: userId, fieldName: 'User ID' }
+      ])
+    } catch (error) {
+      req.clientResponseError = new ResponseWithoutPayload(400, error.message)
+      return next()
     }
 
     const user = await User.findById(userId)
 
     if (!user) {
       req.clientResponseError = new ResponseWithoutPayload(404, 'User not found')
+      return next()
     }
 
-    if (!req.clientResponseError) {
-      req.clientResponseError = false
-    }
-
-    next()
-  } else {
+    req.clientResponseError = false
     next()
   }
+
+  next()
 }
 
 module.exports = checkValidFormUpdateUserDashboard

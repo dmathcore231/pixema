@@ -44,6 +44,7 @@ export function DashboardAddMovie(): JSX.Element {
     if (isSubmit) {
       setIsSubmit(prev => !prev)
       const formData = new FormData()
+      formData.append('formName', 'createMovie')
       formData.append('title', formMovie.title)
       formData.append('year', formMovie.year)
       formData.append('releaseDate', formMovie.releaseDate)

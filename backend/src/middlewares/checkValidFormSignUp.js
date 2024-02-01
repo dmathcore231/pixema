@@ -6,29 +6,35 @@ async function checkValidFormSignUp(req, res, next) {
 
   if (req.body.formSignUp) {
     const { userName, email, password } = req.body.formSignUp
-    const errMessages = []
     const existingEmail = await User.findOne({ email })
     const existingUserName = await User.findOne({ userName })
-    missingFields(userName, 'Username', errMessages)
-    missingFields(email, 'Email', errMessages)
-    missingFields(password, 'Password', errMessages)
 
-    if (errMessages.length > 0) {
-      req.clientResponseError = new responseWithoutPayload(400,
-        `Missing fields: ${errMessages.join(', ')}`)
-    } else if (existingEmail) {
-      req.clientResponseError = new responseWithoutPayload(400, 'Email already exists')
-    } else if (existingUserName) {
-      req.clientResponseError = new responseWithoutPayload(400, 'User already exists')
-    } else {
-      req.clientResponseError = false
+    try {
+      missingFields([
+        { field: userName, fieldName: 'Username' },
+        { field: email, fieldName: 'Email' },
+        { field: password, fieldName: 'Password' }
+      ])
+    } catch (error) {
+      req.clientResponseError = new responseWithoutPayload(400, error.message)
+      return next()
     }
 
-    next()
-  } else {
-    next()
+    if (existingEmail) {
+      req.clientResponseError = new responseWithoutPayload(400, 'Email already exists')
+      return next()
+    }
+
+    if (existingUserName) {
+      req.clientResponseError = new responseWithoutPayload(400, 'User already exists')
+      return next()
+    }
+
+    req.clientResponseError = false
+    return next()
   }
 
+  next()
 }
 
 module.exports = checkValidFormSignUp

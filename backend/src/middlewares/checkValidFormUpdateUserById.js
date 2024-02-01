@@ -8,16 +8,17 @@ async function checkValidFormUpdateById(req, res, next) {
   if (req.body.formUpdateUserById) {
     const { userName, email, password } = req.body.formUpdateUserById
     const { _id } = req.userData.user
-    const errMessages = []
     const user = await User.findById(_id)
 
-    missingFields(userName, 'Username', errMessages)
-    missingFields(email, 'Email', errMessages)
-    missingFields(password, 'Password', errMessages)
-
-    if (errMessages.length > 0) {
-      req.clientResponseError = new ResponseWithoutPayload(400,
-        `Missing fields: ${errMessages.join(', ')}`)
+    try {
+      missingFields([
+        { field: userName, fieldName: 'Username' },
+        { field: email, fieldName: 'Email' },
+        { field: password, fieldName: 'Password' }
+      ])
+    } catch (error) {
+      req.clientResponseError = new ResponseWithoutPayload(400, error.message)
+      return next()
     }
 
     if (user) {
@@ -25,19 +26,18 @@ async function checkValidFormUpdateById(req, res, next) {
 
       if (!isMatch) {
         req.clientResponseError = new ResponseWithoutPayload(401, 'Invalid password')
+        return next()
       }
     } else {
       req.clientResponseError = new ResponseWithoutPayload(400, 'User not found')
+      return next()
     }
 
-    if (!req.clientResponseError) {
-      req.clientResponseError = false
-    }
-
-    next()
-  } else {
-    next()
+    req.clientResponseError = false
+    return next()
   }
+
+  next()
 }
 
 module.exports = checkValidFormUpdateById
