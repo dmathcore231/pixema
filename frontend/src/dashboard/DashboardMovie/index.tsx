@@ -97,6 +97,7 @@ export function DashboardMovie(): JSX.Element {
     if (isSubmit) {
       setIsSubmit(prev => !prev)
       const formData = new FormData()
+      formData.append('formName', 'updateMovie')
       formData.append('title', formMovie.title)
       formData.append('year', formMovie.year ? formMovie.year.toString() : 'N/A')
       formData.append('releaseDate', formMovie.releaseDate)
@@ -119,7 +120,7 @@ export function DashboardMovie(): JSX.Element {
       formData.append('isRecommended', formMovie.isRecommended.toString())
 
       if (movieId) {
-        dispatch(fetchUpdateMovieById({formUpdateMovie: {body: formData, id: movieId}}))
+        dispatch(fetchUpdateMovieById({ formUpdateMovie: { body: formData, id: movieId } }))
       }
     }
   }, [formMovie, isSubmit, movieId, dispatch])

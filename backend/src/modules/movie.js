@@ -38,19 +38,10 @@ async function createMovie(req, res) {
           { field: isRecommended, fieldName: 'Recommended' },
         ])
       } catch (error) {
-        return res.status(400).send(error.message)
+        return res.status(400).send(new ResponseWithoutPayload(400, error.message))
       }
 
       try {
-        const { accessToken, tokenValid } = req.userData.token
-
-        if (!accessToken) {
-          return res.status(401).send(new ResponseData(401, 'Access token is required', null))
-        }
-
-        if (!tokenValid) {
-          return res.status(401).send(new ResponseData(401, 'Invalid access token', null))
-        }
         const movie = new Movie({
           title,
           year,
@@ -127,40 +118,79 @@ async function deleteMovieById(req, res) {
 }
 
 async function updateMovieById(req, res) {
-  upload.single('poster')(req, res, async function () {
+  upload.single('poster')(req, res, async function (err) {
     if (req.clientResponseError) {
       return res.status(req.clientResponseError.status).send(req.clientResponseError)
     }
-    try {
-      const movieId = req.params.id
-      const { title, year, releaseDate, boxOffice, country, production, actors, directors, writers, rating, imdbRating, genre, description, duration, isRecommended } = req.body.formUpdateMovie
-      const posterPath = req.file
-      console.log(posterPath)
-      const movie = await Movie.findById(movieId)
 
-      movie.title = title || movie.title
-      movie.year = year || movie.year
-      movie.releaseDate = releaseDate || movie.releaseDate
-      movie.boxOffice = boxOffice || movie.boxOffice
-      movie.country = country || movie.country
-      movie.production = production || movie.production
-      movie.actors = actors || movie.actors
-      movie.directors = directors || movie.directors
-      movie.writers = writers || movie.writers
-      movie.rating = rating || movie.rating
-      movie.imdbRating = imdbRating || movie.imdbRating
-      movie.genre = genre || movie.genre
-      movie.poster = posterPath ? `http://localhost:3000/${req.file.path}` : movie.poster
-      movie.description = description || movie.description
-      movie.duration = duration || movie.duration
-      movie.isRecommended = isRecommended || movie.isRecommended
+    if (req.body.formName === 'updateMovie') {
+      if (err) {
+        return req.clientResponseError = new ResponseWithoutPayload(500, 'File upload failed')
+      }
 
-      await movie.save()
+      const { id } = req.params
 
-      res.status(200).send(new ResponseDashboardData(200, 'Movie updated successfully', movie))
-    } catch (error) {
-      console.log(error)
-      res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
+      if (!id) {
+        return res.status(400).send(new ResponseWithoutPayload(400, 'Movie ID is required'))
+      }
+
+      const movie = await Movie.findById(id)
+
+      if (!movie) {
+        return res.status(404).send(new ResponseWithoutPayload(404, 'Movie not found'))
+      }
+
+      const { title, year, releaseDate, boxOffice, country, production, actors, directors, writers, rating, imdbRating, genre, description, duration, isRecommended } = req.body
+
+      try {
+        missingFields([
+          { field: title, fieldName: 'Title' },
+          { field: year, fieldName: 'Year' },
+          { field: releaseDate, fieldName: 'Release Date' },
+          { field: boxOffice, fieldName: 'Box Office' },
+          { field: country, fieldName: 'Country' },
+          { field: production, fieldName: 'Production' },
+          { field: actors, fieldName: 'Actors' },
+          { field: directors, fieldName: 'Directors' },
+          { field: writers, fieldName: 'Writers' },
+          { field: rating, fieldName: 'Rating' },
+          { field: imdbRating, fieldName: 'IMDB Rating' },
+          { field: genre, fieldName: 'Genre' },
+          { field: description, fieldName: 'Description' },
+          { field: duration, fieldName: 'Duration' },
+          { field: isRecommended, fieldName: 'Is Recommended' }
+        ])
+      } catch (error) {
+        return res.status(400).send(new ResponseWithoutPayload(400, error.message))
+      }
+
+      try {
+        const poster = req.file
+
+        movie.title = title || movie.title
+        movie.year = year || movie.year
+        movie.releaseDate = releaseDate || movie.releaseDate
+        movie.boxOffice = boxOffice || movie.boxOffice
+        movie.country = country || movie.country
+        movie.production = production || movie.production
+        movie.actors = actors || movie.actors
+        movie.directors = directors || movie.directors
+        movie.writers = writers || movie.writers
+        movie.rating = rating || movie.rating
+        movie.imdbRating = imdbRating || movie.imdbRating
+        movie.genre = genre || movie.genre
+        movie.poster = poster ? `http://localhost:3000/${req.file.path}` : movie.poster
+        movie.description = description || movie.description
+        movie.duration = duration || movie.duration
+        movie.isRecommended = isRecommended || movie.isRecommended
+
+        await movie.save()
+
+        res.status(200).send(new ResponseDashboardData(200, 'Movie updated successfully', movie))
+      } catch (error) {
+        console.log(error)
+        res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
+      }
     }
   })
 }

@@ -14,6 +14,10 @@ const ResponseData = require('../classes/responseData')
 const router = express.Router()
 
 async function getAllUser(_, res) {
+  if (req.clientResponseError) {
+    return res.status(req.clientResponseError.status).send(req.clientResponseError)
+  }
+
   try {
     const users = await User.find({})
     const totalUsers = users.length
@@ -77,15 +81,12 @@ async function authenticateUser(req, res) {
 }
 
 async function getUserByJwt(req, res) {
-  const { accessToken, tokenValid } = req.userData.token
+  const { accessToken } = req.userData.token
 
-  if (!accessToken) {
-    return res.status(401).send(new ResponseData(401, 'Access token is required', null))
+  if (req.clientResponseError) {
+    return res.status(req.clientResponseError.status).send(req.clientResponseError)
   }
 
-  if (!tokenValid) {
-    return res.status(401).send(new ResponseData(401, 'Invalid access token', null))
-  }
   try {
     const decoded = jwt.verify(accessToken, secretKey)
 
@@ -97,12 +98,13 @@ async function getUserByJwt(req, res) {
     }
 
   } catch (error) {
+    console.log(error)
     res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }
 }
 
 async function updateUserById(req, res) {
-  const { accessToken, tokenValid } = req.userData.token
+  const { accessToken } = req.userData.token
   const { userName, email, newPassword } = req.body.formUpdateUserById
 
   if (req.clientResponseError) {

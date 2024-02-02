@@ -9,18 +9,10 @@ const ResponseDashboardData = require('../classes/responseDashboardData')
 const router = express.Router()
 
 async function loginDashboardMain(req, res) {
-  const { accessToken, tokenValid } = req.userData.token
+  const { accessToken } = req.userData.token
   const { user } = req.userData
 
   try {
-    if (!accessToken) {
-      return res.status(401).send(new ResponseData(401, 'Access token is required', null))
-    }
-
-    if (!tokenValid) {
-      return res.status(401).send(new ResponseData(401, 'Invalid access token', null))
-    }
-
     if (req.clientResponseError) {
       return res.status(req.clientResponseError.status).send(req.clientResponseError)
     }
@@ -35,6 +27,10 @@ async function getUserById(req, res) {
 
   if (!id) {
     return res.status(400).send(new ResponseWithoutPayload(400, 'User ID is required'))
+  }
+
+  if (req.clientResponseError) {
+    return res.status(req.clientResponseError.status).send(req.clientResponseError)
   }
 
   try {
@@ -76,6 +72,10 @@ async function deleteUserById(req, res) {
 
   if (!id) {
     return res.status(400).send(new ResponseWithoutPayload(400, 'User ID is required'))
+  }
+
+  if (req.clientResponseError) {
+    return res.status(req.clientResponseError.status).send(req.clientResponseError)
   }
 
   try {
