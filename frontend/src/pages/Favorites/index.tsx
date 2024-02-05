@@ -4,18 +4,40 @@ import { useEffect } from "react"
 import { fetchGetFavoritesMovies } from "../../redux/movieSlice"
 import { Card } from "../../components/Card"
 import { NoContent } from "../../components/NoContent"
+import { Spinner } from "../../components/Spinner"
+import { Error } from "../../components/Error"
 
 export function Favorites(): JSX.Element {
   const dispatch = useAppDispatch()
 
   const { user } = useAppSelector(state => state.user)
-  const { favoritesMovies } = useAppSelector(state => state.movies)
+  const { favoritesMovies, loading, error } = useAppSelector(state => state.movies)
 
   useEffect(() => {
     if (user) {
       dispatch(fetchGetFavoritesMovies())
     }
   }, [dispatch, user])
+
+  if (loading) {
+    return (
+      <div className="favorites-page">
+        <div className="favorites-page__loader">
+          <Spinner width="40" height="40" />
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="favorites-page">
+        <div className="favorites-page__error">
+          <Error />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="favorites-page">
@@ -30,6 +52,7 @@ export function Favorites(): JSX.Element {
                 genres={movie.genre}
                 rating={movie.rating}
                 isRecommended={movie.isRecommended}
+                isFavorite={true}
               />
             </div>
           ))

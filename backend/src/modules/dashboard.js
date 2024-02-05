@@ -60,10 +60,10 @@ async function updatedUser(req, res) {
     user._role = userRole
 
     await user.save()
-    res.send(new ResponseDashboardData(200, 'User updated successfully', user))
+    return res.send(new ResponseDashboardData(200, 'User updated successfully', user))
   } catch (error) {
     console.log(error)
-    res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
+    return res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }
 }
 

@@ -13,7 +13,7 @@ const ResponseData = require('../classes/responseData')
 
 const router = express.Router()
 
-async function getAllUser(_, res) {
+async function getAllUser(req, res) {
   if (req.clientResponseError) {
     return res.status(req.clientResponseError.status).send(req.clientResponseError)
   }
@@ -132,53 +132,72 @@ async function updateUserById(req, res) {
 }
 
 async function updateFavoritesMovies(req, res) {
-  const { movieId } = req.body
-  const token = req.headers['authorization'].split(' ')[1]
 
-  if (!token) {
-    return res.status(401).send({ status: 401, message: 'Access token is required', accessToken: null })
-  }
-
-  if (!movieId) {
-    return res.status(400).send({ status: 400, message: 'Favorites movies is required' })
+  if (req.clientResponseError) {
+    return res.status(req.clientResponseError.status).send(req.clientResponseError)
   }
 
   try {
-    const decoded = jwt.verify(token, secretKey)
-    const user = await User.findById(decoded.id)
-    if (!user) {
-      return res.status(404).send({ status: 404, message: 'User not found', accessToken: null })
-    }
-    if (!user.favoritesMovies.includes(movieId)) {
-      user.favoritesMovies.push(movieId)
+    const { accessToken } = req.userData.token
+    const { movieId } = req.body
+    const user = await User.findById(req.userData.user._id)
+    const favoritesUser = user.moviesData.favorites
+    if (!favoritesUser.includes(movieId)) {
+      user.moviesData.favorites.push(movieId)
     } else {
-      const index = user.favoritesMovies.indexOf(movieId)
-      user.favoritesMovies.splice(index, 1)
+      const index = user.moviesData.favorites.indexOf(movieId)
+      user.moviesData.favorites.splice(index, 1)
     }
+
     await user.save()
-    return res.status(200).send({ status: 200, message: 'Favorites movies updated successfully', user })
+    return res.status(200).send(new ResponseData(200, 'Favorites movies updated successfully', user, accessToken))
   } catch (error) {
-    res.status(500).send({ status: 500, message: 'Internal Server Error' })
+    return res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }
+
+  // const { movieId } = req.body
+  // const token = req.headers['authorization'].split(' ')[1]
+
+  // if (!token) {
+  //   return res.status(401).send({ status: 401, message: 'Access token is required', accessToken: null })
+  // }
+
+  // if (!movieId) {
+  //   return res.status(400).send({ status: 400, message: 'Favorites movies is required' })
+  // }
+
+  // try {
+  //   const decoded = jwt.verify(token, secretKey)
+  //   const user = await User.findById(decoded.id)
+  //   if (!user) {
+  //     return res.status(404).send({ status: 404, message: 'User not found', accessToken: null })
+  //   }
+  //   if (!user.favoritesMovies.includes(movieId)) {
+  //     user.favoritesMovies.push(movieId)
+  //   } else {
+  //     const index = user.favoritesMovies.indexOf(movieId)
+  //     user.favoritesMovies.splice(index, 1)
+  //   }
+  //   await user.save()
+  //   return res.status(200).send({ status: 200, message: 'Favorites movies updated successfully', user })
+  // } catch (error) {
+  //   res.status(500).send({ status: 500, message: 'Internal Server Error' })
+  // }
 }
 
 async function getFavoritesMovies(req, res) {
-  const token = req.headers['authorization'].split(' ')[1]
 
-  if (!token) {
-    return res.status(401).send({ status: 401, message: 'Access token is required', accessToken: null })
-  }
-  const decoded = jwt.verify(token, secretKey)
-  const user = await User.findById(decoded.id)
-  if (!user) {
-    return res.status(404).send({ status: 404, message: 'User not found', accessToken: null })
+  if (req.clientResponseError) {
+    return res.status(req.clientResponseError.status).send(req.clientResponseError)
   }
 
   try {
-    const movies = await Movie.find({ _id: { $in: user.favoritesMovies } })
-    res.status(200).send({ status: 200, message: 'Success', movies })
+    const { accessToken } = req.userData.token
+    const user = await User.findById(req.userData.user._id)
+    const movies = await Movie.find({ _id: { $in: user.moviesData.favorites } })
+    res.status(200).send(new ResponseData(200, 'Success', movies, accessToken))
   } catch (error) {
-    res.status(500).send({ status: 500, message: 'Internal Server Error' })
+    res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }
 }
 

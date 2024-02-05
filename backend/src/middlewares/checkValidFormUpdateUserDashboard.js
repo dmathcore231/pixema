@@ -26,7 +26,7 @@ async function checkValidFormUpdateUserDashboard(req, res, next) {
     }
 
     req.clientResponseError = false
-    next()
+    return next()
   }
 
   next()

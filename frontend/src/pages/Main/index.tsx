@@ -9,7 +9,10 @@ import { ActiveFilters } from "../../components/activeFilters"
 
 export function Main(): JSX.Element {
   const dispatch = useAppDispatch()
-  const { movies, loading, error, moviesByFilters, activeFilters, favoritesMovies } = useAppSelector(state => state.movies)
+  const { user } = useAppSelector(state => state.user)
+  const { movies, loading, error, moviesByFilters, activeFilters } = useAppSelector(state => state.movies)
+  const userFavoriteMovies = user?.moviesData.favorites
+  console.log(userFavoriteMovies)
 
   useEffect(() => {
     if (!activeFilters) {
@@ -48,6 +51,7 @@ export function Main(): JSX.Element {
                   genres={movie.genre}
                   rating={movie.rating}
                   isRecommended={movie.isRecommended}
+                  isFavorite={userFavoriteMovies?.includes(movie._id)}
                 />
               </div>
             ))}
@@ -69,7 +73,7 @@ export function Main(): JSX.Element {
                 genres={movie.genre}
                 rating={movie.rating}
                 isRecommended={movie.isRecommended}
-                isFavorite={favoritesMovies?.some(favorite => favorite._id === movie._id)}
+                isFavorite={userFavoriteMovies?.includes(movie._id)}
               />
             </div>
           ))}
