@@ -1,4 +1,7 @@
 import "./styles.scss"
+import { useEffect, useState } from "react"
+import { useAppDispatch } from "../../hooks"
+import { fetchUpdateFavoriteMovie } from "../../redux/userSlice"
 import { GenresList } from "../GenresList"
 import { truncateTitle } from "../../helpers"
 import { CardProps } from "../../types/interfaces/CardProps"
@@ -6,8 +9,25 @@ import noPoster from "../../images/no-poster.png"
 import { Link } from "react-router-dom"
 import { PixemaRecommended } from "../pixemaRecommended"
 import { FavoritesIcon } from "../../images/Icons/FavoritesIcon"
+import { Btn } from "../Btn"
 
-export function Card({ poster, title, genres, rating, id, isRecommended, isFavorite }: CardProps): JSX.Element {
+export function Card({ poster, title, genres, rating, id, isRecommended, isFavorite }: CardProps):
+  JSX.Element {
+  const dispatch = useAppDispatch()
+  const [isFavoriteMovie, setIsFavoriteMovie] = useState(false)
+
+  useEffect(() => {
+    if (id && isFavoriteMovie) {
+      setIsFavoriteMovie(false)
+      dispatch(fetchUpdateFavoriteMovie({ movieId: id }))
+    }
+  }, [dispatch, id, isFavoriteMovie])
+
+  function handleClickBtnFavorite(event: React.MouseEvent<HTMLButtonElement>): void {
+    event.preventDefault()
+    setIsFavoriteMovie(!isFavoriteMovie)
+  }
+
   return (
     <div className="card">
       <Link to={id ? `/movie/${id}` : "#"} className="card__link">
@@ -24,7 +44,13 @@ export function Card({ poster, title, genres, rating, id, isRecommended, isFavor
             : null}
           {isFavorite
             ? <div className="card__favorite">
-              <FavoritesIcon width="24" height="24" />
+              <Btn
+                type="button"
+                className="btn_padding_none"
+                onClick={handleClickBtnFavorite}
+              >
+                <FavoritesIcon width="24" height="24" />
+              </Btn>
             </div>
             : null}
         </div>
