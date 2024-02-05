@@ -17,7 +17,7 @@ export function Favorites(): JSX.Element {
     if (user) {
       dispatch(fetchGetFavoritesMovies())
     }
-  }, [dispatch, user])
+  }, [dispatch])
 
   if (loading) {
     return (

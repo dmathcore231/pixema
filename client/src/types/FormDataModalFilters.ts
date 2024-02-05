@@ -1,4 +1,4 @@
-import { OptionsSelect } from '../types/OptionsSelect'
+import { OptionsSelect } from './OptionsSelect'
 
 export type FormDataModalFilters = {
   sort: OptionsSelect | null
