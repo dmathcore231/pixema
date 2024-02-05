@@ -1,66 +1,33 @@
 import "./styles.scss"
+import { useRef } from "react"
+import { useAppSelector } from "../../hooks"
 import { ArrowLeft } from "../../images/Icons/ArrowLeft"
 import { ArrowRight } from "../../images/Icons/ArrowRight"
-import { useState } from "react"
 import { CarouselProps } from "../../types/interfaces/CarouselProps"
 import { NoContent } from "../NoContent"
 import { Btn } from "../Btn"
+import { Card } from "../Card"
 
 export function Carousel({ data, title }: CarouselProps): JSX.Element {
-  const [offset, setOffset] = useState(0)
-  const [counterClick, setCounterClick] = useState(0)
+  const { user } = useAppSelector(state => state.user)
+
+  const carouselBodyElement = useRef<HTMLDivElement>(null)
 
   function handleClickRight(): void {
-    const carouselBodyElement = document.querySelector(".carousel-body")
-    const bodyItemElement = document.querySelector(".carousel-body__item")
-    const widthBodyElement = carouselBodyElement?.getBoundingClientRect().width
-    const widthBodyItemElement = bodyItemElement?.getBoundingClientRect().width
-    if (data) {
-      const lastSwap = (data.length - 5)
-      setCounterClick(counterClick + 1)
-      if (counterClick < lastSwap) {
-        const newOffset = offset + widthBodyItemElement!
-        carouselBodyElement?.scrollTo({
-          top: 0,
-          left: newOffset,
-          behavior: "smooth",
-        })
-        setOffset(newOffset)
-      } else if (counterClick === lastSwap) {
-        setCounterClick(counterClick)
-        const newOffset = widthBodyElement!
-        carouselBodyElement?.scrollTo({
-          top: 0,
-          left: newOffset,
-          behavior: "smooth",
-        })
-        setOffset(newOffset)
-      }
+    if (carouselBodyElement.current) {
+      const item = carouselBodyElement.current
+      const itemStyle = getComputedStyle(item)
+      const itemWidth = item.offsetWidth + parseFloat(itemStyle.marginRight)
+      carouselBodyElement.current.scrollLeft += itemWidth
     }
   }
 
   function handleClickLeft(): void {
-    const carouselBodyElement = document.querySelector(".carousel-body")
-    const bodyItemElement = document.querySelector(".carousel-body__item")
-    const widthBodyItemElement = bodyItemElement?.getBoundingClientRect().width
-    setCounterClick(counterClick - 1)
-    if (counterClick > 0) {
-      const newOffset = offset - widthBodyItemElement!
-      carouselBodyElement?.scrollTo({
-        top: 0,
-        left: newOffset,
-        behavior: "smooth",
-      })
-      setOffset(newOffset)
-    } else if (counterClick === 0) {
-      setCounterClick(0)
-      const newOffset = 0
-      carouselBodyElement?.scrollTo({
-        top: 0,
-        left: newOffset,
-        behavior: "smooth",
-      })
-      setOffset(newOffset)
+    if (carouselBodyElement.current) {
+      const item = carouselBodyElement.current;
+      const itemStyle = getComputedStyle(item)
+      const itemWidth = item.offsetWidth + parseFloat(itemStyle.marginRight)
+      carouselBodyElement.current.scrollLeft -= itemWidth
     }
   }
 
@@ -87,7 +54,8 @@ export function Carousel({ data, title }: CarouselProps): JSX.Element {
           </Btn>
         </div>
       </div>
-      <div className="carousel-body">
+      <div className="carousel-body"
+        ref={carouselBodyElement}>
         {data
           ? data.map((item, index) => {
             return (
@@ -95,7 +63,15 @@ export function Carousel({ data, title }: CarouselProps): JSX.Element {
                 key={index}
                 className="carousel-body__item"
               >
-                {item}
+                <Card
+                  id={item._id}
+                  poster={item.poster}
+                  title={item.title}
+                  genres={item.genre}
+                  rating={item.rating}
+                  isRecommended={item.isRecommended}
+                  isFavorite={user?.moviesData.favorites.includes(item._id)}
+                />
               </div>
             )
           })

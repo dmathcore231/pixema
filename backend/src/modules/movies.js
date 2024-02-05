@@ -88,8 +88,34 @@ async function getMovieBySearch(req, res) {
   }
 }
 
+async function getRecommendedMovies(req, res) {
+  if (req.clientResponseError) {
+    return res.status(req.clientResponseError.status).send(req.clientResponseError)
+  }
+
+  try {
+    const { movieId } = req.params
+
+    if (!movieId) {
+      return res.status(400).send(new ResponseWithoutPayload(400, 'Missing fields: movieId'))
+    }
+
+    const movie = await Movie.findOne({ _id: movieId })
+    const genresRecommended = movie.genre
+    const recommendedMovies = await Movie.find({
+      _id: { $ne: movieId },
+      genre: { $in: genresRecommended },
+      isRecommended: true
+    })
+    res.status(200).send(new ResponseData(200, 'Success', recommendedMovies))
+  } catch (error) {
+    res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
+  }
+}
+
 router.get('/', getAllMovies)
 router.get('/filters', getMovieByFilters)
 router.get('/search', getMovieBySearch)
+router.get('/recommended/:movieId', getRecommendedMovies)
 
 module.exports = router

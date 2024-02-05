@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AxiosError } from "axios"
-import { requestMovies, requestCreateMovie, requestGetMovieById, requestGetMoviesByFilters, requestGetMoviesBySearch, requestUpdateMovieById, requestFavoritesMovies, requestDeleteMovieById } from "../services/movie"
+import { requestMovies, requestCreateMovie, requestGetMovieById, requestGetMoviesByFilters, requestGetMoviesBySearch, requestUpdateMovieById, requestFavoritesMovies, requestDeleteMovieById, requestGetRecommendedMovies } from "../services/movie"
 import { Movie, MovieState, ResponseMovie, ResponseMovieByFilters, ResponseMovies } from "../types/interfaces/Movie"
 import { ResponseNoData } from "../types/interfaces/UserData"
 import { FormDataModalFilters } from "../types/FormDataModalFilters"
@@ -94,6 +94,17 @@ export const fetchDeleteMovieById = createAsyncThunk<ResponseNoData, string, { r
     }
   })
 
+export const fetchGetRecommendedMovies = createAsyncThunk<ResponseMovies, string, { rejectValue: ResponseNoData }>('movies/fetchGetRecommendedMovies',
+  async (id, { rejectWithValue }) => {
+    try {
+      return await requestGetRecommendedMovies(id)
+    } catch (error) {
+      const err = error as AxiosError
+      const errResponse = err.response?.data as ResponseNoData
+      return rejectWithValue(errResponse)
+    }
+  })
+
 export const moviesSlice = createSlice({
   name: 'movies',
 
@@ -109,6 +120,7 @@ export const moviesSlice = createSlice({
     moviesBySearch: null,
     searchValue: null,
     favoritesMovies: null,
+    recommendedMovies: null
   } as Partial<MovieState>,
 
   reducers: {
@@ -299,6 +311,29 @@ export const moviesSlice = createSlice({
       state.status = action.payload?.status
       state.message = action.payload?.message
       state.movie = null
+    })
+
+    //getRecommendedMovies
+    builder.addCase(fetchGetRecommendedMovies.pending, (state) => {
+      state.loading = true
+      state.error = false
+      state.status = 0
+    })
+
+    builder.addCase(fetchGetRecommendedMovies.fulfilled, (state, action: PayloadAction<ResponseMovies>) => {
+      state.loading = false
+      state.error = false
+      state.status = action.payload.status
+      state.message = action.payload.message
+      state.recommendedMovies = action.payload.data
+    })
+
+    builder.addCase(fetchGetRecommendedMovies.rejected, (state, action) => {
+      state.loading = false
+      state.error = true
+      state.status = action.payload?.status
+      state.message = action.payload?.message
+      state.recommendedMovies = null
     })
   }
 

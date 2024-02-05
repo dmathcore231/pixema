@@ -12,7 +12,6 @@ export function Main(): JSX.Element {
   const { user } = useAppSelector(state => state.user)
   const { movies, loading, error, moviesByFilters, activeFilters } = useAppSelector(state => state.movies)
   const userFavoriteMovies = user?.moviesData.favorites
-  console.log(userFavoriteMovies)
 
   useEffect(() => {
     if (!activeFilters) {

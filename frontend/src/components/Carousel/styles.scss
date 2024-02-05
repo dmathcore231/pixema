@@ -1,8 +1,7 @@
 @import "../../styles/app.scss";
 
 .carousel {
-  display: flex;
-  flex-direction: column;
+  @include flex-column;
   width: 100%;
 
   &-header {
@@ -32,18 +31,19 @@
   }
 
   &-body {
-    @include flex-center;
+    display: flex;
+    align-items: center;
+    gap: 1.875rem;
     width: 100%;
-    max-width: 100%;
     overflow-x: scroll;
-    gap: 1.25rem;
 
     &::-webkit-scrollbar {
       display: none;
     }
 
     &__item {
-      max-width: 25%;
+      flex: 0 0 22.7%;
+      max-width: 22.7%;
     }
   }
 }

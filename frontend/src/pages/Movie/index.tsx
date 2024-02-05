@@ -2,7 +2,7 @@ import "./styles.scss"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../hooks"
-import { fetchGetMovieById } from "../../redux/movieSlice"
+import { fetchGetMovieById, fetchGetRecommendedMovies } from "../../redux/movieSlice"
 import { fetchUpdateFavoriteMovie } from "../../redux/userSlice"
 import { Spinner } from "../../components/Spinner"
 import { Error } from "../../components/Error"
@@ -17,7 +17,7 @@ import { LinkBack } from "../../components/LinkBack"
 
 export function Movie(): JSX.Element {
   const dispatch = useAppDispatch()
-  const { movie, loading, error } = useAppSelector(state => state.movies)
+  const { movie, loading, error, recommendedMovies } = useAppSelector(state => state.movies)
   const { user } = useAppSelector(state => state.user)
   const { id } = useParams()
 
@@ -42,6 +42,12 @@ export function Movie(): JSX.Element {
       setDefaultCheck('')
     }
   }, [user, id])
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchGetRecommendedMovies(id))
+    }
+  }, [dispatch, id])
 
   if (loading) {
     return (
@@ -99,7 +105,7 @@ export function Movie(): JSX.Element {
           </div>
           <div className="movie__carousel">
             <Carousel
-              data={null} title="Recommended" />
+              data={recommendedMovies ? recommendedMovies : null} title="Recommended" />
           </div>
         </div>
       </>

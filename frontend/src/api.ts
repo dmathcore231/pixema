@@ -1,6 +1,7 @@
 export const moviesEndPoint = '/movies'
 export const moviesFiltersEndPoint = `${moviesEndPoint}/filters`
 export const moviesSearchEndPoint = `${moviesEndPoint}/search`
+export const moviesRecommendedEndPoint = `${moviesEndPoint}/recommended`
 export const movieEmdPoint = '/movie'
 export const authEndPoint = '/auth/user'
 export const authAllUsersEndPoint = '/auth/users'

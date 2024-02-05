@@ -1,5 +1,6 @@
+import { Movie } from "./Movie"
 
 export interface CarouselProps {
-  data: JSX.Element[] | null
+  data: Movie[] | null
   title: string
 }

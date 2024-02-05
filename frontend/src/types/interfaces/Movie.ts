@@ -48,4 +48,5 @@ export interface MovieState {
   moviesBySearch: Movie[] | null
   searchValue: string | null
   favoritesMovies: Movie[] | null
+  recommendedMovies: Movie[] | null
 }

@@ -1,6 +1,6 @@
 import { AxiosError } from "axios"
 import { clientRest } from "../utils/client"
-import { moviesEndPoint, movieEmdPoint, moviesFiltersEndPoint, moviesSearchEndPoint, favoriteMovieEndPoint } from "../api"
+import { moviesEndPoint, movieEmdPoint, moviesFiltersEndPoint, moviesSearchEndPoint, favoriteMovieEndPoint, moviesRecommendedEndPoint } from "../api"
 import { ResponseMovie, ResponseMovieByFilters, ResponseMovies } from "../types/interfaces/Movie"
 import { FormDataModalFilters } from "../types/FormDataModalFilters"
 
@@ -120,6 +120,20 @@ export const requestFavoritesMovies = async (): Promise<ResponseMovies> => {
 export const requestDeleteMovieById = async (id: string): Promise<ResponseMovie> => {
   try {
     const { data } = await clientRest.delete(`${movieEmdPoint}/${id}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    return data
+  } catch (error) {
+    const err = error as AxiosError
+    throw err
+  }
+}
+
+export const requestGetRecommendedMovies = async (movieId: string): Promise<ResponseMovies> => {
+  try {
+    const { data } = await clientRest.get(`${moviesRecommendedEndPoint}/${movieId}`, {
       headers: {
         'Content-Type': 'application/json'
       }
