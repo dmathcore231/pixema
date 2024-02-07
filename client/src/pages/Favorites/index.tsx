@@ -50,7 +50,7 @@ export function Favorites(): JSX.Element {
                 poster={movie.poster}
                 title={movie.title}
                 genres={movie.genre}
-                rating={movie.rating}
+                rating={movie.rating.ratingMovie}
                 isRecommended={movie.isRecommended}
                 isFavorite={true}
               />

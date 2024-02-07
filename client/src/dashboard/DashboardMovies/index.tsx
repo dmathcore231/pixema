@@ -103,7 +103,7 @@ export function DashboardMovies(): JSX.Element {
               <tr key={movie._id} className="table-movies-row">
                 <td className="table-movies-row__item">{index + 1}</td>
                 <td className="table-movies-row__item">{truncateTitle(movie.title, 25)}</td>
-                <td className="table-movies-row__item">{movie.rating}</td>
+                <td className="table-movies-row__item">{movie.rating.ratingMovie}</td>
                 <td className="table-movies-row__item">{movie.year}</td>
                 <td className="table-movies-row__item">
                   <Btn

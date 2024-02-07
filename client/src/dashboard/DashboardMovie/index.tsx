@@ -58,25 +58,27 @@ export function DashboardMovie(): JSX.Element {
   }
 
   function handleClickCancelBtn() {
-    setFormMovie({
-      title: '',
-      year: null,
-      releaseDate: '',
-      boxOffice: null,
-      country: '',
-      production: '',
-      actors: '',
-      directors: '',
-      writers: '',
-      rating: null,
-      imdbRating: null,
-      genre: [],
-      poster: null,
-      duration: null,
-      description: '',
-      isRecommended: false
-    })
-    setIsCancel(prev => !prev)
+    if (movie) {
+      setFormMovie({
+        title: movie.title,
+        year: movie.year,
+        releaseDate: movie.releaseDate,
+        boxOffice: movie.boxOffice,
+        country: movie.country,
+        production: movie.production,
+        actors: movie.actors,
+        directors: movie.directors,
+        writers: movie.writers,
+        rating: movie.rating.ratingMovie,
+        imdbRating: movie.imdbRating,
+        genre: [],
+        poster: null,
+        duration: movie.duration,
+        description: movie.description,
+        isRecommended: movie.isRecommended
+      })
+      setIsCancel(prev => !prev)
+    }
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -143,7 +145,7 @@ export function DashboardMovie(): JSX.Element {
         actors: movie.actors || '',
         directors: movie.directors || '',
         writers: movie.writers || '',
-        rating: movie.rating || null,
+        rating: movie.rating.ratingMovie || null,
         imdbRating: movie.imdbRating || null,
         genre: movie.genre || [],
         poster: null as File | null,

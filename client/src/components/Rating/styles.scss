@@ -1,0 +1,30 @@
+@import '../../styles/app.scss';
+
+.rating {
+
+  input {
+    display: none;
+
+    &:checked+label {
+      fill: var(--primary-color);
+    }
+  }
+
+  &-list {
+    display: flex;
+    gap: 0.5rem;
+
+    &__item {
+      @include flex-column;
+      fill: var(--secondary-color);
+
+      &:hover {
+        fill: var(--primary-color-light);
+      }
+
+      &:active {
+        fill: var(--primary-color);
+      }
+    }
+  }
+}

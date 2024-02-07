@@ -68,7 +68,7 @@ export function Carousel({ data, title }: CarouselProps): JSX.Element {
                   poster={item.poster}
                   title={item.title}
                   genres={item.genre}
-                  rating={item.rating}
+                  rating={item.rating.ratingMovie}
                   isRecommended={item.isRecommended}
                   isFavorite={user?.moviesData.favorites.includes(item._id)}
                 />

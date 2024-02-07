@@ -5,6 +5,7 @@ const ResponseWithoutPayload = require('../classes/responseWithoutPayload')
 const ResponseDashboardData = require('../classes/responseDashboardData')
 const ResponseData = require('../classes/responseData')
 const missingFields = require('../helpers/missingFields')
+const User = require('../models/userSchema')
 
 const router = express.Router()
 
@@ -52,7 +53,9 @@ async function createMovie(req, res) {
           actors,
           directors,
           writers,
-          rating,
+          rating: {
+            ratingMovie: rating,
+          },
           imdbRating,
           genre,
           poster: `http://localhost:3000/${posterPath}`,
@@ -64,6 +67,7 @@ async function createMovie(req, res) {
         await movie.save()
         res.status(201).send(new ResponseDashboardData(201, 'Movie created successfully', movie))
       } catch (error) {
+        console.log(error)
         res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
       }
     }
@@ -91,14 +95,9 @@ async function getMovieById(req, res) {
 
 async function deleteMovieById(req, res) {
   const { id } = req.params
-  const { accessToken, tokenValid } = req.userData.token
 
-  if (!accessToken) {
-    return res.status(401).send(new ResponseUserData(401, 'Access token is required', null))
-  }
-
-  if (!tokenValid) {
-    return res.status(401).send(new ResponseUserData(401, 'Invalid access token', null))
+  if (req.clientResponseError) {
+    return res.status(req.clientResponseError.status).send(req.clientResponseError)
   }
 
   if (!id) {
@@ -195,9 +194,52 @@ async function updateMovieById(req, res) {
   })
 }
 
+async function setRatingMovie(req, res) {
+  const { id } = req.params
+
+  if (req.clientResponseError) {
+    return res.status(req.clientResponseError.status).send(req.clientResponseError)
+  }
+
+  try {
+    const { userId, rating } = req.body.formSetRatingMovie
+    const movie = await Movie.findById(id)
+    const user = await User.findById(userId)
+
+    if (!movie) {
+      return res.status(404).send(new ResponseWithoutPayload(404, 'Movie not found'))
+    }
+
+    if (!user) {
+      return res.status(404).send(new ResponseWithoutPayload(404, 'User not found'))
+    }
+
+    const existingRating = movie.rating.userRating.find(item => item.userId === userId)
+
+    if (existingRating) {
+      existingRating.rating = rating
+    } else {
+      movie.rating.userRating.push({ userId, rating })
+    }
+
+    movie.rating.ratingMovie = movie.rating.userRating.reduce((acc, item) => acc + item.rating, 0) / movie.rating.userRating.length
+
+    await movie.save()
+
+    res.status(200).send(new ResponseDashboardData(200, 'Rating set successfully', movie))
+  } catch (error) {
+    console.log(error)
+    if (error.name === 'CastError') {
+      return res.status(404).send(new ResponseWithoutPayload(404, 'Bad request'))
+    }
+    res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
+  }
+}
+
 router.post('/', createMovie)
 router.get('/:id', getMovieById)
 router.delete('/:id', deleteMovieById)
 router.put('/:id', updateMovieById)
+router.post('/rating/:id', setRatingMovie)
 
 module.exports = router

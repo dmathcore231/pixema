@@ -14,6 +14,7 @@ import { FavoritesIcon } from "../../images/Icons/FavoritesIcon"
 import { MovieInfo } from "../../components/MovieInfo"
 import { Carousel } from "../../components/Carousel"
 import { LinkBack } from "../../components/LinkBack"
+import { Rating } from "../../components/Rating"
 
 export function Movie(): JSX.Element {
   const dispatch = useAppDispatch()
@@ -82,6 +83,7 @@ export function Movie(): JSX.Element {
               onChange={() => setIsFavorite(true)}
               defaultCheck={defaultCheck}
             />
+            <Rating />
           </div>
           <div className="movie__content">
             <div className="movie__genres">
@@ -90,7 +92,7 @@ export function Movie(): JSX.Element {
             <div className="movie__title">
               <h1>{movie.title}</h1>
             </div>
-            <Presentation itemList={[movie.rating, movie.imdbRating, movie.duration, movie.isRecommended]} />
+            <Presentation itemList={[movie.rating.ratingMovie, movie.imdbRating, movie.duration, movie.isRecommended]} />
             <MovieInfo
               description={movie.description}
               year={movie.year}

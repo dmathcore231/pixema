@@ -7,7 +7,6 @@ const ResponseUserData = require('../classes/responseUserData')
 const ResponseWithoutPayload = require('../classes/responseWithoutPayload')
 const expiresInAccessToken = require('../helpers/tokenExpires').expiresInAccessToken
 const expiresInRefreshToken = require('../helpers/tokenExpires').expiresInRefreshToken
-
 const secretKey = require('../modules/secretKey')
 const ResponseData = require('../classes/responseData')
 
@@ -154,35 +153,6 @@ async function updateFavoritesMovies(req, res) {
   } catch (error) {
     return res.status(500).send(new ResponseWithoutPayload(500, 'Internal Server Error'))
   }
-
-  // const { movieId } = req.body
-  // const token = req.headers['authorization'].split(' ')[1]
-
-  // if (!token) {
-  //   return res.status(401).send({ status: 401, message: 'Access token is required', accessToken: null })
-  // }
-
-  // if (!movieId) {
-  //   return res.status(400).send({ status: 400, message: 'Favorites movies is required' })
-  // }
-
-  // try {
-  //   const decoded = jwt.verify(token, secretKey)
-  //   const user = await User.findById(decoded.id)
-  //   if (!user) {
-  //     return res.status(404).send({ status: 404, message: 'User not found', accessToken: null })
-  //   }
-  //   if (!user.favoritesMovies.includes(movieId)) {
-  //     user.favoritesMovies.push(movieId)
-  //   } else {
-  //     const index = user.favoritesMovies.indexOf(movieId)
-  //     user.favoritesMovies.splice(index, 1)
-  //   }
-  //   await user.save()
-  //   return res.status(200).send({ status: 200, message: 'Favorites movies updated successfully', user })
-  // } catch (error) {
-  //   res.status(500).send({ status: 500, message: 'Internal Server Error' })
-  // }
 }
 
 async function getFavoritesMovies(req, res) {

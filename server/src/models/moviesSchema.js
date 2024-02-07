@@ -10,7 +10,16 @@ const movieSchema = new mongoose.Schema({
   actors: String,
   directors: String,
   writers: String,
-  rating: Number,
+  rating: {
+    ratingMovie: { type: Number, default: 0 },
+    userRating: {
+      type: [{
+        _id: false,
+        userId: String,
+        rating: Number
+      }],
+    }
+  },
   imdbRating: Number,
   genre: Array,
   poster: String,

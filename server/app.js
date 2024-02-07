@@ -16,6 +16,7 @@ const checkValidFormSignIn = require('./src/middlewares/checkValidFormSignIn')
 const checkValidFormUpdateById = require('./src/middlewares/checkValidFormUpdateUserById')
 const checkValidFormLoginDashboard = require('./src/middlewares/checkValidFormLoginDashboard')
 const checkValidFormUpdateUserDashboard = require('./src/middlewares/checkValidFormUpdateUserDashboard')
+const checkSetRatingMovie = require('./src/middlewares/checkSetRatingMovie')
 
 const app = express()
 
@@ -45,6 +46,7 @@ app.use(checkValidFormSignIn)
 app.use(checkValidFormUpdateById)
 app.use(checkValidFormLoginDashboard)
 app.use(checkValidFormUpdateUserDashboard)
+app.use(checkSetRatingMovie)
 
 app.use('/auth', authRouter)
 app.use('/movies', moviesRouter)

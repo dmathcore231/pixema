@@ -1,4 +1,10 @@
 import { FormDataModalFilters } from '../FormDataModalFilters'
+
+export type UserRating = {
+  userId: string,
+  rating: number
+}
+
 export interface Movie {
   _id: string,
   title: string,
@@ -10,7 +16,10 @@ export interface Movie {
   actors: string,
   directors: string,
   writers: string,
-  rating: number,
+  rating: {
+    ratingMovie: number,
+    userRating: UserRating[]
+  },
   imdbRating: number,
   genre: string[],
   poster: string,
