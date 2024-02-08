@@ -1,7 +1,7 @@
 .header {
   display: flex;
   justify-content: space-between;
-  padding-top: 4rem;
+  padding-top: 4rem !important;
 
   &__logo {
     display: flex;
