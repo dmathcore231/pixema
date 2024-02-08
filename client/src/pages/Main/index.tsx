@@ -5,7 +5,7 @@ import { Card } from "../../components/Card"
 import { ShowMoreBox } from "../../components/ShowMoreBox"
 import { Error } from "../../components/Error"
 import { fetchMovies } from "../../redux/movieSlice"
-import { ActiveFilters } from "../../components/activeFilters"
+import { ActiveFilters } from "../../components/ActiveFilters"
 
 export function Main(): JSX.Element {
   const dispatch = useAppDispatch()

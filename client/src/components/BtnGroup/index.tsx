@@ -1,7 +1,6 @@
 import "./styles.scss"
 import { BtnGroupProps } from "../../types/interfaces/BtnGroupProps"
 
-
 export function BtnGroup({ itemsName, itemsValue, onChange, defaultCheck }: BtnGroupProps): JSX.Element {
 
   function renderBtnGroup(): JSX.Element[] {

@@ -93,7 +93,6 @@
   }
 
   &__wrapper {
-    display: flex;
-    flex-direction: column;
+    @include flex-column;
   }
 }
