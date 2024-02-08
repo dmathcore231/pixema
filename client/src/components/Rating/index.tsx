@@ -1,25 +1,66 @@
 import "./styles.scss"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useParams } from "react-router-dom"
+import { useAppDispatch, useAppSelector } from "../../hooks"
 import { Btn } from "../Btn"
 import { Modal } from "../Modal"
 import { RatingStarIcon } from "../../images/Icons/RatingStarIcon"
+import { fetchSetMovieRating } from "../../redux/movieSlice"
 
 export function Rating(): JSX.Element {
+  const dispatch = useAppDispatch()
+  const { id } = useParams()
+  const { user } = useAppSelector(state => state.user)
+  const { movie } = useAppSelector(state => state.movies)
   const [isActiveModal, setIsActiveModal] = useState(false)
+  const [isSubmitRating, setIsSubmitRating] = useState(false)
+  const [isRemoveRating, setIsRemoveRating] = useState(false)
   const [valueRating, setValueRating] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (isSubmitRating && user && id) {
+      dispatch(fetchSetMovieRating({ body: { formSetRatingMovie: { userId: user._id, rating: valueRating!, remove: false } }, id }))
+    }
+
+  }, [dispatch, isSubmitRating])
+
+  useEffect(() => {
+    if (movie && user) {
+      const foundUserRating = movie.rating.userRating.find((item) => item.userId === user._id)
+      setValueRating(foundUserRating ? foundUserRating.rating : null)
+    }
+  }, [movie, user])
+
+  useEffect(() => {
+    if (isRemoveRating) {
+      if (user && id) {
+        dispatch(fetchSetMovieRating({ body: { formSetRatingMovie: { userId: user._id, rating: valueRating!, remove: true } }, id }))
+      }
+      setValueRating(null)
+      setIsRemoveRating(false)
+    }
+  }, [dispatch, isRemoveRating])
+
 
   function handleClickBtnClose() {
     setIsActiveModal(false)
   }
 
   function handleClickBtnRemoveRating() {
-    setIsActiveModal(false)
-    setValueRating(null)
+    if (valueRating) {
+      setIsActiveModal(false)
+      setIsRemoveRating(true)
+    } else {
+      setIsActiveModal(false)
+    }
   }
 
   function handleSubmitRating() {
-    setIsActiveModal(false)
-    console.log(valueRating)
+    if (valueRating) {
+      setIsActiveModal(false)
+      setIsSubmitRating(true)
+    }
+
   }
 
   const idName: Record<number, string> = {
@@ -42,13 +83,13 @@ export function Rating(): JSX.Element {
         className="btn_secondary rating__btn"
         onClick={() => setIsActiveModal(true)}
       >
-        {valueRating ? "Change rating" : "Rate The Film"}
+        {movie?.rating.userRating.find((item) => item.userId === user?._id) ? "Change rating" : "Rate The Film"}
       </Btn>
       <Modal
         isActive={isActiveModal}
         modalClass="rating__modal"
         title="Rate The Film"
-        titleBtnClose={valueRating ? "Remove" : "Close"}
+        titleBtnClose={movie?.rating.userRating.find((item) => item.userId === user?._id) ? "Remove" : "Close"}
         modalSubmit={true}
         onClose={handleClickBtnClose}
         onCloseInFooter={handleClickBtnRemoveRating}
@@ -63,8 +104,12 @@ export function Rating(): JSX.Element {
                 name="rating"
                 value={(index + 1)}
                 onChange={(e) => setValueRating(parseFloat(e.target.value))}
+                checked={valueRating === (index + 1)}
               />
-              <label htmlFor={`rating-${idName[index + 1]}`}>
+              <label
+                className="rating-list__label"
+                htmlFor={`rating-${idName[index + 1]}`}
+              >
                 <RatingStarIcon width="24" height="24" />
                 {index + 1}
               </label>

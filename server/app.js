@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const express = require('express')
-const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser')
 const authRouter = require('./src/modules/auth')
 const moviesRouter = require('./src/modules/movies')
 const movieRouter = require('./src/modules/movie')
@@ -30,9 +30,9 @@ app.use((_, res, next) => {
 
 app.use(express.static(path.join(__dirname, 'public')))
 app.get('/public/posters/:filename', (req, res) => {
-  const { filename } = req.params;
-  const imagePath = path.join(__dirname, 'public', 'posters', filename);
-  res.sendFile(imagePath);
+  const { filename } = req.params
+  const imagePath = path.join(__dirname, 'public', 'posters', filename)
+  res.sendFile(imagePath)
 })
 
 app.use(express.json())

@@ -202,7 +202,7 @@ async function setRatingMovie(req, res) {
   }
 
   try {
-    const { userId, rating } = req.body.formSetRatingMovie
+    const { userId, rating, remove } = req.body.formSetRatingMovie
     const movie = await Movie.findById(id)
     const user = await User.findById(userId)
 
@@ -216,19 +216,22 @@ async function setRatingMovie(req, res) {
 
     const existingRating = movie.rating.userRating.find(item => item.userId === userId)
 
-    if (existingRating) {
-      existingRating.rating = rating
+    if (remove) {
+      movie.rating.userRating = movie.rating.userRating.filter(item => item.userId !== userId)
     } else {
-      movie.rating.userRating.push({ userId, rating })
+      if (existingRating) {
+        existingRating.rating = rating
+      } else {
+        movie.rating.userRating.push({ userId, rating })
+      }
     }
 
-    movie.rating.ratingMovie = movie.rating.userRating.reduce((acc, item) => acc + item.rating, 0) / movie.rating.userRating.length
+    movie.rating.ratingMovie = (movie.rating.userRating.reduce((acc, item) => acc + item.rating, 0) / movie.rating.userRating.length).toFixed(1)
 
     await movie.save()
 
     res.status(200).send(new ResponseDashboardData(200, 'Rating set successfully', movie))
   } catch (error) {
-    console.log(error)
     if (error.name === 'CastError') {
       return res.status(404).send(new ResponseWithoutPayload(404, 'Bad request'))
     }
@@ -237,9 +240,10 @@ async function setRatingMovie(req, res) {
 }
 
 router.post('/', createMovie)
+router.post('/rating/:id', setRatingMovie)
 router.get('/:id', getMovieById)
 router.delete('/:id', deleteMovieById)
 router.put('/:id', updateMovieById)
-router.post('/rating/:id', setRatingMovie)
+
 
 module.exports = router

@@ -59,3 +59,11 @@ export interface MovieState {
   favoritesMovies: Movie[] | null
   recommendedMovies: Movie[] | null
 }
+
+export interface RequestMovieSetRating {
+  formSetRatingMovie: {
+    userId: string,
+    rating: number,
+    remove: boolean
+  }
+}

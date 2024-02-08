@@ -52,8 +52,8 @@ export function Movie(): JSX.Element {
 
   if (loading) {
     return (
-      <div className="movie">
-        <div className="movie__loader">
+      <div className="movie-loader">
+        <div className="movie-loader__content">
           <Spinner width="40" height="40" />
         </div>
       </div>
@@ -68,9 +68,9 @@ export function Movie(): JSX.Element {
     )
   }
 
-  if (movie && Object.keys(movie).length > 0) {
-    return (
-      <>
+  return (
+    <>
+      {(movie && Object.keys(movie).length > 0) && (
         <div className="movie">
           <div className="movie__link-back">
             <LinkBack />
@@ -110,13 +110,8 @@ export function Movie(): JSX.Element {
               data={recommendedMovies ? recommendedMovies : null} title="Recommended" />
           </div>
         </div>
-      </>
-    )
-  } else {
-    return (
-      <div className="movie">
-        <Error />
-      </div>
-    )
-  }
+      )}
+    </>
+  )
 }
+

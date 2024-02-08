@@ -26,5 +26,12 @@
         fill: var(--primary-color);
       }
     }
+
+    &__label {
+      @include flex-column;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
   }
 }

@@ -1,7 +1,7 @@
 import { AxiosError } from "axios"
 import { clientRest } from "../utils/client"
-import { moviesEndPoint, movieEmdPoint, moviesFiltersEndPoint, moviesSearchEndPoint, favoriteMovieEndPoint, moviesRecommendedEndPoint } from "../api"
-import { ResponseMovie, ResponseMovieByFilters, ResponseMovies } from "../types/interfaces/Movie"
+import { moviesEndPoint, movieEndPoint, moviesFiltersEndPoint, moviesSearchEndPoint, favoriteMovieEndPoint, moviesRecommendedEndPoint, movieRatingEndPoint } from "../api"
+import { ResponseMovie, ResponseMovieByFilters, ResponseMovies, RequestMovieSetRating } from "../types/interfaces/Movie"
 import { FormDataModalFilters } from "../types/FormDataModalFilters"
 
 export const requestMovies = async (): Promise<ResponseMovies> => {
@@ -20,7 +20,7 @@ export const requestMovies = async (): Promise<ResponseMovies> => {
 
 export const requestCreateMovie = async (body: FormData) => {
   try {
-    const { data } = await clientRest.post(movieEmdPoint, body, {
+    const { data } = await clientRest.post(movieEndPoint, body, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -34,7 +34,7 @@ export const requestCreateMovie = async (body: FormData) => {
 
 export const requestGetMovieById = async (id: string): Promise<ResponseMovie> => {
   try {
-    const { data } = await clientRest.get(`${movieEmdPoint}/${id}`, {
+    const { data } = await clientRest.get(`${movieEndPoint}/${id}`, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -91,7 +91,7 @@ export const requestGetMoviesBySearch = async (search: string): Promise<Response
 
 export const requestUpdateMovieById = async ({ formUpdateMovie: { id, body } }: { formUpdateMovie: { id: string, body: FormData } }): Promise<ResponseMovie> => {
   try {
-    const { data } = await clientRest.put(`${movieEmdPoint}/${id}`, body, {
+    const { data } = await clientRest.put(`${movieEndPoint}/${id}`, body, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -119,7 +119,7 @@ export const requestFavoritesMovies = async (): Promise<ResponseMovies> => {
 
 export const requestDeleteMovieById = async (id: string): Promise<ResponseMovie> => {
   try {
-    const { data } = await clientRest.delete(`${movieEmdPoint}/${id}`, {
+    const { data } = await clientRest.delete(`${movieEndPoint}/${id}`, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -134,6 +134,20 @@ export const requestDeleteMovieById = async (id: string): Promise<ResponseMovie>
 export const requestGetRecommendedMovies = async (movieId: string): Promise<ResponseMovies> => {
   try {
     const { data } = await clientRest.get(`${moviesRecommendedEndPoint}/${movieId}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    return data
+  } catch (error) {
+    const err = error as AxiosError
+    throw err
+  }
+}
+
+export const requestSetMovieRating = async (body: RequestMovieSetRating, id: string): Promise<ResponseMovie> => {
+  try {
+    const { data } = await clientRest.post(`${movieRatingEndPoint}/${id}`, body, {
       headers: {
         'Content-Type': 'application/json'
       }
