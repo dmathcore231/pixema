@@ -1,6 +1,6 @@
 import "./styles.scss"
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../hooks"
 import { fetchGetMovieById, fetchGetRecommendedMovies } from "../../redux/movieSlice"
 import { fetchUpdateFavoriteMovie } from "../../redux/userSlice"
@@ -18,6 +18,7 @@ import { Rating } from "../../components/Rating"
 
 export function Movie(): JSX.Element {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const { movie, loading, error, recommendedMovies } = useAppSelector(state => state.movies)
   const { user } = useAppSelector(state => state.user)
   const { id } = useParams()
@@ -68,6 +69,14 @@ export function Movie(): JSX.Element {
     )
   }
 
+  function handleClickBtnFavorites() {
+    if (user) {
+      setIsFavorite(true)
+    } else {
+      navigate('/sign-in')
+    }
+  }
+
   return (
     <>
       {(movie && Object.keys(movie).length > 0) && (
@@ -80,10 +89,10 @@ export function Movie(): JSX.Element {
             <BtnGroup
               itemsName={["favorites", "share"]}
               itemsValue={[<FavoritesIcon width="24" height="24" />, <ShareIcon width="24" height="24" />]}
-              onChange={() => setIsFavorite(true)}
+              onChange={handleClickBtnFavorites}
               defaultCheck={defaultCheck}
             />
-            <Rating />
+            {user ? <Rating /> : null}
           </div>
           <div className="movie__content">
             <div className="movie__genres">
