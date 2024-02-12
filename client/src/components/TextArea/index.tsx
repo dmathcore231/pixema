@@ -1,23 +1,6 @@
 import './styles.scss'
-import { ReactNode } from 'react'
+import { TextAreaProps } from '../../types/interfaces/TextAreaProps'
 
-export interface TextAreaProps {
-  label: boolean
-  maxlength: number
-  minlength: number
-  required: boolean
-  htmlFor?: string
-  children?: ReactNode
-  id?: string
-  placeholder?: string
-  value?: string
-  className?: string
-  disabled?: boolean
-  cols?: number
-  rows?: number
-  name?: string
-  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
-}
 export function TextArea({ label, maxlength, minlength, required, htmlFor, children, id, placeholder, value, className, disabled, cols, rows, name, onChange }: TextAreaProps): JSX.Element {
   return (
     <div className='text-area-container'>

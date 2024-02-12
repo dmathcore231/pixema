@@ -1,21 +1,17 @@
-import './styles.scss';
-import { useState } from 'react';
-
-interface TooltipProps {
-  text: string;
-  children: React.ReactNode;
-}
+import './styles.scss'
+import { useState } from 'react'
+import { TooltipProps } from '../../types/interfaces/TooltipProps'
 
 export function Tooltip({ text, children }: TooltipProps): JSX.Element {
-  const [showTooltip, setShowTooltip] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false)
 
   const handleMouseEnter = () => {
-    setShowTooltip(true);
-  };
+    setShowTooltip(true)
+  }
 
   const handleMouseLeave = () => {
-    setShowTooltip(false);
-  };
+    setShowTooltip(false)
+  }
 
   return (
     <div

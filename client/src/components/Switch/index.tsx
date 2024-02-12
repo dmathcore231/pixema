@@ -1,9 +1,6 @@
 import "./styles.scss"
+import { SwitchProps } from "../../types/interfaces/SwitchProps"
 
-export interface SwitchProps {
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
-  isChecked?: boolean
-}
 
 export function Switch({ onChange, isChecked }: SwitchProps): JSX.Element {
   return (
